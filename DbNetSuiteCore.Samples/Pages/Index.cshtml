@@ -1,0 +1,20 @@
+﻿@page
+@using DbNetSuiteCore.Components
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+@section Styles {
+    @DbNetSuiteCore.StyleSheet()
+}
+@section Scripts {
+    @DbNetSuiteCore.ClientScript()
+}
+
+<div class="text-center">
+    <h1 class="display-4">Customers</h1>
+    @{
+        DbNetGridCore customersGrid = new DbNetGridCore("northwind", "customers");
+        @customersGrid.Render()
+    }
+</div>
