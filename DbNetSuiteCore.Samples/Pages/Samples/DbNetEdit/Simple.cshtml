@@ -1,0 +1,19 @@
+﻿@page
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+
+@model SampleModel
+
+@section Title
+{
+    <p>An edit form can be created with a single of code. Simply supply the connection alias and table name in the @Model.HelpLink("dbnetedit_constructors.htm","constructor") for the control.</p>
+}
+
+@section Control
+{
+    @(new DbNetEditCore("northwind", "customers").Render())
+}
+
+@section Source {
+@@(new DbNetEditCore("northwind", "customers").Render())
+}

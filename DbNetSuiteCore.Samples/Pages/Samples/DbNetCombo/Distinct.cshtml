@@ -1,0 +1,151 @@
+﻿@page
+@using DbNetSuiteCore.Enums.DbNetCombo;
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+
+@model SampleModel
+
+@section Title
+    {
+    <p>The @Model.HelpLink("dbnetcombo_properties.htm#Distinct","Distinct") property when set to true will only select distinct (unique) values. In this example the customers table is filtered by selecting customers for select distinct countries and cities.</p>
+}
+
+@section Styles
+    {
+    <style>
+        table.customer td:first-child {
+            font-weight: bold;
+        }
+    </style>
+}
+
+
+@section Markup
+    {
+    <div class="source">
+        <div class="row">
+            <div class="col-2">
+                <h5>Countries</h5>
+                <div id="country"></div>
+            </div>
+            <div class="col-2">
+                <h5>Cities</h5>
+                <div id="city"></div>
+            </div>
+            <div class="col-3">
+                <h5>Customers</h5>
+                <div id="customer"></div>
+            </div>
+            <div class="col-5">
+                <h5 id="customerTitle"></h5>
+                <hr />
+                <table class="customer">
+                    <tr>
+                        <td>Contact Name</td>
+                        <td id="ContactName"></td>
+                    </tr>
+                    <tr>
+                        <td>Contact Title</td>
+                        <td id="ContactTitle"></td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td id="Address"></td>
+                    </tr>
+                    <tr>
+                        <td>City</td>
+                        <td id="City"></td>
+                    </tr>
+                    <tr>
+                        <td>Region</td>
+                        <td id="Region"></td>
+                    </tr>
+                    <tr>
+                        <td>Postal Code</td>
+                        <td id="PostalCode"></td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td id="Phone"></td>
+                    </tr>
+                    <tr>
+                        <td>Fax</td>
+                        <td id="Fax"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+@section Control {
+    @{
+        DbNetComboCore customerCombo = new DbNetComboCore("northwind", "customers", "companyname", null, "customer")
+                {
+                    ForeignKeyColumn = "city",
+                    Size = 5,
+                    AutoRowSelect = true,
+                    DataOnlyColumns = new List<string>() { "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax" },
+                };
+        customerCombo.Bind(EventType.OnOptionSelected, "showSelectedCustomer");
+        DbNetComboCore cityCombo = new DbNetComboCore("northwind", "customers", "city", null, "city")
+                {
+                    ForeignKeyColumn = "country",
+                    Size = 5,
+                    Distinct = true,
+                    AutoRowSelect = true
+                };
+        DbNetComboCore countryCombo = new DbNetComboCore("northwind", "customers", "country", null, "country")
+                {
+                    Size = 10,
+                    Distinct = true,
+                    AutoRowSelect = true
+                };
+        cityCombo.AddLinkedControl(customerCombo);
+        countryCombo.AddLinkedControl(cityCombo);
+        @countryCombo.Render()
+    }
+}
+
+
+@section Source {
+DbNetComboCore customerCombo = new DbNetComboCore("northwind", "customers", "companyname", null, "customer")
+{
+        ForeignKeyColumn = "city",
+        Size = 5,
+        AutoRowSelect = true,
+        DataOnlyColumns = new List<string> () { "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax" },
+};
+customerCombo.Bind(EventType.OnOptionSelected, "showSelectedCustomer");
+DbNetComboCore cityCombo = new DbNetComboCore("northwind", "customers", "city", null, "city")
+{
+    ForeignKeyColumn = "country",
+    Size = 5,
+    Distinct = true,
+    AutoRowSelect = true
+};
+DbNetComboCore countryCombo = new DbNetComboCore("northwind", "customers", "country", null, "country")
+{
+    Size = 10,
+    Distinct = true,
+    AutoRowSelect = true
+};
+cityCombo.AddLinkedControl(customerCombo);
+countryCombo.AddLinkedControl(cityCombo);
+@@countryCombo.Render()
+}
+
+@section Scripts
+    {
+    <script type="text/javascript" class="source">
+        function showSelectedCustomer(control, args) {
+            var columns = ["ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax"]
+            var $option = $(args.selectedOptions[0]);
+            $("#customerTitle").html($option.text())
+            for (var i = 0; i < columns.length; i++) {
+                var colName = columns[i];
+                $(`#${colName}`).text($option.data(colName.toLowerCase()));
+            }
+        }
+    </script>
+}

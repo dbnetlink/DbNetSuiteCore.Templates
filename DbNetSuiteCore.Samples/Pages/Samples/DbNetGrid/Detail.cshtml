@@ -1,0 +1,93 @@
+﻿@page
+@using DbNetSuiteCore.Enums.DbNetGrid;
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+@using DbNetSuiteCore.Enums;
+
+@model SampleModel
+@section Title
+    {
+    <p>The <b>FixedFilterSql</b> and <b>FixedFilterParams</b> property allows you to add a fixed filter to the grid that will limit the portion of the dataset that can be interacted with.</p>
+}
+
+@section Control
+    {
+    @{
+        if (string.IsNullOrEmpty(Model.CustomerId) == false)
+        {
+            <h2>Customer ID - @Model.CustomerId</h2>
+            DbNetGridCore ordersGrid = new DbNetGridCore("northwind", "orders");
+            ordersGrid.Columns = new List<string>() { "EmployeeID", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipName", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "'' as OrderLines" };
+            ordersGrid.Labels = new List<string>() { "Employee", "Order Date", "Required", "Shipped", "Ship Via", "Freight", "Name", "Address", "City", "Region", "Postal Code", "Country", " " };
+            ordersGrid.FixedFilterSql = "CustomerId = @CustomerId";
+            ordersGrid.FixedFilterParams["CustomerId"] = Model.CustomerId;
+            ordersGrid.Column("OrderId").DataOnly();
+            ordersGrid.Column("EmployeeID").Lookup(new Lookup("Employees", "EmployeeId", "lastname + ',' + firstname"));
+            ordersGrid.Column("ShipVia").Lookup(new Lookup("Shippers", "ShipperId", "CompanyName"));
+            ordersGrid.RowSelect = false;
+            ordersGrid.Bind(EventType.OnCellTransform, "addButton");
+            @ordersGrid.Render()
+        }
+
+        if (Model.OrderId.HasValue)
+        {
+            <h2>Order ID - @Model.OrderId.Value</h2>
+            DbNetGridCore orderDetailsGrid = new DbNetGridCore("northwind", "[order details]");
+            orderDetailsGrid.FixedFilterSql = "OrderId = @OrderId";
+            orderDetailsGrid.FixedFilterParams["OrderId"] = Model.OrderId.Value;
+            orderDetailsGrid.Column("OrderId").Hidden();
+            orderDetailsGrid.Column("unitprice").Format("c");
+            orderDetailsGrid.Column("discount").Format("P");
+            orderDetailsGrid.Column("ProductID").Lookup(new Lookup("Products", "ProductId", "ProductName")).Label("Product");
+            @orderDetailsGrid.Render()
+        }
+    }
+}
+
+
+@section Source {
+if (string.IsNullOrEmpty(Model.CustomerId) == false)
+{
+    <h2>Customer ID - @@Model.CustomerId</h2>
+    DbNetGridCore ordersGrid = new DbNetGridCore("northwind", "orders");
+    ordersGrid.Columns = new List<string>() { "EmployeeID", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipName", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "'' as OrderLines" };
+    ordersGrid.Labels = new List<string>() { "Employee", "Order Date", "Required", "Shipped", "Ship Via", "Freight", "Name", "Address", "City", "Region", "Postal Code", "Country", " " };
+    ordersGrid.FixedFilterSql = "CustomerId = @@CustomerId";
+    ordersGrid.FixedFilterParams["CustomerId"] = Model.CustomerId;
+    ordersGrid.Column("OrderId").DataOnly();
+    ordersGrid.Column("EmployeeID").Lookup(new Lookup("Employees", "EmployeeId", "lastname + ',' + firstname"));
+    ordersGrid.Column("ShipVia").Lookup(new Lookup("Shippers", "ShipperId", "CompanyName"));
+    ordersGrid.RowSelect = false;
+    ordersGrid.Bind(EventType.OnCellTransform, "addButton");
+    @@ordersGrid.Render()
+}
+
+if (Model.OrderId.HasValue)
+{
+    <h2>Order ID - @@Model.OrderId.Value</h2>
+    DbNetGridCore orderDetailsGrid = new DbNetGridCore("northwind", "[order details]");
+    orderDetailsGrid.FixedFilterSql = "OrderId = @@OrderId";
+    orderDetailsGrid.FixedFilterParams["OrderId"] = Model.OrderId.Value;
+    orderDetailsGrid.Column("OrderId").Hidden();
+    orderDetailsGrid.Column("unitprice").Format("c");
+    orderDetailsGrid.Column("discount").Format("P");
+    orderDetailsGrid.Column("ProductID").Lookup(new Lookup("Products", "ProductId", "ProductName")).Label("Product");
+    @@orderDetailsGrid.Render()
+}
+}
+
+@section Scripts
+    {
+    <script type="text/javascript" class="source">
+        function addButton(sender, args) {
+            switch (args.columnName.toLowerCase()) {
+                case "orderlines":
+                    var $cell = $(args.cell);
+                    var $row = $(args.row);
+                    var orderId = sender.columnValue("OrderId", $row);
+                    $cell.html(`<a target='_blank' href='/samples/dbnetgrid/detail?orderid=${orderId}'>Order&nbsp;Details</a>`).css('background-color', '#fff');
+                    break;
+            }
+        }
+    </script>
+}

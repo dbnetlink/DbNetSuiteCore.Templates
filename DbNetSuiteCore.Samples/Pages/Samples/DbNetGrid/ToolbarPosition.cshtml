@@ -1,0 +1,83 @@
+﻿@page
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+@using DbNetSuiteCore.Enums;
+
+@model SampleModel
+@section Title
+    {
+    <p>
+        The toolbar can be positioned at the top of bottom of the grid or hidden completely using the @Model.HelpLink("properties.htm#ToolbarPosition", "ToolbarPosition") property. If the toolbar is hidden then paging is supressed and all rows will be rendered in a single page. The style of the toolbar button can be controlled with the @Model.HelpLink("properties.htm#ToolbarButtonStyle", "ToolbarButtonStyle") property.
+    </p>
+}
+@section Markup {
+    <div class="source">
+        <table class="selection-table">
+            <tr>
+                <td><b>Toolbar Position</b></td>
+                <td>
+                    <select class="form-select" id="toolbarLocation">
+                        <option value="Top">Top</option>
+                        <option value="Bottom">Bottom</option>
+                        <option value="Hidden">Hidden</option>
+                    </select>
+                </td>
+                <td><b>Toolbar Style</b></td>
+                <td>
+                    <select class="form-select" id="toolbarButtonStyle">
+                        <option value="Image">Image</option>
+                        <option value="Text">Text</option>
+                        <option value="ImageAndText">Image and text</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+
+
+@section Control
+{
+    @{
+        DbNetGridCore customersGrid = new DbNetGridCore("northwind", "customers")
+                {
+                    PageSize = 10,
+                    BooleanDisplayMode = BooleanDisplayMode.Checkbox,
+                    ToolbarPosition = Model.ToolbarLocation,
+                    ToolbarButtonStyle = Model.ToolbarButtonStyle
+                };
+
+        @customersGrid.Render()
+    }
+}
+
+@section Source {
+DbNetGridCore customersGrid = new DbNetGridCore("northwind", "customers")
+{
+    PageSize = 10,
+    BooleanDisplayMode = BooleanDisplayMode.Checkbox,
+    ToolbarPosition = Model.ToolbarLocation,
+    ToolbarButtonStyle = Model.ToolbarButtonStyle
+};
+
+@@customersGrid.Render()
+}
+
+@section Scripts
+    {
+    <script type="text/javascript" class="source">
+        var toolbarLocation = "@Model.ToolbarLocation"
+        var toolbarButtonStyle = "@Model.ToolbarButtonStyle"
+
+        $(document).ready(init);
+
+        function init() {
+            $('#toolbarLocation').val(toolbarLocation).change(function (event) { reloadPage(event) });
+            $('#toolbarButtonStyle').val(toolbarButtonStyle).change(function (event) { reloadPage(event) });
+        }
+
+        function reloadPage(event) {
+            window.location.href = window.location.href.replace(/[\?#].*|$/, "?toolbarLocation=" + $('#toolbarLocation').val() + "&toolbarButtonStyle=" + $('#toolbarButtonStyle').val());
+        }
+    </script>
+}

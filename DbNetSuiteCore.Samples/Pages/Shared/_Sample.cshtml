@@ -1,0 +1,293 @@
+﻿@using DbNetSuiteCoreSamples.Enums;
+@using Microsoft.AspNetCore.Html
+@using DbNetSuiteCoreSamples.ViewModels
+@using DbNetSuiteCore.Components
+@model SampleModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @{
+        string description = "DbNetSuiteCore - ASP.NET Core Razor UI Components";
+    }
+    @if (Model.ShowMenu == false)
+    {
+        description += $" {Model.Title}";
+    }
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" />
+
+    <link rel="stylesheet" href="~/css/prism.css" />
+    @DbNetSuiteCore.StyleSheet(Model.FontSize, Model.FontFamily)
+    <style>
+        pre {
+            border: 1pt solid steelblue;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+
+        div.row {
+            margin-top: 10px;
+        }
+
+        div#home {
+            margin-top: 10px;
+        }
+
+        code[class*=language-] {
+            font-size: small;
+        }
+
+        pre[class*=language-] {
+            line-height: 1.1;
+        }
+
+        h2, h3 {
+            color: steelblue;
+        }
+
+        hr {
+            margin: 0.5rem 0;
+        }
+
+        code[class*=language-],
+        pre[class*=language-] {
+            white-space: break-spaces;
+        }
+
+        table.selection-table {
+            margin-bottom: 10px;
+        }
+
+            table.selection-table td {
+                padding-right: 5px;
+            }
+
+        .btn-group-sm > .btn, .btn-sm {
+            margin-left: 5px;
+            padding: 0.1rem 0.2rem;
+            font-size: 1rem;
+            border-radius: 0.2rem;
+        }
+
+        div.logo {
+            border: 3px solid steelblue;
+            border-radius: 5px;
+            font-family: 'Cascadia Code';
+            font-size: 36px;
+            color: steelblue;
+            width: fit-content;
+            display: flex;
+            align-items: center;
+            height: 54px;
+            padding-right: 2px;
+            background-color: whitesmoke;
+        }
+
+            div.logo img {
+                margin: auto;
+                vertical-align: middle;
+                display: inline-block;
+                padding-bottom: 5px;
+            }
+
+        span.net {
+            color: lightsteelblue;
+        }
+
+        span.core {
+            color: #ccc;
+        }
+
+        div.sample-title {
+            border: 1px solid silver;
+            border-radius: 5px;
+            background-color: whitesmoke;
+        }
+
+        a.help-button {
+            width: auto;
+            float: right;
+        }
+
+        table.description {
+            width: 100%;
+        }
+
+        td.description p {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        a.menu-btn,
+        a.menu-btn:hover {
+            background-color: #039BE5;
+        }
+
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <main role="main" class="pb-3">
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <a class="navbar-brand" asp-area="" asp-page="/Index">DbNetSuiteCore Samples</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            <!--
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            </li>
+                            -->
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div class="container">
+            <div class="row">
+                @if (Model.ShowMenu)
+                {
+                    @await RenderSectionAsync("Markup", required: false)
+                }
+                else
+                {
+                    <div class="col-12">
+                        <main role="main">
+                            <table style="width:100%">
+                                <tr>
+                                    <td>
+                                        <h3>@Html.Raw(Model.Title)</h3>
+                                    </td>
+                                    <td>
+                                        <div class="clearfix">
+                                            <a type="button" href="/samples/@Model.NextSampleApp.Url" title="@Model.NextSampleApp.Title" class="btn btn-secondary btn-sm float-end menu-btn">&nbsp;Next&nbsp;<i class="bi bi-chevron-right"></i>
+                                            </a>
+                                            <a type="button" href="/samples" class="btn btn-secondary btn-sm float-end menu-btn">&nbsp;Menu&nbsp;<i class="bi bi-list"></i>&nbsp;</a>
+                                            <a type="button" href="/samples/@Model.PreviousSampleApp.Url" title="@Model.PreviousSampleApp.Title" class="btn btn-secondary btn-sm float-end menu-btn"><i class="bi bi-chevron-left"></i>&nbsp;Previous&nbsp;</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <div>
+                                <div class="sample-title p-2 mb-2">
+                                    <table class="description">
+                                        <tr>
+                                            <td style="width:100%" class="description">
+                                                <a href="https://docs.dbnetsuitecore.com/" class="btn btn-sm btn-primary my-2 help-button" role="button" target="_blank">Help</a>
+                                                @await RenderSectionAsync("Title", required: false)
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+ 
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Example</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="source-tab" data-bs-toggle="tab" data-bs-target="#source" type="button" role="tab" aria-controls="source" aria-selected="false">Source</button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="samplesContent">
+                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    @RenderBody()
+                                    @await RenderSectionAsync("Markup", required: false)
+                                    @await RenderSectionAsync("Control", required: false)
+                                </div>
+                                <div class="tab-pane fade" id="source" role="tabpanel" aria-labelledby="sourtce-tab">
+                                    <h5>Razor</h5>
+                                    @if (string.IsNullOrEmpty(Model.SourceCode))
+                                    {
+                                        <pre>
+                                        <code class="language-csharp razor">
+                                                @await RenderSectionAsync("Source", required: false)
+                                                                                            </code>
+                                                                                        </pre>
+                                    }
+                                    else
+                                    {
+                                        IgnoreSection("Source");
+                                        <pre>
+                                        <code class="language-csharp razor">@Model.SourceCode</code>
+                                                                                        </pre>
+                                    }
+                                    <div class="controller-source" style="display:none">
+                                        <h5>Controller</h5>
+                                        <pre><code id="controller-code" class="language-csharp">@await RenderSectionAsync("Controller", required: false)</code></pre>
+                                    </div>
+                                    <div class="client-source" style="display:none">
+                                        <h5>JavaScript</h5>
+                                        <pre><code class="language-javascript"></code></pre>
+                                    </div>
+                                    <div class="html-source" style="display:none">
+                                        <h5>HTML</h5>
+                                        <pre><code class="language-html"></code></pre>
+                                    </div>
+                                    <div class="css-source" style="display:none">
+                                        <h5>CSS</h5>
+                                        <pre><code class="language-css"></code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </main>
+                    </div>
+                }
+            </div>
+            <footer class="py-2">
+                <div class="d-flex flex-column flex-sm-row justify-content-between py-1 my-1 border-top">
+                    <p>&copy; @DateTime.Today.ToString("yyyy") DbNetLink Limited. All rights reserved.</p>
+                </div>
+            </footer>
+        </div>
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/prism.js" asp-append-version="true"></script>
+
+    @DbNetSuiteCore.ClientScript()
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        window.Prism = window.Prism || {};
+        Prism.manual = true;
+        $("code.razor").html($("code.razor").html().replaceAll("<string>", "&lt;string&gt;"));
+
+        if ($("div.source").length > 0) {
+            $("code.language-html").text($("div.source").html().replace("<string>", "&lt;").replace(">", "&gt;"));
+            $("div.html-source").show();
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            if ($("script.source").length > 0) {
+                $("code.language-javascript").text($("script.source").text());
+                $("div.client-source").show();
+            }
+            if ($("style.source").length > 0) {
+                $("code.language-css").text($("style.source").text());
+                $("div.css-source").show();
+            }
+            if ($("#controller-code").text().length > 0) {
+                $("div.controller-source").show();
+            }
+            Prism.highlightAll();
+        });
+    </script>
+    <script type="text/javascript" src="/js/sample.js" asp-append-version="true"></script>
+</body>
+</html>

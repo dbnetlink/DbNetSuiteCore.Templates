@@ -4,10 +4,12 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <NoWarn>8625,8618,8601,8602,8604</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DbNetSuiteCore" Version="1.0.2" />
+    <PackageReference Include="Dapper" Version="2.1.24" />
+    <PackageReference Include="DbNetSuiteCore" Version="1.0.12" />
   </ItemGroup>
 
 </Project>

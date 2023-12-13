@@ -1,0 +1,47 @@
+﻿@page
+@using DbNetSuiteCore.Enums;
+@using DbNetSuiteCore.Enums.DbNetCombo;
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+
+@model SampleModel
+
+@section Title
+    {
+    <p>A database driven drop-down list can be created very easily. Simply pass the connection alias, table name,value and text column names to the  @Model.HelpLink("dbnetcombo_constructors.htm","constructor").</p>
+}
+
+@section Markup
+{
+    <div class="source ps-2">
+        <div class="row">
+            <div class="col" id="customerCombo"></div>
+            <div class="col">
+                <span id="selectedCustomer"></span>
+            </div>
+        </div>
+    </div>
+}
+
+@section Control {
+    @{
+        DbNetComboCore customersCombo = new DbNetComboCore("northwind", "customers", "customerid", "companyname", "customerCombo");
+        customersCombo.Bind(EventType.OnOptionSelected, "showSelectedCustomer");
+        @customersCombo.Render()
+    }
+}
+
+@section Source {
+DbNetComboCore customersCombo = new DbNetComboCore("northwind", "customers", "customerid", "companyname", "customerCombo");
+customersCombo.Bind(EventType.OnOptionSelected, "showSelectedCustomer");
+@@customersCombo.Render()
+}
+
+@section Scripts
+    {
+<script type="text/javascript" class="source">
+    function showSelectedCustomer(control, args) {
+            $("#selectedCustomer").html(`Selected Customer: <b>${args.selectedOptions[0].text} (${args.selectedValues[0]})</b>`)
+    }
+</script>
+}

@@ -1,0 +1,80 @@
+﻿@page
+@using DbNetSuiteCore.Enums.DbNetGrid;
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+@using DbNetSuiteCore.Enums;
+
+@model SampleModel
+
+@section Title {
+    <p>Binary data can be treated in one of two ways in the grid control. If it is an image then the value can be rendered directly in the browser by setting the column @Model.HelpLink("dbnetgrid_column_properties.htm#Image", "Image") property using the @Model.HelpLink("ImageConfiguration.htm", "ImageConfiguration") class or if the binary data should be downloaded in the case of files such as spreadsheets or PDF's then you can set the column @Model.HelpLink("dbnetgrid_column_properties.htm#File", "File") property using the @Model.HelpLink("FileConfiguration.htm", "FileConfiguration") class. The sample also demonstrates use of the @Model.HelpLink("events.htm#OnConfigureBinaryData", "OnConfigureBinaryData") event which is used to assign a download file name to the binary data.</p>
+}
+
+@section Markup {
+    <div class="source">
+        <h5>Preview binary data</h5>
+        <hr />
+        <div id="imageGrid"></div>
+        <br />
+        <h5>Download binary data</h5>
+        <hr />
+        <div id="downloadGrid"></div>
+    </div>
+}
+
+@section Control {
+    @{
+        DbNetGridCore employeesGrid = new DbNetGridCore("northwind", "employees", "imageGrid")
+        {
+            Columns = new List<string>() { "EmployeeId", "FirstName", "LastName", "Title", "Photo", "PhotoPath" },
+            PageSize = 5
+        };
+        employeesGrid.View = true;
+        employeesGrid.PageSize = 5;
+        employeesGrid.MaxImageHeight = 40;
+        employeesGrid.Bind(EventType.OnConfigureBinaryData, "configureImageFileName");
+        employeesGrid.Column("Photo").Image( new ImageConfiguration("jpg"));
+        @employeesGrid.Render()
+
+        DbNetGridCore downloadGrid = new DbNetGridCore("northwind", "employees", "downloadGrid")
+        {
+            Columns = new List<string>() { "EmployeeId", "FirstName", "LastName", "Title", "Photo", "PhotoPath" },
+            PageSize = 5
+        };
+        downloadGrid.Column("EmployeeId").Hidden();
+        downloadGrid.Bind(EventType.OnConfigureBinaryData, "configureImageFileName");
+        downloadGrid.Column("Photo").File(new FileConfiguration("jpg"));
+        @downloadGrid.Render()
+    }
+}
+
+@section Source {
+DbNetGridCore employeesGrid = new DbNetGridCore("northwind", "employees", "imageGrid")
+{
+    Columns = new List<string>() { "EmployeeId", "FirstName", "LastName", "Title", "Photo", "PhotoPath" },
+    PageSize = 5
+};
+employeesGrid.View = true;
+employeesGrid.PageSize = 5;
+employeesGrid.MaxImageHeight = 40;
+employeesGrid.Bind(EventType.OnConfigureBinaryData, "configureImageFileName");
+employeesGrid.Column("Photo").Image( new ImageConfiguration("jpg"));
+@@employeesGrid.Render()
+
+DbNetGridCore downloadGrid = new DbNetGridCore("northwind", "employees", "downloadGrid")
+{
+    Columns = new List<string>() { "EmployeeId", "FirstName", "LastName", "Title", "Photo", "PhotoPath" },
+    PageSize = 5
+};
+downloadGrid.Column("EmployeeId").Hidden();
+downloadGrid.Bind(EventType.OnConfigureBinaryData, "configureImageFileName");
+downloadGrid.Column("Photo").File(new FileConfiguration("jpg"));
+@@downloadGrid.Render()
+}
+
+<script type="text/javascript" class="source">
+    function configureImageFileName(sender, args) {
+        var fileName = sender.columnValue("photopath", args.row);
+        args.fileName = fileName.split('/').pop().replace(".bmp", ".jpg");
+    }
+</script>

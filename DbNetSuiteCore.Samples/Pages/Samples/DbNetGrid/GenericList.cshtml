@@ -1,0 +1,37 @@
+﻿@page
+@model GenericListModel
+@using DbNetSuiteCoreSamples.Models;
+@using DbNetSuiteCore.Components;
+@using DbNetSuiteCoreSamples.Pages.Samples.DbNetGrid;
+@using DbNetSuiteCore.Enums;
+
+@section Title
+    {
+    <p>In addition to connecting directly to the database you can use a list of typed objects from an API as a data source. In this example the grid control is created with a data source type of @Model.HelpLink("constructors.htm#List", "List") and then given a list of Nobel prize winners generated from the following <a target="_blank" href="https://api.nobelprize.org/v1/prize.json">API end-point</a> objects using the @Model.HelpLink("methods.htm#AddList", "AddList") method.</p>
+}
+
+@section Control {
+    @{
+        DbNetGridCore nobelPrizeWinnersGrid = new DbNetGridCore(DataSourceType.List);
+        nobelPrizeWinnersGrid.AddList(Model.NobelPrizeLaureates);
+        nobelPrizeWinnersGrid.Column("*").Filter();
+        nobelPrizeWinnersGrid.Column(nameof(NobelPrize.category)).Lookup().FilterMode(FilterMode.List);
+        @nobelPrizeWinnersGrid.Render()
+    }
+}
+
+@section Source {
+DbNetGridCore nobelPrizeWinnersGrid = new DbNetGridCore(DataSourceType.List);
+nobelPrizeWinnersGrid.AddList(Model.NobelPrizeLaureates);
+nobelPrizeWinnersGrid.Column("*").Filter();
+nobelPrizeWinnersGrid.Column(nameof(NobelPrizeLaureate.category)).Lookup().FilterMode(FilterMode.List);
+@@nobelPrizeWinnersGrid.Render()
+}
+
+@section Controller {
+...
+string json = await GetUrlContent("https://api.nobelprize.org/v1/prize.json");
+_nobelPrizes = System.Text.Json.JsonSerializer.Deserialize<NobelPrizes>(json);
+NobelPrizeLaureates = _nobelPrizes.prizes.Where(p => p.laureates != null).SelectMany(p => p.laureates.Select(l => new { p, l })).Select(x => new NobelPrizeLaureate(x.p, x.l)).ToList();
+...
+}

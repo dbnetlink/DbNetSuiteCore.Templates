@@ -1,0 +1,26 @@
+﻿@page
+@using DbNetSuiteCore.Enums.DbNetFile;
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+
+@model SampleModel
+
+@section Title {
+    <p>You can configure the information returned by DbNetFileCore using the Columns property to specify which bits of information you want to return from the file system. This sample uses the <b>Preview</b> column type to show a thumbnail for image file types.</p>
+}
+
+@section Control {
+    @{
+        DbNetFileCore folderView = new DbNetFileCore("/dbnetfile/documents/sampleimages");
+        folderView.Columns = new List<FileInfoProperties>() { FileInfoProperties.Name, FileInfoProperties.Length, FileInfoProperties.Preview };
+        folderView.Column(FileInfoProperties.Preview).Label("Thumbnail");
+        @folderView.Render()
+    }
+}
+
+@section Source {
+DbNetFileCore folderView = new DbNetFileCore("/dbnetfile/documents/sampleimages");
+folderView.Columns = new List<FileInfoProperties>() { FileInfoProperties.Name, FileInfoProperties.Length, FileInfoProperties.Preview };
+folderView.Column(FileInfoProperties.Preview).Label("Thumbnail");
+@@folderView.Render()
+}

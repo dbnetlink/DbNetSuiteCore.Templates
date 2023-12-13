@@ -1,0 +1,77 @@
+﻿@page
+@using DbNetSuiteCore.Components;
+@using DbNetSuiteCoreSamples.Pages.Samples.DbNetGrid;
+
+@model FontModel
+@{
+    ViewData["Title"] = "Changing the font ";
+}
+@section Markup {
+    <div class="source">
+        <table class="selection-table">
+            <tr>
+                <td>
+                    <b>Font Size</b>
+                </td>
+                <td>
+                    <select class="form-select" id="font-size">
+                        @foreach (string fontSize in Model.FontSizes)
+                        {
+                            <option value="@fontSize.ToLower()">@fontSize</option>
+                        }
+                    </select>
+                </td>
+                <td>&nbsp;</td>
+                <td>
+                    <b>Font Family</b>
+                </td>
+                <td>
+                    <select class="form-select" id="font-family">
+                        @foreach (string fontFamily in Model.FontFamilies)
+                        {
+                            <option value="@fontFamily.ToLower()">@fontFamily</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+
+@section Title
+    {
+    <p>
+        The font size and family can be changed by supplying arguments to the rendering of the @Model.HelpLink("gettingstarted.htm#DbNetSuiteCore.StyleSheet","DbNetSuiteCore stylesheet"). This can also be achieved by setting @Model.HelpLink("gettingstarted.htm#FontSize","FontSize") and @Model.HelpLink("gettingstarted.htm#FontFamily","FontFamily") in the @Model.HelpLink("gettingstarted.htm#appSettings","appSettings.json") file.
+    </p>
+}
+
+@section Control {
+    @{
+        DbNetGridCore customersGrid = new DbNetGridCore("northwind", "customers");
+        @customersGrid.Render()
+    }
+}
+
+@section Source {
+DbNetGridCore customersGrid = new DbNetGridCore("northwind", "customers");
+@@customersGrid.Render()
+}
+
+@section Scripts
+    {
+    <script type="text/javascript" class="source">
+        var fontSize = "@Model.FontSize"
+        var fontFamily = "@Model.FontFamily"
+
+        $(document).ready(init);
+
+        function init() {
+            $('#font-size').val(fontSize).change(function (event) { reloadPage(event) });
+            $('#font-family').val(fontFamily).change(function (event) { reloadPage(event) });
+        }
+
+        function reloadPage(event) {
+            window.location.href = window.location.href.replace(/[\?#].*|$/, "?fontsize=" + $('#font-size').val() + "&fontfamily=" + $('#font-family').val());
+        }
+    </script>
+}

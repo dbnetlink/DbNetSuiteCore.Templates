@@ -1,0 +1,97 @@
+﻿@page
+@using DbNetSuiteCore.Enums.DbNetEdit;
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+@using DbNetSuiteCore.Enums;
+
+@using Microsoft.AspNetCore.Html
+@model SampleModel
+@section Title
+    {
+    <p>Instances of DbNetEditCore can be linked together to create parent child relationships. To link a child edit simply add it to the parent control using the @Model.HelpLink("dbnetedit_methods.htm#AddLinkedControl", "AddLinkedControl") method. The edit controls are linked by automatically associating the column in the child edit control specified as a @Model.HelpLink("dbnetedit_column_properties.htm#ForeignKey", "ForeignKey") with the column in the parent Edit identified as a @Model.HelpLink("dbnetedit_column_properties.htm#PrimaryKey", "PrimaryKey") (usually automatic). This sample also demonstrates how to use custom HTML markup by specifyng the <b>Id</b> of the containing element as a 3rd argument to the @Model.HelpLink("dbnetedit_constructors.htm","constructor").</p>
+}
+
+@section Styles
+    {
+    <style>
+        .dbnetsuite {
+            margin-top: 10px;
+        }
+    </style>
+}
+@section Markup
+    {
+    <div class="source">
+        <div class="row">
+            <div class="col">
+                <h5>Customers</h5>
+                <hr />
+                <div id="customersEdit"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h5>Orders</h5>
+                <hr />
+                <div id="ordersEdit"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h5>Order Details</h5>
+                <hr />
+                <div id="orderDetailsEdit"></div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Control {
+    @{
+        DbNetEditCore orderDetailsEdit = new DbNetEditCore("northwind", "[order details]", "orderDetailsEdit");
+        orderDetailsEdit.Column("OrderID").ForeignKey().Hidden();
+        orderDetailsEdit.Column("ProductID").Lookup(new Lookup("Products", "ProductId", "ProductName")).Label("Product");
+        orderDetailsEdit.Column("UnitPrice").Format("c");
+        orderDetailsEdit.LayoutColumns = 3;
+
+        DbNetEditCore ordersEdit = new DbNetEditCore("northwind", "orders", "ordersEdit");
+        ordersEdit.Column("CustomerID").ForeignKey().Hidden();
+        ordersEdit.Column("EmployeeID").Lookup(new Lookup("Employees", "EmployeeId", "lastname + ',' + firstname")).Label("Employee");
+        ordersEdit.Column("ShipVia").Lookup(new Lookup("Suppliers", "SupplierId", "CompanyName"));
+        ordersEdit.Column("Freight").Format("c");
+        ordersEdit.LayoutColumns = 3;
+        ordersEdit.AddLinkedControl(orderDetailsEdit);
+
+        DbNetEditCore customersEdit = new DbNetEditCore("northwind", "customers", "customersEdit");
+
+        customersEdit.Column("CustomerID").Hidden();
+        customersEdit.AddLinkedControl(ordersEdit);
+        customersEdit.LayoutColumns = 3;
+
+        @customersEdit.Render()
+    }
+}
+
+@section Source {
+DbNetEditCore orderDetailsEdit = new DbNetEditCore("northwind", "[order details]", "orderDetailsEdit");
+orderDetailsEdit.Column("OrderID").ForeignKey().Hidden();
+orderDetailsEdit.Column("ProductID").Lookup(new Lookup("Products", "ProductId", "ProductName")).Label("Product");
+orderDetailsEdit.Column("UnitPrice").Format("c");
+orderDetailsEdit.LayoutColumns = 3;
+
+DbNetEditCore ordersEdit = new DbNetEditCore("northwind", "orders", "ordersEdit");
+ordersEdit.Column("CustomerID").ForeignKey().Hidden();
+ordersEdit.Column("EmployeeID").Lookup(new Lookup("Employees", "EmployeeId", "lastname + ',' + firstname")).Label("Employee");
+ordersEdit.Column("ShipVia").Lookup(new Lookup("Suppliers", "SupplierId", "CompanyName"));
+ordersEdit.Column("Freight").Format("c");
+ordersEdit.LayoutColumns = 3;
+ordersEdit.AddLinkedControl(orderDetailsEdit);
+
+DbNetEditCore customersEdit = new DbNetEditCore("northwind", "customers", "customersEdit");
+
+customersEdit.Column("CustomerID").Hidden();
+customersEdit.AddLinkedControl(ordersEdit);
+customersEdit.LayoutColumns = 3;
+
+@@customersEdit.Render()
+}

@@ -1,0 +1,107 @@
+﻿@page
+@using DbNetSuiteCore.Enums.DbNetCombo;
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+
+@model SampleModel
+
+@section Title
+    {
+    <p>You can use the combo controls to filter and select records to be edited using a DbNetEditCore edit control.</p>
+}
+
+
+@section Markup
+    {
+    <div class="source">
+        <div class="row">
+            <div class="col-2">
+                <h5>Countries</h5>
+                <div id="country"></div>
+            </div>
+            <div class="col-2">
+                <h5>Cities</h5>
+                <div id="city"></div>
+            </div>
+            <div class="col-3">
+                <h5>Customers</h5>
+                <div id="customer"></div>
+            </div>
+            <div class="col-5">
+                <h5 id="customerTitle"></h5>
+                <hr />
+                <div id="customerEdit"></div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Control {
+    @{
+        DbNetEditCore customerEdit = new DbNetEditCore("northwind", "customers", "customerEdit") { };
+
+        DbNetComboCore customerCombo = new DbNetComboCore("northwind", "customers", "companyname", null, "customer")
+                {
+                    ForeignKeyColumn = "city",
+                    Size = 5,
+                    AutoRowSelect = true
+                };
+        customerCombo.Bind(EventType.OnOptionSelected, "showSelectedCustomer");
+        DbNetComboCore cityCombo = new DbNetComboCore("northwind", "customers", "city", null, "city")
+                {
+                    ForeignKeyColumn = "country",
+                    Size = 5,
+                    Distinct = true,
+                    AutoRowSelect = true
+                };
+        DbNetComboCore countryCombo = new DbNetComboCore("northwind", "customers", "country", null, "country")
+                {
+                    Size = 10,
+                    Distinct = true,
+                    AutoRowSelect = true
+                };
+        customerCombo.AddLinkedControl(customerEdit);
+        cityCombo.AddLinkedControl(customerCombo);
+        countryCombo.AddLinkedControl(cityCombo);
+        @countryCombo.Render()
+    }
+}
+
+@section Source {
+DbNetEditCore customerEdit = new DbNetEditCore("northwind", "customers", "customerEdit") { };
+
+DbNetComboCore customerCombo = new DbNetComboCore("northwind", "customers", "companyname", null, "customer")
+{
+    ForeignKeyColumn = "city",
+    Size = 5,
+    AutoRowSelect = true
+};
+customerCombo.Bind(EventType.OnOptionSelected, "showSelectedCustomer");
+DbNetComboCore cityCombo = new DbNetComboCore("northwind", "customers", "city", null, "city")
+{
+    ForeignKeyColumn = "country",
+    Size = 5,
+    Distinct = true,
+    AutoRowSelect = true
+};
+DbNetComboCore countryCombo = new DbNetComboCore("northwind", "customers", "country", null, "country")
+{
+    Size = 10,
+    Distinct = true,
+    AutoRowSelect = true
+};
+customerCombo.AddLinkedControl(customerEdit);
+cityCombo.AddLinkedControl(customerCombo);
+countryCombo.AddLinkedControl(cityCombo);
+@@countryCombo.Render()
+    }
+
+@section Scripts
+    {
+    <script type="text/javascript" class="source">
+        function showSelectedCustomer(control, args) {
+            var option = args.selectedOptions[0];
+            $("#customerTitle").html(option.text)
+        }
+    </script>
+}

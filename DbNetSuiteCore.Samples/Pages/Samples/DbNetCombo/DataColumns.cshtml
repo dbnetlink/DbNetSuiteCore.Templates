@@ -1,0 +1,112 @@
+﻿@page
+@using DbNetSuiteCore.Enums;
+@using DbNetSuiteCore.Enums.DbNetCombo;
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+
+@model SampleModel
+
+@section Title
+    {
+    <p>The @Model.HelpLink("dbnetcombo_properties.htm#DataOnlyColumns", "DataOnlyColumns") property allows additonal data to be selected from the data source and stored on the combo options as data attributes.</p>
+}
+
+<style>
+    table.employee td:first-child {
+        font-weight: bold;
+    }
+</style>
+
+@section Markup
+    {
+    <div class="source ps-2">
+        <div class="row">
+            <div class="col">
+                <div id="employeeCombo"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="employee">
+                    <tr>
+                        <td>Title</td>
+                        <td id="Title"></td>
+                    </tr>
+                    <tr>
+                        <td>Title Of Courtesy</td>
+                        <td id="TitleOfCourtesy"></td>
+                    </tr>
+                    <tr>
+                        <td>Birth Date</td>
+                        <td id="BirthDate"></td>
+                    </tr>
+                    <tr>
+                        <td>Hire Date</td>
+                        <td id="HireDate"></td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td id="Address"></td>
+                    </tr>
+                    <tr>
+                        <td>City</td>
+                        <td id="City"></td>
+                    </tr>
+                    <tr>
+                        <td>Region</td>
+                        <td id="Region"></td>
+                    </tr>
+                    <tr>
+                        <td>Postal Code</td>
+                        <td id="PostalCode"></td>
+                    </tr>
+                    <tr>
+                        <td>Country</td>
+                        <td id="Country"></td>
+                    </tr>
+                    <tr>
+                        <td>Home Phone</td>
+                        <td id="HomePhone"></td>
+                    </tr>
+                    <tr>
+                        <td>Extension</td>
+                        <td id="Extension"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+@section Control {
+    @{
+        DbNetComboCore employeesCombo = new DbNetComboCore("northwind", "employees", "employeeid", "lastname || ', ' || firstname", "employeeCombo");
+        employeesCombo.DataOnlyColumns = new List<string>() { "Title", "TitleOfCourtesy", "BirthDate", "HireDate", "Address", "City", "Region", "PostalCode", "Country", "HomePhone", "Extension" };
+        employeesCombo.Bind(EventType.OnOptionSelected, "showSelectedEmployee");
+        @employeesCombo.Render()
+    }
+}
+@section Source
+    {
+DbNetComboCore employeesCombo = new DbNetComboCore("northwind", "employees", "employeeid", "lastname || ', ' || firstname", "employeeCombo");
+employeesCombo.DataOnlyColumns = new List<string>
+() { "Title", "TitleOfCourtesy", "BirthDate", "HireDate", "Address", "City", "Region", "PostalCode", "Country", "HomePhone", "Extension" };
+employeesCombo.Bind(EventType.OnOptionSelected, "showSelectedEmployee");
+@@employeesCombo.Render()
+}
+
+
+@section Scripts
+    {
+<script type="text/javascript" class="source">
+        function showSelectedEmployee(control, args) {
+        var columns = ["Title", "TitleOfCourtesy", "BirthDate", "HireDate", "Address", "City", "Region", "PostalCode", "Country", "HomePhone", "Extension"]
+
+        for (var i = 0; i < columns.length; i++) {
+            var colName = columns[i];
+            var $option = $(args.selectedOptions[0]);
+            $(`#${colName}`).text($option.data(colName.toLowerCase()));
+        }
+    }
+</script>
+}

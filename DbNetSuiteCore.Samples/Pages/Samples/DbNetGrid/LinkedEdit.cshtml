@@ -1,0 +1,97 @@
+﻿@page
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+@using DbNetSuiteCore.Enums.DbNetGrid;
+@using Microsoft.AspNetCore.Html;
+
+@model SampleModel
+@section Markup
+    {
+    <div class="source">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            @Tab("Customers",true)
+            @Tab("Customer Edit",false)
+            @Tab("Orders Edit",false)
+        </ul>
+        <div class="tab-content" id="linkedGrids">
+            <div class="tab-pane fade show active" id="customers" role="tabpanel" aria-labelledby="customers-tab">
+                <div id="customersGrid"></div>
+            </div>
+            <div class="tab-pane fade" id="customeredit" role="tabpanel" aria-labelledby="customeredit-tab">
+                <div id="customersEdit"></div>
+            </div>
+            <div class="tab-pane fade" id="ordersedit" role="tabpanel" aria-labelledby="ordersedit-tab">
+                <div id="ordersEdit"></div>
+            </div>
+        </div>
+    </div>
+}
+@section Title
+{
+    <p>An editing capability can also be added to DbNetGrid by explicity linking instances of DbNetEdit using the @Model.HelpLink("methods.htm#AddLinkedControl","AddLinkedControl") method. In this sample the ability to edit the selected customer record itself and also order records for the selected customer. For one-to-many relationships it is necessary to specify the column in the linked control that acts as the foreign key using the @Model.HelpLink("dbnetedit_column_properties.htm#ForeignKey","ForeignKey") method. The sample also uses the @Model.HelpLink("events.htm#OnRowSelected","OnRowSelected") client-side event to update the tab labels with the selected customer name.</p>
+}
+@section Control
+{
+    @{
+        DbNetEditCore customersEdit = new DbNetEditCore("northwind", "customers", "customersEdit");
+        customersEdit.LayoutColumns = 2;
+        DbNetEditCore ordersEdit = new DbNetEditCore("northwind", "orders", "ordersEdit");
+        ordersEdit.LayoutColumns = 2;
+        ordersEdit.Column("CustomerId").ForeignKey();
+        ordersEdit.Column("ShipVia").Lookup(new Lookup("Shippers","ShipperID", "CompanyName"));
+        ordersEdit.Column("EmployeeId").Lookup(new Lookup("Employees", "EmployeeID", "FirstName + ' ' + LastName")).Label("Employee");
+        ordersEdit.Column("Freight").Format("c");
+
+        DbNetGridCore customersGrid = new DbNetGridCore("northwind", "customers", "customersGrid") { PageSize = 10 };
+        customersGrid.Columns = new List<string>() { "CustomerId", "CompanyName",  "ContactTitle", "Address", "City", "Region", "Country" };
+        customersGrid.Labels = new List<string>() { "", "Company Name",  "Contact", "Address", "City", "Region", "Country" };
+        customersGrid.Column(new string[] { "Addr", "PhoneFax" }).Style("text-align:left");
+        customersGrid.Column("CustomerId").Hidden();
+        customersGrid.AddLinkedControl(customersEdit);
+        customersGrid.AddLinkedControl(ordersEdit);
+        customersGrid.Bind(EventType.OnRowSelected, "setTabLabels");
+
+        @customersGrid.Render()
+    }
+}
+
+@section Source {
+DbNetEditCore customersEdit = new DbNetEditCore("northwind", "customers", "customersEdit");
+customersEdit.LayoutColumns = 2;
+DbNetEditCore ordersEdit = new DbNetEditCore("northwind", "orders", "ordersEdit");
+ordersEdit.LayoutColumns = 2;
+ordersEdit.Column("CustomerId").ForeignKey();
+ordersEdit.Column("ShipVia").Lookup(new Lookup("Shippers","ShipperID", "CompanyName"));
+ordersEdit.Column("EmployeeId").Lookup(new Lookup("Employees", "EmployeeID", "FirstName + ' ' + LastName")).Label("Employee");
+ordersEdit.Column("Freight").Format("c");
+
+DbNetGridCore customersGrid = new DbNetGridCore("northwind", "customers", "customersGrid") { PageSize = 10 };
+customersGrid.Columns = new List<string>() { "CustomerId", "CompanyName",  "ContactTitle", "Address", "City", "Region", "Country" };
+customersGrid.Labels = new List<string>() { "", "Company Name",  "Contact", "Address", "City", "Region", "Country" };
+customersGrid.Column(new string[] { "Addr", "PhoneFax" }).Style("text-align:left");
+customersGrid.Column("CustomerId").Hidden();
+customersGrid.AddLinkedControl(customersEdit);
+customersGrid.AddLinkedControl(ordersEdit);
+customersGrid.Bind(EventType.OnRowSelected, "setTabLabels");
+
+@@customersGrid.Render()
+}
+
+@section Scripts
+    {
+    <script type="text/javascript" class="source">
+        function setTabLabels(grid, args) {
+            let companyName = grid.columnValue("companyname", args.row)
+            $("button#customeredit-tab").html(`<b>${companyName}</b> update`)
+            $("button#ordersedit-tab").html(`<b>${companyName}</b> orders update`)
+        }
+    </script>
+}
+@functions
+{
+    public static HtmlString Tab(string label, bool active)
+    {
+        string name = label.ToLower().Replace(" ", string.Empty);
+        return new HtmlString($"<li class=\"nav-item\" role=\"presentation\"><button class=\"nav-link {(active ? "active" : string.Empty)}\" id=\"{name}-tab\" data-bs-toggle=\"tab\" data-bs-target=\"#{name}\" type=\"button\" role=\"tab\" aria-controls=\"{name}\" aria-selected=\"{active.ToString().ToLower()}\">{label}</button></li>");
+    }
+}

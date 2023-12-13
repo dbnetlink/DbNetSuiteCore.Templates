@@ -1,0 +1,38 @@
+﻿@page
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+@using DbNetSuiteCore.Enums.DbNetGrid;
+@using DbNetSuiteCore.Enums;
+@model SampleModel
+
+@section Title
+{
+    <p>Sub-totals can be added for a column using the @Model.HelpLink("dbnetgrid_column_properties.htm#TotalBreak", "TotalBreak") property in combination with the @Model.HelpLink("dbnetgrid_column_properties.htm#Aggregate", "Aggregate") property. Duplicated column values can be suppressed using @Model.HelpLink("dbnetgrid_column_properties.htm#ClearDuplicateValue", "ClearDuplicateValue") property for enhanced readability.</p>
+}
+
+@section Control
+{
+    @{
+        DbNetGridCore orderTotalsGrid = new DbNetGridCore("northwind", "Customers join Orders on Customers.CustomerID = Orders.CustomerID join [Order Details] on Orders.OrderID = [Order Details].OrderID");
+        orderTotalsGrid.Columns = new List<string>() { "CompanyName", "OrderDate", "[Order Details].OrderID", "ProductID", "UnitPrice", "Quantity", "(UnitPrice*Quantity) as Value" };
+        orderTotalsGrid.Labels = new List<string>() {  "Company", "Order Date", "Order ID", "Product", "Unit Price", "Qty", "Value" };
+        orderTotalsGrid.Column("UnitPrice").Format("c");
+        orderTotalsGrid.Column("value").Format("c").DataType(typeof(Decimal)).Aggregate(AggregateType.Sum);
+        orderTotalsGrid.Column(new string[] { "CompanyName", "OrderID" }).TotalBreak();
+        orderTotalsGrid.Column("OrderDate").ClearDuplicateValue();
+        orderTotalsGrid.Column("ProductID").Lookup(new Lookup("Products", "ProductId", "ProductName"));
+        @orderTotalsGrid.Render()
+    }
+}
+
+@section Source {
+DbNetGridCore orderTotalsGrid = new DbNetGridCore("northwind", "Customers join Orders on Customers.CustomerID = Orders.CustomerID join [Order Details] on Orders.OrderID = [Order Details].OrderID");
+orderTotalsGrid.Columns = new List<string>() { "CompanyName", "OrderDate", "[Order Details].OrderID", "ProductID", "UnitPrice", "Quantity", "(UnitPrice*Quantity) as Value" };
+orderTotalsGrid.Labels = new List<string>() {  "Company", "Order Date", "Order ID", "Product", "Unit Price", "Qty", "Value" };
+orderTotalsGrid.Column("UnitPrice").Format("c");
+orderTotalsGrid.Column("value").Format("c").DataType(typeof(Decimal)).Aggregate(AggregateType.Sum);
+orderTotalsGrid.Column(new string[] { "CompanyName", "OrderID" }).TotalBreak();
+orderTotalsGrid.Column("OrderDate").ClearDuplicateValue();
+orderTotalsGrid.Column("ProductID").Lookup(new Lookup("Products", "ProductId", "ProductName"));
+@@orderTotalsGrid.Render()
+}

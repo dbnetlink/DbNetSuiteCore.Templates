@@ -1,0 +1,70 @@
+﻿@page
+@using DbNetSuiteCore.Components;
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Globalization
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Enums.DbNetGrid;
+@using DbNetSuiteCoreSamples.Pages.Samples.DbNetGrid
+@model LocalizationModel
+
+<table class="selection-table">
+    <tr>
+        <td>
+            <b>Culture</b>
+        </td>
+        <td>
+            <select class="form-select" id="culture">
+                @foreach (CultureInfo culture in Model.Cultures)
+                {
+                    <option value="@culture.Name">@culture.DisplayName</option>
+                }
+            </select>
+        </td>
+    </tr>
+</table>
+
+@section Title
+{
+    <p>By default date and currency formatting will be based on the server culture settings this can be overridden using the @Model.HelpLink("properties.htm#Culture", "Culture") property if required</p>
+}
+
+@section Control
+{
+    @{
+        DbNetGridCore ordersGrid = new DbNetGridCore("northwind", "Customers join Orders on Customers.CustomerID = Orders.CustomerID join [Order Details] on Orders.OrderID = [Order Details].OrderID");
+        ordersGrid.Columns = new List<string>() { "Customers.CompanyName", "Orders.OrderDate", "[Order Details].OrderID", "[Order Details].ProductID", "[Order Details].UnitPrice", "[Order Details].Quantity" };
+        ordersGrid.Labels = new List<string>() { "Company Name", "Order Date", "Order ID", "Product", "Unit Price", "Qty" };
+        ordersGrid.Culture = Model.Culture;
+        ordersGrid.Column("UnitPrice").Format("c");
+        ordersGrid.Column("ProductID").Lookup(new Lookup("Products", "ProductId", "ProductName"));
+        @ordersGrid.Render()
+    }
+}
+
+@section Source {
+DbNetGridCore ordersGrid = new DbNetGridCore("northwind", "Customers join Orders on Customers.CustomerID = Orders.CustomerID join [Order Details] on Orders.OrderID = [Order Details].OrderID");
+ordersGrid.Columns = new List<string>() { "Customers.CompanyName", "Orders.OrderDate", "[Order Details].OrderID", "[Order Details].ProductID", "[Order Details].UnitPrice", "[Order Details].Quantity" };
+ordersGrid.Labels = new List<string>() { "Company Name", "Order Date", "Order ID", "Product", "Unit Price", "Qty" };
+ordersGrid.Culture = Model.Culture;
+ordersGrid.Column("UnitPrice").Format("c");
+ordersGrid.Column("ProductID").Lookup(new Lookup("Products", "ProductId", "ProductName"));
+@@ordersGrid.Render()
+}
+
+
+@section Scripts
+{
+<script type="text/javascript">
+    var culture = "@Model.Culture"
+
+    $(document).ready(init);
+
+    function init() {
+        $('#culture').val(culture).change(function (event) { reloadPage(event) });
+    }
+
+    function reloadPage(event) {
+        window.location.href = window.location.href.replace(/[\?#].*|$/, "?culture=" + $('#culture').val());
+    }
+</script>
+}

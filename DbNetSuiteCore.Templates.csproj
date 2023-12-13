@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>    
     <PackageId>DbNetSuiteCore.Templates</PackageId>
-    <PackageVersion>1.0.4</PackageVersion>
+    <PackageVersion>1.0.6</PackageVersion>
     <Title>DbNetSuiteCore Templates</Title>
     <Authors>DbNetLink Limited</Authors>
-    <Description>Templates to use when creating an application using DbNetSuiteCore.</Description>
+    <Description>Templates to illustrate use of DbNetSuiteCore Razor components.</Description>
     <PackageTags>dotnet-new;templates;dbnetsuitecore;</PackageTags>
 	<PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://dbnetsuitecore.com</PackageProjectUrl>
@@ -21,7 +21,7 @@
 
 	<ItemGroup>
 	  <None Include="readme.md" pack="true" PackagePath="." />
-	  <None Include="icon.png" Pack="true" PackagePath="."/>
+	  <None Include="icon.png" Pack="true" PackagePath="." />
 	</ItemGroup>
   <ItemGroup>
     <Content Include="DbNetSuiteCore.Samples\**\*" Exclude="DbNetSuiteCore.Samples\**\bin\**;DbNetSuiteCore.Samples\**\obj\**" />

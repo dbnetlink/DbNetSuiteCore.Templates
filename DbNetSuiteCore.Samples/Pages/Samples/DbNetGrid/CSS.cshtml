@@ -1,0 +1,59 @@
+﻿@page
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+
+@model SampleModel
+
+@section Title
+    {
+    <p>The styling of <b>DbNetGridCore</b> can be changed by simply overriding the default CSS styles</p>
+}
+
+@section Styles
+    {
+    <style class="source">
+        /*  Selected row */
+        table.dbnetgrid-table tr.selected td {
+            background-color: #E8F8F5 !important;
+            color: #0E6655 !important;
+        }
+
+        /*  Highlighted row */
+        table.dbnetgrid-table tr.highlight td {
+            background-color: #E8F8F5 !important;
+            color: #0E6655 !important;
+        }
+
+        /*  Heading row */
+        table.dbnetgrid-table tr.header-row th {
+            background-color: #F1C40F !important;
+            color: #000000;
+        }
+
+        /*  Data row (odd) */
+        table.dbnetgrid-table tr.odd td {
+            background-color: #138D75;
+            color: #D4EFDF;
+        }
+
+        /*  Data row (even) */
+        table.dbnetgrid-table tr.even td {
+            background-color: #48C9B0;
+            color: #D1F2EB;
+        }
+
+        /*  Toolbar panel background color */
+        div.dbnetgrid-toolbar-panel {
+            background-color: #E8F8F5;
+        }
+    </style>
+}
+
+@section Control {
+    @(new DbNetGridCore("northwind", "customers").Render())
+}
+
+
+@section Source {
+@@(new DbNetGridCore("northwind", "customers").Render())
+}

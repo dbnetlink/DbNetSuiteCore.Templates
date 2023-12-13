@@ -1,0 +1,19 @@
+﻿@page
+@{
+    Layout = null;
+} 
+@using DbNetSuiteCore.Components;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customers</title>
+    @DbNetSuiteCore.StyleSheet()
+</head>
+<body>
+<h1>Customers</h1>
+@(new DbNetGridCore("northwind", "customers").Render())
+@DbNetSuiteCore.ClientScript()
+</body>
+</html>

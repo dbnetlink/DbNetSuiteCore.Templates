@@ -1,0 +1,37 @@
+﻿@page
+@using DbNetSuiteCore.Enums.DbNetFile;
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+
+@model SampleModel
+
+@section Title {
+    <p>Folder structure can also be represented as an expandable tree-style view which can be linked to another instance of DbNetFileCore to provide an alternative navigational style.</p>
+}
+
+@section Markup {
+    <div style="display:flex;align-items:flex-start;">
+        <div id="treeview" style="padding:10px"></div>
+        <div id="files" style="padding:10px"></div>
+    </div>
+}
+
+@section Control {
+    @{
+        DbNetFileCore filesView = new DbNetFileCore(string.Empty, "files");
+        filesView.FilesOnly = true;
+        DbNetFileCore treeView = new DbNetFileCore("/dbnetfile/documents", "treeview");
+        treeView.TreeView = true;
+        treeView.AddLinkedControl(filesView);
+        @treeView.Render()
+    }
+}
+
+@section Source {
+DbNetFileCore filesView = new DbNetFileCore(string.Empty, "files");
+filesView.FilesOnly = true;
+DbNetFileCore treeView = new DbNetFileCore("/dbnetfile/documents", "treeview");
+treeView.TreeView = true;
+treeView.AddLinkedControl(filesView);
+@@treeView.Render()
+    }

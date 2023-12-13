@@ -1,0 +1,39 @@
+﻿@page
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+@using DbNetSuiteCore.Enums.DbNetGrid;
+@using DbNetSuiteCore.Enums;
+@model SampleModel
+
+@section Title
+{
+    <p>
+        Aggregates can be added for a column using the @Model.HelpLink("dbnetgrid_column_propertier.htm#Aggregate", "Aggregate") column method. An aggregate can be <b>Sum</b>, <b>Avg</b>, <b>Min</b>, <b>Max</b> or <b>Count</b>.
+    </p>
+}
+
+@section Control
+{
+    @{
+        DbNetGridCore orderTotalsGrid = new DbNetGridCore("northwind", "Customers join Orders on Customers.CustomerID = Orders.CustomerID join [Order Details] on Orders.OrderID = [Order Details].OrderID");
+        orderTotalsGrid.Columns = new List<string>() { "Customers.CompanyName", "Orders.OrderDate", "[Order Details].OrderID", "[Order Details].ProductID", "[Order Details].UnitPrice", "[Order Details].Quantity", "(UnitPrice*Quantity) as Value" };
+        orderTotalsGrid.Labels = new List<string>() { "Company Name", "Order Date", "Order ID", "Product", "Unit Price", "Qty", "Value" };
+        orderTotalsGrid.Column(new string[] { "UnitPrice", "value" }).Format("c");
+        orderTotalsGrid.Column("OrderDate").Format("MMMM yyyy");
+        orderTotalsGrid.Column("value").DataType(typeof(Decimal)).Aggregate(AggregateType.Sum);
+        orderTotalsGrid.Column("ProductID").Lookup(new Lookup("Products", "ProductId", "ProductName"));
+        @orderTotalsGrid.Render()
+    }
+}
+
+
+@section Source {
+DbNetGridCore orderTotalsGrid = new DbNetGridCore("northwind", "Customers join Orders on Customers.CustomerID = Orders.CustomerID join [Order Details] on Orders.OrderID = [Order Details].OrderID");
+orderTotalsGrid.Columns = new List<string>() { "Customers.CompanyName", "Orders.OrderDate", "[Order Details].OrderID", "[Order Details].ProductID", "[Order Details].UnitPrice", "[Order Details].Quantity", "(UnitPrice*Quantity) as Value" };
+orderTotalsGrid.Labels = new List<string>() { "Company Name", "Order Date", "Order ID", "Product", "Unit Price", "Qty", "Value" };
+orderTotalsGrid.Column(new string[] { "UnitPrice", "value" }).Format("c");
+orderTotalsGrid.Column("OrderDate").Format("MMMM yyyy");
+orderTotalsGrid.Column("value").DataType(typeof(Decimal)).Aggregate(AggregateType.Sum);
+orderTotalsGrid.Column("ProductID").Lookup(new Lookup("Products", "ProductId", "ProductName"));
+@@orderTotalsGrid.Render()
+}

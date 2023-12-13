@@ -1,0 +1,65 @@
+﻿@page
+@using DbNetSuiteCore.Enums.DbNetEdit;
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+@using DbNetSuiteCore.Enums;
+
+@model SampleModel
+
+@section Title {
+    <p>Binary data can be treated in one of two ways in the form control. If it is an image then it can be previewed directly in the browser by setting the column @Model.HelpLink("dbnetedit_column_properties.htm#Image", "Image") property to true or if the binary data should be downloaded in the case of files such as spreadsheets or PDF's then you can set the column @Model.HelpLink("dbnetedit_column_properties.htm#File", "File") method. In this sample the @Model.HelpLink("ImageConfiguration.htm", "ImageConfiguration") class is used to automatically associate uploaded file meta-data with columns in the form and the @Model.HelpLink("dbnetedit_events.htm#OnFileSelected", "OnFileSelected") event is used to set the description column of the record based on the name of the uploaded file.</p>
+}
+
+
+
+@section Markup {
+    <div class="source">
+        <h5>Preview binary data</h5>
+        <hr />
+        <div id="imageForm"></div>
+        <br />
+        <h5>Download binary data</h5>
+        <hr />
+        <div id="fileForm"></div>
+    </div>
+}
+
+@section Control {
+    @{
+        DbNetEditCore imagesEdit = new DbNetEditCore("dbnetsuitecore", "images", "imageForm");
+        imagesEdit.Insert = true;
+        imagesEdit.Delete = true;
+        imagesEdit.Column("Content").Image(new ImageConfiguration(new List<string>() { "jpg", "png" }, new Dictionary<FileMetaData, string>() { { FileMetaData.FileName, "FileName" }, { FileMetaData.ContentType, "ContentType" }, { FileMetaData.LastModified, "LastModified" }, { FileMetaData.Size, "Size" } }));
+        imagesEdit.Bind(EventType.OnFileSelected, "setDescription");
+        @imagesEdit.Render()
+
+        DbNetEditCore filesEdit = new DbNetEditCore("dbnetsuitecore", "files", "fileForm");
+        filesEdit.Insert = true;
+        filesEdit.Delete = true;
+        filesEdit.Column("Content").File(new FileConfiguration("pdf", new Dictionary<FileMetaData, string>() { { FileMetaData.FileName, "FileName" }, { FileMetaData.ContentType, "ContentType" }, { FileMetaData.LastModified, "LastModified" }, { FileMetaData.Size, "Size" } }));
+        filesEdit.Bind(EventType.OnFileSelected, "setDescription");
+        @filesEdit.Render()
+    }
+}
+
+@section Source {
+DbNetEditCore imagesEdit = new DbNetEditCore("dbnetsuitecore", "images", "imageForm");
+imagesEdit.Insert = true;
+imagesEdit.Delete = true;
+imagesEdit.Column("Content").Image(new ImageConfiguration(new List<string>() { "jpg", "png" }, new Dictionary<FileMetaData, string>() { { FileMetaData.FileName, "FileName" }, { FileMetaData.ContentType, "ContentType" }, { FileMetaData.LastModified, "LastModified" }, { FileMetaData.Size, "Size" } }));
+imagesEdit.Bind(EventType.OnFileSelected, "setDescription");
+@@imagesEdit.Render()
+
+DbNetEditCore filesEdit = new DbNetEditCore("dbnetsuitecore", "files", "fileForm");
+filesEdit.Insert = true;
+filesEdit.Delete = true;
+filesEdit.Column("Content").File(new FileConfiguration("pdf", new Dictionary<FileMetaData, string>() { { FileMetaData.FileName, "FileName" }, { FileMetaData.ContentType, "ContentType" }, { FileMetaData.LastModified, "LastModified" }, { FileMetaData.Size, "Size" } }));
+filesEdit.Bind(EventType.OnFileSelected, "setDescription");
+@@filesEdit.Render()
+}
+
+<script type="text/javascript" class="source">
+    function setDescription(sender, args) {
+        sender.setColumnValue("description", args.fileMetaData.fileName.split('.')[0])
+    }
+</script>

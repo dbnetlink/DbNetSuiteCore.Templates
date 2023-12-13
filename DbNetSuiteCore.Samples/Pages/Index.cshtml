@@ -1,20 +1,21 @@
 ﻿@page
 @using DbNetSuiteCore.Components
+@using DbNetSuiteCoreSamples.Pages;
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
-}
-@section Styles {
-    @DbNetSuiteCore.StyleSheet()
-}
-@section Scripts {
-    @DbNetSuiteCore.ClientScript()
+    Layout = "_Layout";
+    ViewData["Title"] = "Welcome to DbNetSuiteCore";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Customers</h1>
-    @{
-        DbNetGridCore customersGrid = new DbNetGridCore("northwind", "customers");
-        @customersGrid.Render()
-    }
+<div class="px-4 py-5 my-5 text-center">
+    <img class="d-block mx-auto mb-4" src="~/images/icon.png">
+    <h1 class="display-5 fw-bold">DbNetSuiteCore. UI components for Razor pages</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4"><b>DbNetSuiteCore</b> is a set of data driven UI components that simplify the job of presenting and editing data in ASP.NET Core Razor pages.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a type="button" target="_blank" href="https://www.dbnetsuitecore.com" class="btn btn-primary btn-lg px-4 gap-3">Website</a>
+            <a type="button" target="_blank" href="https://docs.dbnetsuitecore.com" class="btn btn-outline-secondary btn-lg px-4">Docs</a>
+            <a type="button" target="_blank" href="./samples/index" class="btn btn-outline-secondary btn-lg px-4">Samples</a>
+        </div>
+    </div>
 </div>

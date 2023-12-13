@@ -1,0 +1,50 @@
+﻿@page
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+
+@model SampleModel
+
+@section Title
+    {
+    <p>Combo boxes can be linked together using the @Model.HelpLink("dbnetcombo_methods.htm#AddLinkedControl", "AddLinkedControl") so that selecting an option in a parent control will automatically trigger the loading of options in the linked control. This is achieved by specifying the @Model.HelpLink("dbnetcombo_properties.htm#ForeignKeyColumn", "ForeignKeyColumn") in the linked control which is matched against the selected value in the parent control. Adding @Model.HelpLink("dbnetcombo_properties.htm#EmptyOptionText", "EmptyOptionText") will require the user to make a selection before the child control is loaded rather than automatically.</p>
+}
+
+@section Markup
+{
+<div class="source">
+    <div class="row">
+        <div class="col">
+            <h5>Artist</h5>
+            <div id="artists"></div>
+        </div>
+        <div class="col">
+            <h5>Album</h5>
+            <div id="albums"></div>
+        </div>
+        <div class="col">
+            <h5>Track</h5>
+            <div id="tracks"></div>
+        </div>
+    </div>
+</div>
+}
+
+@section Control {
+    @{
+DbNetComboCore tracksCombo = new DbNetComboCore("chinook", "tracks", "trackid", "name", "tracks") { ForeignKeyColumn = "albumid", EmptyOptionText = "Please select a track ..." };
+DbNetComboCore albumsCombo = new DbNetComboCore("chinook", "albums", "albumid", "title", "albums") { ForeignKeyColumn = "artistid", EmptyOptionText = "Please select an album ..." };
+DbNetComboCore artistsCombo = new DbNetComboCore("chinook", "artists", "artistid", "name", "artists") { EmptyOptionText = "Please select an artist ..." };
+albumsCombo.AddLinkedControl(tracksCombo);
+artistsCombo.AddLinkedControl(albumsCombo);
+@artistsCombo.Render()
+    }
+}
+
+@section Source {
+DbNetComboCore tracksCombo = new DbNetComboCore("chinook", "tracks", "trackid", "name", "tracks") { ForeignKeyColumn = "albumid", EmptyOptionText = "Please select a track ..." };
+DbNetComboCore albumsCombo = new DbNetComboCore("chinook", "albums", "albumid", "title", "albums") { ForeignKeyColumn = "artistid", EmptyOptionText = "Please select an album ..." };
+DbNetComboCore artistsCombo = new DbNetComboCore("chinook", "artists", "artistid", "name", "artists") { EmptyOptionText = "Please select an artist ..." };
+albumsCombo.AddLinkedControl(tracksCombo);
+artistsCombo.AddLinkedControl(albumsCombo);
+@@artistsCombo.Render()
+    }

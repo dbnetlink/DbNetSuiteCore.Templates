@@ -1,0 +1,34 @@
+﻿@page
+@using DbNetSuiteCoreSamples.ViewModels;
+@using DbNetSuiteCore.Components;
+@using DbNetSuiteCore.Enums.DbNetGrid;
+
+@model SampleModel
+
+@section Title
+{
+    <p>Data can be selected from multiple tables by joining them together in the @Model.HelpLink("properties.htm#FromPart","FromPart") constructor parameter. If referencing a column name which appears in morte that one of the joined table the column expression will need to be qualified with the relevant table name.</p>
+}
+
+@section Control
+{
+    @{
+        DbNetGridCore ordersGrid = new DbNetGridCore("northwind", "Customers join Orders on Customers.CustomerID = Orders.CustomerID join [Order Details] on Orders.OrderID = [Order Details].OrderID");
+        ordersGrid.Columns = new List<string>() { "Customers.CompanyName", "Orders.OrderDate", "[Order Details].OrderID", "[Order Details].ProductID", "[Order Details].UnitPrice", "[Order Details].Quantity", "Discount" };
+        ordersGrid.Labels = new List<string>() { "Company Name", "Order Date", "Order ID", "Product", "Unit Price", "Qty", "Discount" };
+        ordersGrid.Column("UnitPrice").Format("c");
+        ordersGrid.Column("Discount").Format("P");
+        ordersGrid.Column("ProductID").Lookup(new Lookup("Products", "ProductId", "ProductName"));
+        @ordersGrid.Render()
+    }
+}
+
+@section Source {
+DbNetGridCore ordersGrid = new DbNetGridCore("northwind", "Customers join Orders on Customers.CustomerID = Orders.CustomerID join [Order Details] on Orders.OrderID = [Order Details].OrderID");
+ordersGrid.Columns = new List<string>() { "Customers.CompanyName", "Orders.OrderDate", "[Order Details].OrderID", "[Order Details].ProductID", "[Order Details].UnitPrice", "[Order Details].Quantity", "Discount" };
+ordersGrid.Labels = new List<string>() { "Company Name", "Order Date", "Order ID", "Product", "Unit Price", "Qty", "Discount" };
+ordersGrid.Column("UnitPrice").Format("c");
+ordersGrid.Column("Discount").Format("P");
+ordersGrid.Column("ProductID").Lookup(new Lookup("Products", "ProductId", "ProductName"));
+@@ordersGrid.Render()
+}
