@@ -20,7 +20,7 @@
     @{
         DbNetFileCore filesView = new DbNetFileCore(string.Empty, "files");
         filesView.FilesOnly = true;
-        DbNetFileCore treeView = new DbNetFileCore("/dbnetfile/documents", "treeview");
+        DbNetFileCore treeView = new DbNetFileCore("/lib", "treeview");
         treeView.TreeView = true;
         treeView.AddLinkedControl(filesView);
         @treeView.Render()
