@@ -55,7 +55,7 @@
 
 @section Title
 {
-    <p>This application will allow you to browse a database using any table or view. Try it against your own database by adding a connection string to the <b>appSettings</b> file</p>
+    <p>This application will allow you to browse a database using any table or view. Try it against your own database by adding a connection string to the <a href="https://www.connectionstrings.com/store-and-read-connection-string-in-appsettings-json/" target="_blank">appSettings.json</a> file and then select from the <b>Connections</b> drop-down below</p>
 }
 @section Control {
     @{
@@ -63,7 +63,8 @@
         {
             OptimizeForLargeDataset = true,
             QuickSearch = true,
-            View = true
+            View = true,
+            Update = true
         };
         grid.Column("*").Filter().View().Style("{white-space:nowrap}");
         @grid.Render()
@@ -75,7 +76,8 @@ DbNetGridCore grid = new DbNetGridCore(Model.Db, string.IsNullOrEmpty(Model.View
 {
     OptimizeForLargeDataset = true,
     QuickSearch = true,
-    View = true
+    View = true,
+    Update = true
 };
 grid.Column("*").Filter().View().Style("{white-space:nowrap}");
 @@grid.Render()

@@ -17,6 +17,7 @@
     <ContentTargetFolders>DbNetSuiteCore.Samples</ContentTargetFolders>
     <NoWarn>$(NoWarn);NU5128</NoWarn>
     <NoDefaultExcludes>true</NoDefaultExcludes>
+    <PackageLicenseExpression>NPOSL-3.0</PackageLicenseExpression>
   </PropertyGroup>
 
 	<ItemGroup>
