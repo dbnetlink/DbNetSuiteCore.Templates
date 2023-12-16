@@ -9,6 +9,7 @@ using DbNetSuiteCoreSamples.Pages.Samples.DbNetGrid;
 using DbNetSuiteCoreSamples.Pages.Samples;
 using System.Xml;
 using DbNetSuiteCore.Enums;
+using DbNetSuiteCore.Samples.Pages.Samples;
 
 namespace DbNetSuiteCoreSamples.ViewModels
 {
@@ -39,12 +40,7 @@ namespace DbNetSuiteCoreSamples.ViewModels
         public MultiRowSelectLocation MultiRowSelectLocation { get; set; } = MultiRowSelectLocation.Left;
         public List<string> FontSizes { get; set; } = new List<string>() { "Small", "Medium", "Large" };
         public List<string> FontFamilies { get; set; } = new List<string>() { "Verdana", "Tahoma", "Georgia", "Arial" };
-        public string Db { get; set; }
-        public string Table { get; set; }
-        public string View { get; set; }
-        public List<DbObject> Tables { get; set; } = new List<DbObject>();
-        public List<DbObject> Views { get; set; } = new List<DbObject>();
-        public List<string> Connections { get; set; } = new List<string>();
+
         public List<CultureInfo> Cultures { get; set; } = new List<CultureInfo>();
         public string Culture { get; set; } = null;
         public string CustomerId { get; set; } = null;
@@ -67,13 +63,6 @@ namespace DbNetSuiteCoreSamples.ViewModels
 
           )
         {
-            if (this is BrowseDbModel)
-            {
-                Table = table;
-                View = view;
-                BrowseDbPopulate(db);
-            }
-
             if (this is FontModel)
             {
                 FontFamily = fontFamily;
@@ -122,31 +111,6 @@ namespace DbNetSuiteCoreSamples.ViewModels
             }
         }
 
-        private void BuildSitemap()
-        {
-            XmlElement root = Sitemap.CreateElement("urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
-            Sitemap.AppendChild(root);
-            XmlDeclaration xmldecl;
-            xmldecl = Sitemap.CreateXmlDeclaration("1.0", "UTF-8", null);
-            Sitemap.InsertBefore(xmldecl, root);
-
-            string domain = "http://www.example.com/";
-
-            XmlElement url = Sitemap.CreateElement("url");
-            url.InnerText = domain;
-            root.AppendChild(url);
-
-            foreach (var key in Samples.Keys)
-            {
-                foreach (var app in Samples[key])
-                {
-                    url = Sitemap.CreateElement("url");
-                    url.InnerText = $"{domain}samples/{app.Url}";
-                    root.AppendChild(url);
-                }
-            }
-
-        }
 
         protected void SampleNavigation()
         {
@@ -305,7 +269,6 @@ namespace DbNetSuiteCoreSamples.ViewModels
                 new DbNetGridSampleApp("Css", "Customising the styling"),
                 new DbNetGridSampleApp("JsonFile", "Using JSON as a data source"),
                 new DbNetGridSampleApp("GenericList", "Using an API as a data source"),
-                new DbNetGridSampleApp("browsedb", "Browse a database")
             };
             return samples;
         }
@@ -362,49 +325,11 @@ namespace DbNetSuiteCoreSamples.ViewModels
 
             return samples;
         }
-        public void BrowseDbPopulate(string db = null)
-        {
-            var connectonStrings = _configuration.GetSection("ConnectionStrings").GetChildren();
-            connectonStrings = connectonStrings.AsEnumerable().Where(c => FilterConnectionString(_configuration.GetConnectionString(c.Key))).ToList();
-
-            var connectionAlias = db ?? connectonStrings.AsEnumerable().First().Key;
-            var connectionString = _configuration.GetConnectionString(connectionAlias);
-
-            Connections = connectonStrings.AsEnumerable().Select(c => c.Key).ToList();
-
-            using (var connection = new DbNetDataCore(connectionString, _webHostEnvironment))
-            {
-                connection.Open();
-                Tables = connection.InformationSchema(DbNetDataCore.MetaDataType.Tables);
-                Views = connection.InformationSchema(DbNetDataCore.MetaDataType.Views);
-            }
-
-            Db = connectionAlias;
-
-            if (string.IsNullOrEmpty(Table) && string.IsNullOrEmpty(View))
-            {
-                Table = Tables.First().QualifiedTableName;
-            }
-        }
-
+    
         public HtmlString HelpLink(string url, string text)
         {
             url = $"https://docs.dbnetsuitecore.com/topics/{url.Replace("_", "-")}";
             return new HtmlString($"<a target=\"_blank\" href=\"{url}\">{text}</a>");
-        }
-        private bool FilterConnectionString(string? path)
-        {
-            if (_webHostEnvironment.IsDevelopment())
-            {
-                return true;
-            }
-
-            return IsSqliteConnectionString(path);
-        }
-
-        private bool IsSqliteConnectionString(string? path)
-        {
-            return Regex.IsMatch(path ?? string.Empty, @"Data Source=(.*)\.db;", RegexOptions.IgnoreCase);
         }
 
         private void GetCultures()

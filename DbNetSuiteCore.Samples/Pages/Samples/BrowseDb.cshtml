@@ -1,0 +1,145 @@
+﻿@page
+@using DbNetSuiteCore.Components;
+@using DbNetSuiteCore.Enums.DbNetGrid;
+@using DbNetSuiteCore.Enums;
+@using DbNetSuiteCore.Utilities
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using DbNetSuiteCore.Samples.Pages.Samples
+@model BrowseDbModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Welcome to DbNetSuiteCore";
+}
+@section Styles
+    {
+    @DbNetSuiteCore.StyleSheet()
+}
+<table class="selection-table">
+    <tr>
+        <th>
+            Connections
+        </th>
+        <th>
+            Database Type
+        </th>
+        <th>
+            Tables
+        </th>
+        @if (Model.Views.Count > 0)
+        {
+            <th>
+                Views
+            </th>
+        }
+    </tr>
+    <tr>
+        <td>
+            <select class="form-select" id="connection-select">
+                @foreach (string connection in Model.Connections.Keys)
+                {
+                    <option value="@connection" data-databasetype="@Model.Connections[connection]">@connection</option>
+                }
+            </select>
+        </td>
+        <td>
+            <select class="form-select" id="databasetype-select">
+                @foreach (DatabaseType databaseType in Enum.GetValues(typeof(DatabaseType)))
+                {
+                    <option value="@databaseType">@databaseType</option>
+                }
+            </select>
+        </td>
+        <td>
+            <select class="form-select" id="table-select">
+                <option value="">Select a table ...</option>
+                @foreach (DbObject schema in Model.Tables)
+                {
+                    <option value="@schema.QualifiedTableName">@schema.TableName</option>
+                }
+            </select>
+        </td>
+
+        @if (Model.Views.Count > 0)
+        {
+            <td>
+                <select class="form-select" id="view-select">
+                    <option value="">Select a view ...</option>
+                    @foreach (DbObject schema in Model.Views)
+                    {
+                        <option value="@schema.QualifiedTableName">@schema.TableName</option>
+                    }
+                </select>
+            </td>
+        }
+    </tr>
+</table>
+
+@if (string.IsNullOrEmpty(Model.ErrorMessage) == false)
+{
+    <div class="alert alert-danger" role="alert">@Model.ErrorMessage</div>
+}
+<hr />
+<p>To see DbNetGridCore running against your own database simply add a new connection string to the <strong>appsettings.json</strong> file and then select from the <strong>Connections</strong> list and select the correct <strong>Database Type</strong>. If you are connecting to a MySql, MariaDB or PostgreSQL you will need to install the <a target="_blank" href="https://www.nuget.org/packages/mysqlconnector/">MySQLConnector</a> (MySQL, MariaDB) or <a target="_blank" href="https://www.nuget.org/packages/npgsql/">Npgsql</a> (PostgreSQL) data provider.</p>
+<hr />
+@{
+    @if (String.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        DbNetGridCore grid = new DbNetGridCore(Model.Db, Model.DatabaseType.Value, Model.FromPart)
+                {
+                    OptimizeForLargeDataset = true,
+                    QuickSearch = true,
+                    View = true,
+                    ToolbarButtonStyle = ToolbarButtonStyle.ImageAndText,
+                    Update = Model.IsTable
+                };
+        grid.Column("*").Filter().View().Style("{white-space:nowrap}");
+        @grid.Render()
+    }
+}
+
+@section Scripts
+    {
+    @DbNetSuiteCore.ClientScript();
+
+    <script type="text/javascript">
+        var db = "@Model.Db"
+        var table = "@Model.Table"
+        var databaseType = "@Model.DatabaseType"
+        var view = "@Model.View"
+        var views = "@Model.Views.Count"
+
+        $(document).ready(init);
+
+        function init() {
+            $('#connection-select').val(db).change(function (event) { setDatabaseType(); reloadPage(true); });
+            setDatabaseType(databaseType);
+            $('#databasetype-select').change(function (event) { reloadPage(true) });
+
+            $('#table-select').val(table).change(function () {
+                $('#view-select').prop("selectedIndex", 0);
+                reloadPage(false);
+            });
+            $('#view-select').val(view).change(function () {
+                $('#table-select').prop("selectedIndex", 0);
+                reloadPage(false);
+            });
+        }
+
+        function setDatabaseType(databaseType) {
+            if (!databaseType) {
+                databaseType = $('#connection-select').find(":selected").data('databasetype');
+            }
+            $('#databasetype-select').val(databaseType);
+        }
+
+        function reloadPage(dbChange) {
+            var db = $('#connection-select').val();
+            var databaseType = $('#databasetype-select').val();
+
+            var table = dbChange ? '' : $('#table-select').val();
+            var view = dbChange || views == 0 ? '' : $('#view-select').val();
+
+            window.location.href = window.location.href.replace(/[\?#].*|$/, "?db=" + db + "&table=" + table + "&view=" + view + "&databasetype=" + databaseType);
+        }
+    </script>
+}

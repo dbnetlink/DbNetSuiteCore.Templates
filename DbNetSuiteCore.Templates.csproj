@@ -2,11 +2,11 @@
 
   <PropertyGroup>    
     <PackageId>DbNetSuiteCore.Templates</PackageId>
-    <PackageVersion>1.0.12</PackageVersion>
+    <PackageVersion>1.0.13</PackageVersion>
     <Title>DbNetSuiteCore Templates</Title>
     <Authors>DbNetLink Limited</Authors>
-    <Description>Templates to illustrate use of DbNetSuiteCore Razor components.</Description>
-    <PackageTags>dotnet-new;templates;dbnetsuitecore;</PackageTags>
+    <Description>Templates to illustrate use of DbNetSuiteCore UI components for Razor pages.</Description>
+    <PackageTags>dbnetsuitecore;razor;crud;blazor;component;ui;</PackageTags>
 	<PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://dbnetsuitecore.com</PackageProjectUrl>
 	<PackageReadmeFile>readme.md</PackageReadmeFile>
