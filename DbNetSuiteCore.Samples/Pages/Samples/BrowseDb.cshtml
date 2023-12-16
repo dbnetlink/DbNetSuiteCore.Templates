@@ -84,11 +84,11 @@
 @{
     @if (String.IsNullOrEmpty(Model.ErrorMessage))
     {
-        DbNetGridCore grid = new DbNetGridCore(Model.Db, Model.DatabaseType.Value, Model.FromPart)
+        DbNetGridCore grid = new DbNetGridCore(Model.Db, Model.DatabaseType, Model.FromPart)
                 {
                     OptimizeForLargeDataset = true,
                     QuickSearch = true,
-                    View = true,
+                    View = Model.IsTable,
                     ToolbarButtonStyle = ToolbarButtonStyle.ImageAndText,
                     Update = Model.IsTable
                 };

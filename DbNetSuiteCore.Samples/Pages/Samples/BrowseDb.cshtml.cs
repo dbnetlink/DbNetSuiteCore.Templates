@@ -14,7 +14,7 @@ namespace DbNetSuiteCore.Samples.Pages.Samples
         public string? ErrorMessage { get; set; }
         public string? FromPart => QualifiedObjectName();
         public bool? IsTable => string.IsNullOrEmpty(View);
-        public DatabaseType? DatabaseType { get; set; }
+        public DatabaseType DatabaseType { get; set; }
         public List<DbObject> Tables { get; set; } = new List<DbObject>();
         public List<DbObject> Views { get; set; } = new List<DbObject>();
         public Dictionary<string, DatabaseType> Connections { get; set; } = new Dictionary<string, DatabaseType>();
@@ -41,11 +41,11 @@ namespace DbNetSuiteCore.Samples.Pages.Samples
 
             Connections = connectonStrings.AsEnumerable().Select(c => c.Key).ToDictionary(c => c, c => DbNetDataCore.DeriveDatabaseType(_configuration.GetConnectionString(c)));
             Db = connectionAlias;
-            DatabaseType = databaseType.HasValue ? databaseType : Connections[connectionAlias];
+            DatabaseType = databaseType.HasValue ? databaseType.Value : Connections[connectionAlias];
 
             try
             {
-                using (var connection = new DbNetDataCore(connectionAlias, _webHostEnvironment, _configuration, DatabaseType.Value))
+                using (var connection = new DbNetDataCore(connectionAlias, _webHostEnvironment, _configuration, DatabaseType))
                 {
                     connection.Open();
                     Tables = connection.InformationSchema(DbNetDataCore.MetaDataType.Tables);

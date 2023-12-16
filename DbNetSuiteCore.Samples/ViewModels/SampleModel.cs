@@ -229,8 +229,8 @@ namespace DbNetSuiteCoreSamples.ViewModels
         protected void PopulateSamples()
         {
             Samples.Add(Enums.Components.DbNetGrid, DbNetGridSamples());
-            Samples.Add(Enums.Components.DbNetCombo, DbNetComboSamples());
             Samples.Add(Enums.Components.DbNetEdit, DbNetEditSamples());
+            Samples.Add(Enums.Components.DbNetCombo, DbNetComboSamples());
             Samples.Add(Enums.Components.DbNetFile, DbNetFileSamples());
         }
         private List<SampleApp> DbNetGridSamples()
