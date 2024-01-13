@@ -328,7 +328,7 @@ namespace DbNetSuiteCoreSamples.ViewModels
     
         public HtmlString HelpLink(string url, string text)
         {
-            url = $"https://docs.dbnetsuitecore.com/topics/{url.Replace("_", "-")}";
+            url = $"https://dbnetsuitecore.z35.web.core.windows.net/topics/{url.Replace("_", "-")}";
             return new HtmlString($"<a target=\"_blank\" href=\"{url}\">{text}</a>");
         }
 
