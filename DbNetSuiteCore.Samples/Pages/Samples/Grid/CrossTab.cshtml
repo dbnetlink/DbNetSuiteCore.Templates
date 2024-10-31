@@ -1,0 +1,49 @@
+﻿@page
+@using DbNetSuiteCore.Models;
+@using DbNetSuiteCore.Enums;
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+
+@section Title
+{
+    <p data-summary>In this example we use the <b>Aggregate</b> column property and built-in database functions to create a cross-tabulation example. It also use the <b>CellTransform</b> client-side event to highlight values over 100</p>
+}
+
+@section Control {
+    @{
+    var invoiceColumns = new List<GridColumn>
+    {
+        new GridColumn("ProductName", "Product")
+    };
+
+    for (var i = 1; i <= 12; i++)
+    {
+        var monthName = new DateTime(2024, i, 1).ToString("MMMM");
+        var column = new GridColumn($"(case when strftime ('%d', OrderDate) = '{i.ToString("00")}' then Quantity else 0 end) as {monthName.ToLower()}", monthName) { Aggregate = AggregateType.Sum, DataType = typeof(Int32) };
+        invoiceColumns.Add(column);
+    }
+
+    var invoiceGrid = new GridModel(DataSourceType.SQLite, "Northwind", "invoices");
+    invoiceGrid.Columns = invoiceColumns;
+    invoiceGrid.ClientEvents[ClientEvent.CellTransform] = "highlightQuantity";
+    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(invoiceGrid))
+    }
+}
+
+
+@section Scripts {
+    <script type="text/javascript" class="source">
+        function highlightQuantity(gridControl, args) {
+            switch (args.columnName.toLowerCase()) {
+                case "productname":
+                    break;
+                default:
+                    var qty = Number(args.cell.dataset.value)
+                    if (qty > 100) {
+                        args.cell.style = 'background-color:salmon'
+                    }
+                    break;
+            }
+        }
+    </script>
+}

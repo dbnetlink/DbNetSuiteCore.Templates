@@ -1,0 +1,21 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>You can control the columns selected from the table or view by defining <strong>GridColumn</strong> objects and adding them the <strong>Columns</strong> property. In this example columns are selected and combined in an expression and also given a label.</p>
+}
+@section Control {
+    @{
+        GridModel customerGrid = new GridModel(DataSourceType.SQLite, "northwind", "Customers");
+        customerGrid.Columns = new List<GridColumn>
+    {
+        new GridColumn("CompanyName", "Name"), // First argument is the expression, second is the label
+        new GridColumn("coalesce(Address,'') || ', ' || coalesce(City,'')", "Address") { DataType = typeof(string)},
+        new GridColumn("coalesce(Phone,'') || '/' || coalesce(Fax,'')", "Phone/Fax") { DataType = typeof(string)}
+    };
+        @(await new DbNetSuiteCore.GridControl(HttpContext).Render(customerGrid))
+    }
+}

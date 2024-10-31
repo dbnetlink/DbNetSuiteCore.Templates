@@ -2,9 +2,6 @@
 {
     public enum Components
     {
-        DbNetGrid,
-        DbNetCombo,
-        DbNetEdit,
-        DbNetFile
+        Grid,
     }
 }

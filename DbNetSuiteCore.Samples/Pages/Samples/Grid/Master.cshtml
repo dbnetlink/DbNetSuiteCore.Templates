@@ -1,0 +1,27 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>Column values can be formatted using the <b>Format</b> property either standard C# date/numeric format strings or as this example a string template to create a button hyperlink from a value. The created button passes the <b>CustomerID</b> to a detail page where is used to display orders for that customer</p>
+}
+@section Control {
+    @{
+        GridModel customerGrid = new GridModel(DataSourceType.SQLite, "northwind", "Customers");
+
+        customerGrid.Columns = new List<GridColumn>()
+    {
+        new GridColumn("CompanyName"),
+        new GridColumn("Address"),
+        new GridColumn("City"),
+        new GridColumn("Country"),
+        new GridColumn("Phone"),
+        new GridColumn("Fax"),
+        new GridColumn("CustomerID", "") {Format = "<a target='_blank' href='/samples/grid/detail?customerid={0}'><button type=\"button\" class=\"btn btn-secondary btn-sm\">Orders</button></a>"}
+    };
+
+        @(await new DbNetSuiteCore.GridControl(HttpContext).Render(customerGrid))
+    }
+}

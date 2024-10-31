@@ -1,0 +1,65 @@
+﻿@page
+
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Models
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+
+@section Title
+{
+    <p data-summary>Hierarchical data can be presented in a tree like structure by nesting grids. A child grid can be added to the parent grid as a nested grid which is displayed adjacent to the parent row.</p> 
+    <p>To add a nested grid simply create the instance of the control and assign the reference of the child grid control to the <b>NestedGrid</b> property of the parent grid control. You will also need to specify which column in the child grid is the <b>ForeignKey</b> which is matched against the <b>PrimaryKey</b> in the parent control.</p>
+}
+
+@section Control {
+    @{
+        var customerColumns = new List<GridColumn>
+    {
+        new GridColumn("customerid", "CustomerID") {PrimaryKey = true },
+        new GridColumn("firstname", "Forename"),
+        new GridColumn("lastname", "Surname"),
+        new GridColumn("email", "Email Address") {Format = FormatType.Email },
+        new GridColumn("address", "Address"),
+        new GridColumn("city", "City") { InitialSortOrder = SortOrder.Desc},
+        new GridColumn("postalcode", "Post Code"),
+    };
+
+        var invoiceColumns = new List<GridColumn>
+    {
+        new GridColumn("invoiceid", "Invoice ID") {PrimaryKey = true },
+        new GridColumn("customerid", "Customer ID") {ForeignKey = true, DataOnly = true },
+        new GridColumn("invoicedate", "Date") { DataType = typeof(DateTime)},
+        new GridColumn("billingaddress", "Address"),
+        new GridColumn("billingcity", "City"),
+        new GridColumn("billingstate", "State"),
+        new GridColumn("billingcountry", "Country"),
+        new GridColumn("billingpostalcode", "Post Code"),
+    };
+
+        var invoiceItemColumns = new List<GridColumn>
+    {
+        new GridColumn("invoicelineid", "Invoice Line ID"),
+        new GridColumn("invoiceid", "Invoice ID") {ForeignKey = true, DataOnly = true },
+        new GridColumn("trackid", "Track") { Lookup = new Lookup("tracks","trackid", "name") },
+        new GridColumn("unitprice", "Price") {Format = "c"},
+        new GridColumn("quantity", "Qty"),
+    };
+
+        var invoiceLineGridModel = new GridModel("Invoice_items");
+        invoiceLineGridModel.Columns = invoiceItemColumns;
+        invoiceLineGridModel.Caption = "Invoice Lines";
+        invoiceLineGridModel.ToolbarPosition = ToolbarPosition.Hidden;
+
+        var invoiceGridModel = new GridModel("Invoices");
+        invoiceGridModel.Columns = invoiceColumns;
+        invoiceGridModel.NestedGrid = invoiceLineGridModel;
+        invoiceGridModel.Caption = "Invoices";
+        invoiceLineGridModel.ToolbarPosition = ToolbarPosition.Hidden;
+
+        var customerGridModel = new GridModel(DataSourceType.SQLite, "Chinook", "Customers");
+        customerGridModel.Columns = customerColumns;
+        customerGridModel.NestedGrid = invoiceGridModel;
+
+        @(await new DbNetSuiteCore.GridControl(HttpContext).Render(customerGridModel))
+    }
+}

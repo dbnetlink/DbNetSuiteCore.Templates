@@ -1,0 +1,69 @@
+﻿@page
+@using DbNetSuiteCore.Models;
+@using DbNetSuiteCore.Enums;
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+
+@section Title
+{
+    <p data-summary>Client-side events can be used to customise the grid after it has been rendered. In this example the <b>RowTransform</b> and <b>ViewDialogUpdated</b> client-side events are used to highlighted records where the stock is less than the re-order level.</p>
+    <p>Client-side events are passed a reference to the client-side grid control object along with a second args object which contains data relevant to the event. The client-side control has its own API and in this example the <b>columnValue</b> and <b>columnCell</b> methods are used to interact with the grid page after it has rendered.</p>
+}
+
+@section Control {
+    @{
+        GridModel productGrid = new GridModel(DataSourceType.SQLite, "Northwind", "Products") { 
+            ViewDialog = new ViewDialog() { LayoutColumns = 2 } 
+        };
+        productGrid.Columns = new List<GridColumn>()
+    {
+        new GridColumn("ProductID") { PrimaryKey = true },
+        new GridColumn("ProductName"),
+        new GridColumn("SupplierID","Supplier") { Lookup = new Lookup("Suppliers", "SupplierId", "CompanyName"), Filter = true },
+        new GridColumn("CategoryID","Category") { Lookup = new Lookup("Categories", "CategoryID", "CategoryName"), Filter = true },
+        new GridColumn("QuantityPerUnit", "Qty."),
+        new GridColumn("UnitPrice","Price") { Format = "c"},
+        new GridColumn("UnitsInStock", "Stock"),
+        new GridColumn("UnitsOnOrder","On Order"),
+        new GridColumn("ReorderLevel"),
+        new GridColumn("Discontinued") { DataType = typeof(Boolean)}
+    };
+        productGrid.Bind(ClientEvent.RowTransform, "highlightGridLowStock");
+        productGrid.Bind(ClientEvent.ViewDialogUpdated, "highlightViewLowStock");
+
+        @(await new DbNetSuiteCore.GridControl(HttpContext).Render(productGrid))
+    }
+}
+
+        
+@section Scripts {
+<script type="text/javascript" class="source">
+    function highlightGridLowStock(gridControl, args) {
+        highlightLowStock(gridControl, args.row)
+    }
+
+    function highlightViewLowStock(gridControl, args) {
+        highlightLowStock(args.viewDialog)
+    }
+
+    // Either the grid control or view dialog control are passed in depending on the event
+    function highlightLowStock(control, row) {
+        var unitsInStock = parseInt(control.columnValue("UnitsInStock", row));
+        var reorderLevel = parseInt(control.columnValue("ReorderLevel", row));
+
+        if (unitsInStock < reorderLevel) {
+            if (row) {
+                row.style.fontWeight = "bold";
+            }
+            let unitsInStockCell = control.columnCell("UnitsInStock", row);
+            let reorderLevelCell = control.columnCell("ReorderLevel", row);
+
+            unitsInStockCell.style.backgroundColor = "#CD6155"
+            unitsInStockCell.style.color = "#F2D7D5";
+
+            reorderLevelCell.style.backgroundColor = "#CD6155"
+            reorderLevelCell.style.color = "#F2D7D5";
+        }
+    }
+</script>
+}
