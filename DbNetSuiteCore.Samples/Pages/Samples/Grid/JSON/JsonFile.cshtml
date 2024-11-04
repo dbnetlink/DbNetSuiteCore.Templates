@@ -7,12 +7,12 @@
 
 @section Title
 {
-    <p data-summary><a target="_blank" href="/data/producthunt.json">JSON</a> can also be used as a data source either as a file or as an API url. The sample also uses the <b>Cache</b> property to cache the JSON data in memory to improve performance</p>
+    <p data-summary><a target="_blank" href="/data/json/producthunt.json">JSON</a> can also be used as a data source either as a file or as an API url. The sample also uses the <b>Cache</b> property to cache the JSON data in memory to improve performance</p>
 }
 
 @section Control {
     @{
-        var gridModel = new GridModel(DataSourceType.JSON, "/data/producthunt.json");
+        var gridModel = new GridModel(DataSourceType.JSON, "/data/json/ProductHunt.json");
         gridModel.Columns = new List<GridColumn>()
         {
             new GridColumn("Name") {},

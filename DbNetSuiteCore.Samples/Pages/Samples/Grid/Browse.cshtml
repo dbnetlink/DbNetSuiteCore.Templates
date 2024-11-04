@@ -1,0 +1,41 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>This sample uses the <b>DbNetSuiteCore</b> grid to browse the <b>/data</b> folder containing file based data sources that the grid control can render. Clicking on the name of the data source will pass a link to another page which will render the contents of the data source. Feel free to add your own JSON, Excel, CSV or SQLite database file to this folder.</p>
+}
+
+@section Control {
+    @{
+    var columns = new List<GridColumn>()
+    {
+        new GridColumn(FileSystemColumn.Name.ToString(), "File"),
+        new GridColumn(FileSystemColumn.Extension.ToString(), "File Type"),
+        new GridColumn(FileSystemColumn.IsDirectory.ToString(), "File Type") {DataOnly = true}
+    };
+    var gridModel = new GridModel(DataSourceType.FileSystem, "data") { 
+        FixedFilter = "(IsDirectory = 1 or Extension in ('db','csv','json','xls','xlsx'))",
+        Columns = columns,
+        ToolbarPosition = ToolbarPosition.Hidden,
+    };
+
+    gridModel.ClientEvents[GridClientEvent.RowTransform] = "createLink";
+
+    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(gridModel));
+    }
+}
+@section Scripts {
+<script type="text/javascript" class="source">
+function createLink(gridControl, args) {
+    if (gridControl.columnValue('isDirectory', args.row) == "False") {
+        var tbody = args.row.closest("tbody")
+        var name = gridControl.columnValue('name', args.row)
+        var url = `/${tbody.dataset.url}/${name}`
+        gridControl.columnCell('name', args.row).innerHTML = `<a target='_blank' href='/samples/grid/renderfile?filename=${url}'>${name}</a>`
+    }
+}
+</script>
+}

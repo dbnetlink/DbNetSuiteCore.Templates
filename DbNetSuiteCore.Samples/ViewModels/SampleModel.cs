@@ -19,105 +19,87 @@ namespace DbNetSuiteCoreSamples.ViewModels
         public Enums.Components Component { get; set; }
         public string Title { get; set; }
         public string SourceCode { get; set; }
-
         public string PageName { get; set; }
-        public string FontFamily { get; set; }
-        public string FontSize { get; set; }
-        public ToolbarPosition ToolbarLocation { get; set; } = ToolbarPosition.Top;
-        public MultiRowSelectLocation MultiRowSelectLocation { get; set; } = MultiRowSelectLocation.Left;
         public string CustomerId { get; set; } = null;
         public int? OrderId { get; set; } = null;
 
         public void OnGet(
-            ToolbarPosition? toolbarLocation = null,
-            MultiRowSelectLocation? multiRowSelectLocation = null,
-            string? culture = null,
             string? customerId = null,
             int? orderId = null
-
           )
         {
-
-            if (toolbarLocation.HasValue)
-            {
-                ToolbarLocation = toolbarLocation.Value;
-            }
-            if (multiRowSelectLocation.HasValue)
-            {
-                MultiRowSelectLocation = multiRowSelectLocation.Value;
-            }
-
             CustomerId = customerId;
             OrderId = orderId;
-
-            try
-            {
-                GetSourceCode();
-            }
-            catch (Exception)
-            {
-                SourceCode = string.Empty;
-            }
+            GetSourceCode();
         }
 
-        private void GetSourceCode()
+        protected void GetSourceCode()
         {
-            var routeName = (HttpContext.GetEndpoint() as RouteEndpoint)?.RoutePattern.RawText;
-            routeName = String.IsNullOrEmpty(routeName) ? "index" : routeName;
-            var fileInfo = _webHostEnvironment.ContentRootFileProvider.GetFileInfo($"pages/{routeName}.cshtml");
-            string fileContents = string.Empty;
-            if (fileInfo.PhysicalPath != null)
+            try
             {
-                using (var sr = new StreamReader(fileInfo.PhysicalPath))
+                var routeName = (HttpContext.GetEndpoint() as RouteEndpoint)?.RoutePattern.RawText;
+                routeName = String.IsNullOrEmpty(routeName) ? "index" : routeName;
+                var fileInfo = _webHostEnvironment.ContentRootFileProvider.GetFileInfo($"pages/{routeName}.cshtml");
+                string fileContents = string.Empty;
+                if (fileInfo.PhysicalPath != null)
                 {
-                    fileContents = sr.ReadToEnd();
-                }
-            }
-
-            var fileLines = fileContents.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-            var collect = false;
-            var source = new List<string>();
-            foreach (string line in fileLines)
-            {
-                if (line.StartsWith("@section Control"))
-                {
-                    collect = true;
-                    continue;
+                    using (var sr = new StreamReader(fileInfo.PhysicalPath))
+                    {
+                        fileContents = sr.ReadToEnd();
+                    }
                 }
 
-                if (line.StartsWith("}") && collect)
+                var fileLines = fileContents.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                var collect = false;
+                var source = new List<string>();
+                foreach (string line in fileLines)
                 {
-                    break;
-                }
+                    if (line.StartsWith("@section Control"))
+                    {
+                        collect = true;
+                        continue;
+                    }
 
-                if (collect)
-                {
-                    source.Add(line);
+                    if (line.StartsWith("}") && collect)
+                    {
+                        break;
+                    }
+
+                    if (collect)
+                    {
+                        source.Add(line);
+                    }
                 }
+                source.Insert(0, string.Empty);
+                source = source.Select(s => s.TrimStart()).ToList();
+                int indent = 0;
+                var indentedSource = new List<string>();
+                foreach (string line in source)
+                {
+                    if (line.StartsWith("}"))
+                    {
+                        indent--;
+                    }
+                    string indentedLine = string.Empty;
+                    for (var i = 0; i < indent; i++)
+                    {
+                        indentedLine += '\t';
+                    }
+                    indentedLine += line;
+                    indentedSource.Add(indentedLine);
+                    if (line.StartsWith("@{") || line.StartsWith("{"))
+                    {
+                        indent++;
+                    }
+                }
+                SourceCode = string.Join(Environment.NewLine, indentedSource);
             }
-            source.Insert(0, string.Empty);
-            source = source.Select(s => s.TrimStart()).ToList();
-            int indent = 0;
-            var indentedSource = new List<string>();
-            foreach (string line in source)
+            catch (Exception e)
             {
-                if (line.StartsWith("}"))
                 {
-                    indent--;
-                }
-                string indentedLine = string.Empty;
-                for (var i = 0; i < indent; i++)
-                {
-                    indentedLine += '\t';
-                }
-                indentedLine += line;
-                indentedSource.Add(indentedLine);
-                if (line.StartsWith("@{") || line.StartsWith("{"))
-                {
-                    indent++;
+                    SourceCode = e.Message;
                 }
             }
-            SourceCode = string.Join(Environment.NewLine, indentedSource);
         }
     }
 }

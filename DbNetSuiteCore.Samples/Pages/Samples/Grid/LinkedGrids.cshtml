@@ -66,13 +66,13 @@
         invoiceGridModel.Caption = "Invoices";
         invoiceGridModel.PageSize = 10;
         invoiceGridModel.ToolbarPosition = ToolbarPosition.Hidden;
-        invoiceGridModel.ClientEvents[ClientEvent.RowSelected] = "setOrderDetailsTabLabel";
+        invoiceGridModel.ClientEvents[GridClientEvent.RowSelected] = "setOrderDetailsTabLabel";
 
         var customerGridModel = new GridModel(DataSourceType.SQLite, "Chinook", "Customers");
         customerGridModel.Columns = customerColumns;
         customerGridModel.AddLinkedGrid(invoiceGridModel);
         customerGridModel.PageSize = 10;
-        customerGridModel.ClientEvents[ClientEvent.RowSelected] = "setOrderTabLabel";
+        customerGridModel.ClientEvents[GridClientEvent.RowSelected] = "setOrderTabLabel";
 
         <div class="source">
             <ul class="nav nav-tabs" id="myTab" role="tablist">

@@ -17,12 +17,12 @@
         new GridColumn(FileSystemColumn.Content.ToString(), "Summary") { RegularExpression = "<p data-summary>(.*?)</p>"}
     };
     var gridModel = new GridModel(DataSourceType.FileSystem, "../Pages/Samples/Grid") { 
-                    FixedFilter = "(IsDirectory = 1 or Name like '%.cshtml') and Name not in ('Shared','_ViewStart.cshtml','index.cshtml','detail.cshtml')",
+                    FixedFilter = "(IsDirectory = 1 or Name like '%.cshtml') and Name not in ('Shared','_ViewStart.cshtml','index.cshtml','detail.cshtml', 'renderfile.cshtml')",
         Columns = columns,
         ToolbarPosition = ToolbarPosition.Hidden,
     };
 
-    gridModel.ClientEvents[ClientEvent.CellTransform] = "createLink";
+    gridModel.ClientEvents[GridClientEvent.CellTransform] = "createLink";
 
     @(await new DbNetSuiteCore.GridControl(HttpContext).Render(gridModel));
     }

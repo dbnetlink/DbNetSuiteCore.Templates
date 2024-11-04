@@ -8,8 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.24" />
-    <PackageReference Include="DbNetSuiteCore" Version="2.0.11" />
+    <PackageReference Include="DbNetSuiteCore" Version="2.0.13" />
+    <PackageReference Include="MySqlConnector" Version="2.3.7" />
+    <PackageReference Include="Npgsql" Version="8.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\data\Excel\Excel\books.csv" />
+    <None Include="wwwroot\data\Excel\Excel\countries.csv" />
+    <None Include="wwwroot\data\Excel\Excel\FSI-2023-DOWNLOAD.xlsx" />
+    <None Include="wwwroot\data\Excel\Excel\people.xlsx" />
+    <None Include="wwwroot\data\Excel\Excel\states.csv" />
+    <None Include="wwwroot\data\Excel\Excel\Superstore.xlsx" />
+    <None Include="wwwroot\data\Excel\Excel\USDANationalNutrientDatabase.xlsx" />
   </ItemGroup>
 
 </Project>

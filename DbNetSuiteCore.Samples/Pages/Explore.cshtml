@@ -1,0 +1,84 @@
+﻿@page
+@{
+    Layout = "_layout";
+}
+@model DbNetSuiteCoreSamples.Pages.ExploreModel
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using Microsoft.AspNetCore.Http
+@using System.Data
+@using System.Text.RegularExpressions
+@using DbNetSuiteCore.Helpers
+@using DbNetSuiteCore.Extensions
+
+@section Title
+{
+    <p>Want to see how DbNetSuiteCore can present your data ? Simply add a connection to your data source the <b>ConnectionStrings</b> section in the <b>appsettings.json</b> file and you will then be be able to select that connection below.</p>
+}
+
+@{
+    <div style="padding:20px">
+        <form method="post">
+            <div class="d-flex flex-row align-items-center" style="gap:10px">
+                <div>Connection</div>
+                <div>
+                    <select class="form-select" asp-for="@Model.ConnectionAlias" asp-items="Model.Connections" onchange="this.form.submit()"></select>
+                </div>
+                <div>Data Source Type</div>
+                <div>
+                    <select class="form-select" asp-for="@Model.DataSourceTypeName" asp-items="Model.DataSourceTypeItems" onchange="this.form.submit()"></select>
+                </div>
+                @if (Model.DataSourceTypeName == DataSourceType.MongoDB.ToString())
+                {
+                    <div>Database</div>
+                    <div>
+                        <select class="form-select" asp-for="@Model.DatabaseName" asp-items="Model.Databases" onchange="this.form.submit()"></select>
+                    </div>
+                }
+                <div>Table/View</div>
+                <div>
+                    <select class="form-select" asp-for="@Model.TableName" asp-items="Model.Tables" onchange="this.form.submit()"></select>
+                </div>
+            </div>
+        </form>
+
+        <div style="margin-top:10px">
+            @{
+                if (string.IsNullOrEmpty(Model.TableName) == false)
+                {
+                    GridModel gridModel = new GridModel(Model.DataSourceType, Model.ConnectionAlias, Model.TableName) { DatabaseName = Model.DatabaseName, QueryLimit = 5000};
+                    gridModel.ClientEvents[GridClientEvent.FileDownload] = "setFileName";
+                    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(gridModel))
+                }
+
+                if (string.IsNullOrEmpty(Model.ErrorMessage) == false)
+                {
+                    <div class="alert alert-danger" role="alert">@Html.Raw(Model.ErrorMessage)</div>
+                }
+            }
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    <script>
+        function setFileName(sender, args) {
+            args.link.download = "@(CleanTableName(Model.TableName))." + args.extension
+        }
+
+    </script>
+}
+@functions
+{
+    string CleanTableName(string tableName)
+    {
+        if (string.IsNullOrEmpty(tableName) == false)
+        {
+            Regex rgx = new Regex(@"[^a-zA-Z0-9_]");
+            tableName = rgx.Replace(tableName.Split(".").Last(), "");
+        }
+
+        return tableName;
+    }
+}

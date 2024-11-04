@@ -1,0 +1,35 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+
+@model DbNetSuiteCoreSamples.ViewModels.RenderFileModel
+@section Title
+{
+    <p data-summary>Here we are rendering a file passed as a link from the grid control that <a href="/samples/grid/browse">browses</a> the data folder.</p>
+}
+@section Control {
+    @{
+        GridModel dataGrid;
+
+        if (Model.DataSourceType == DataSourceType.SQLite)
+        {
+            dataGrid = new GridModel(Model.DataSourceType, Model.ConnectionString, Model.TableName);
+            dataGrid.Caption = Model.FileName;
+        }
+        else
+        {
+            dataGrid = new GridModel(Model.DataSourceType, Model.FileName);
+            dataGrid.Caption = Model.FileName;
+        }
+
+        <form method="post">
+            <label><b>Table/View</b></label>
+            <select asp-for="@Model.TableName" asp-items="Model.Tables" onchange="this.form.submit()"></select>
+            <input type="hidden" value="@Model.FileName" name="FileName" />
+        </form>
+
+        <div style="margin-top:10px">
+            @(await new DbNetSuiteCore.GridControl(HttpContext).Render(dataGrid))
+        </div>
+    }
+}

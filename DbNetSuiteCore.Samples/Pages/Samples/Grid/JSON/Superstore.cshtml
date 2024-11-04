@@ -1,0 +1,41 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>JSON can be loaded from a file, a string or in this case an API end-point. This sample also makes use of the <b>Cache</b> property to improve performance for JSON based data sources</p>
+}
+@section Control {
+    @{
+    var columns = new List<GridColumn>
+    {
+        new GridColumn("Row ID"){ Filter = FilterType.Default },
+        new GridColumn("Order ID"){ Filter = FilterType.Default },
+        new GridColumn("Order Date"){ Filter = FilterType.Default },
+        new GridColumn("Ship Date"),
+        new GridColumn("Ship Mode") { Filter = FilterType.Distinct},
+        new GridColumn("Customer ID"),
+        new GridColumn("Customer Name"),
+        new GridColumn("Segment"){ Filter = FilterType.Distinct},
+        new GridColumn("Country"){ Filter = FilterType.Distinct},
+        new GridColumn("City"){ Filter = FilterType.Distinct},
+        new GridColumn("State"){ Filter = FilterType.Distinct},
+        new GridColumn("Postal Code"),
+        new GridColumn("Region"){ Filter = FilterType.Distinct},
+        new GridColumn("Product ID"),
+        new GridColumn("Category"){ Filter = FilterType.Distinct},
+        new GridColumn("Sub-Category"){ Filter = FilterType.Distinct},
+        new GridColumn("Product Name"),
+        new GridColumn("Sales") { Format = "c",Filter = FilterType.Default},
+        new GridColumn("Quantity") { Filter = FilterType.Default},
+        new GridColumn("Discount") { Format = "p", Filter = FilterType.Default},
+        new GridColumn("Profit") { Format = "c", Filter = FilterType.Default}
+    };
+
+    GridModel superstoreGrid = new GridModel(DataSourceType.JSON, "/superstore") { Columns = columns, Cache = true };
+
+    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(superstoreGrid))
+    }
+}

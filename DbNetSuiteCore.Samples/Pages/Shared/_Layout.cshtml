@@ -1,30 +1,49 @@
-﻿<!DOCTYPE html>
+﻿@using DbNetSuiteCoreSamples.Enums;
+@using Microsoft.AspNetCore.Html
+@using DbNetSuiteCoreSamples.ViewModels
+@model ExploreModel
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - DbNetSuiteCoreSamples</title>
+    @DbNetSuiteCore.Resources.StyleSheet()
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/css/prism.css" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     @(await Html.PartialAsync("Header"))
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 mt-3 mb-3">
+                <div class="border border-1 rounded bg-light text-dark p-2">
+                    @await RenderSectionAsync("Title", required: true)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <main role="main">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+        <footer class="py-2">
+            <div class="d-flex flex-column flex-sm-row justify-content-between py-1 my-1 border-top">
+                <p>&copy; @DateTime.Today.ToString("yyyy") DbNetLink Limited</p>
+            </div>
+        </footer>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            <p>&copy; @DateTime.Today.ToString("yyyy") DbNetLink Limited. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/prism.js" asp-append-version="true"></script>
+
+    @DbNetSuiteCore.Resources.ClientScript()
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

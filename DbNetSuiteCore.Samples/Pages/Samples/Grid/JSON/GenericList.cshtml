@@ -19,15 +19,15 @@
         var gridModel = new GridModel(DataSourceType.JSON, System.Text.Json.JsonSerializer.Serialize(transformedList));
 
         gridModel.Columns = new List<GridColumn>()
-    {
-            new GridColumn("Id"),
-            new GridColumn("Year") { Filter = true, Lookup = new Lookup()},
-            new GridColumn("Category") {  Filter = true, Lookup = new Lookup()},
-            new GridColumn("Firstname"),
-            new GridColumn("Surname"),
-            new GridColumn("Motivation"),
-            new GridColumn("Share") {  Filter = true, Lookup = new Lookup()}
-    };
+        {
+                new GridColumn("Id"),
+                new GridColumn("Year") { Filter = FilterType.Distinct},
+                new GridColumn("Category") {  Filter = FilterType.Distinct},
+                new GridColumn("Firstname"),
+                new GridColumn("Surname"),
+                new GridColumn("Motivation"),
+                new GridColumn("Share") {  Filter = FilterType.Distinct}
+        };
 
         gridModel.Cache = true;
 
