@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data;
-using DbNetSuiteCore.Enums;
-using System.Dynamic;
+using System.Web;
 
 namespace DbNetSuiteCoreSamples.ViewModels
 {
@@ -20,7 +19,7 @@ namespace DbNetSuiteCoreSamples.ViewModels
         public string Title { get; set; }
         public string SourceCode { get; set; }
         public string PageName { get; set; }
-        public string CustomerId { get; set; } = null;
+        public string? CustomerId { get; set; } = null;
         public int? OrderId { get; set; } = null;
 
         public void OnGet(
@@ -49,6 +48,7 @@ namespace DbNetSuiteCoreSamples.ViewModels
                     }
                 }
 
+                fileContents = fileContents.Replace(">","&gt;").Replace("<", "&lt;");
                 var fileLines = fileContents.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
                 var collect = false;
                 var source = new List<string>();
@@ -60,7 +60,12 @@ namespace DbNetSuiteCoreSamples.ViewModels
                         continue;
                     }
 
-                    if (line.StartsWith("}") && collect)
+                    if (line.StartsWith("@{"))
+                    {
+                        continue;
+                    }
+
+                    if (line.StartsWith("}}") && collect)
                     {
                         break;
                     }
@@ -71,7 +76,7 @@ namespace DbNetSuiteCoreSamples.ViewModels
                     }
                 }
                 source.Insert(0, string.Empty);
-                source = source.Select(s => s.TrimStart()).ToList();
+               // source = source.Select(s => s.TrimStart()).ToList();
                 int indent = 0;
                 var indentedSource = new List<string>();
                 foreach (string line in source)

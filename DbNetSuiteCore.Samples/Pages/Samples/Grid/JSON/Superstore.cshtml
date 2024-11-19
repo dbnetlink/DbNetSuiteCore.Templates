@@ -8,7 +8,7 @@
     <p data-summary>JSON can be loaded from a file, a string or in this case an API end-point. This sample also makes use of the <b>Cache</b> property to improve performance for JSON based data sources</p>
 }
 @section Control {
-    @{
+@{
     var columns = new List<GridColumn>
     {
         new GridColumn("Row ID"){ Filter = FilterType.Default },
@@ -37,5 +37,4 @@
     GridModel superstoreGrid = new GridModel(DataSourceType.JSON, "/superstore") { Columns = columns, Cache = true };
 
     @(await new DbNetSuiteCore.GridControl(HttpContext).Render(superstoreGrid))
-    }
-}
+}}

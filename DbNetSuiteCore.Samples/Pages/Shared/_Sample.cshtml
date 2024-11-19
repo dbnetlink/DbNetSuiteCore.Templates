@@ -19,6 +19,13 @@
 
 
     @await RenderSectionAsync("Styles", required: false)
+    <style>
+        pre.language-csharp,
+        pre.language-js {
+            border:1pt solid olive;
+            border-radius:5px;
+        }
+    </style>
 </head>
 <body>
     @(await Html.PartialAsync("Header"))
@@ -63,7 +70,7 @@
                             {
                                 IgnoreSection("Source");
                                 <pre>
-                                <code class="language-csharp razor">@Model.SourceCode</code>
+                                <code class="language-csharp razor">@Html.Raw(Model.SourceCode)</code>
                                         </pre>
                             }
                             <div class="controller-source" style="display:none">

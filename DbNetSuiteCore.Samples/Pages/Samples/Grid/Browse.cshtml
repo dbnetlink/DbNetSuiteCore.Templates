@@ -9,7 +9,7 @@
 }
 
 @section Control {
-    @{
+@{
     var columns = new List<GridColumn>()
     {
         new GridColumn(FileSystemColumn.Name.ToString(), "File"),
@@ -25,8 +25,7 @@
     gridModel.ClientEvents[GridClientEvent.RowTransform] = "createLink";
 
     @(await new DbNetSuiteCore.GridControl(HttpContext).Render(gridModel));
-    }
-}
+}}
 @section Scripts {
 <script type="text/javascript" class="source">
 function createLink(gridControl, args) {

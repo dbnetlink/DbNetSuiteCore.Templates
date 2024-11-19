@@ -11,11 +11,11 @@
 }
 
 @section Control {
-    @{
-        GridModel productGrid = new GridModel(DataSourceType.SQLite, "Northwind", "Products") { 
-            ViewDialog = new ViewDialog() { LayoutColumns = 2 } 
-        };
-        productGrid.Columns = new List<GridColumn>()
+@{
+    GridModel productGrid = new GridModel(DataSourceType.SQLite, "Northwind", "Products") { 
+        ViewDialog = new ViewDialog() { LayoutColumns = 2 } 
+    };
+    productGrid.Columns = new List<GridColumn>()
     {
         new GridColumn("ProductID") { PrimaryKey = true },
         new GridColumn("ProductName"),
@@ -28,12 +28,11 @@
         new GridColumn("ReorderLevel"),
         new GridColumn("Discontinued") { DataType = typeof(Boolean)}
     };
-        productGrid.Bind(GridClientEvent.RowTransform, "highlightGridLowStock");
-        productGrid.Bind(GridClientEvent.ViewDialogUpdated, "highlightViewLowStock");
+    productGrid.Bind(GridClientEvent.RowTransform, "highlightGridLowStock");
+    productGrid.Bind(GridClientEvent.ViewDialogUpdated, "highlightViewLowStock");
 
-        @(await new DbNetSuiteCore.GridControl(HttpContext).Render(productGrid))
-    }
-}
+    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(productGrid))
+}}
 
         
 @section Scripts {

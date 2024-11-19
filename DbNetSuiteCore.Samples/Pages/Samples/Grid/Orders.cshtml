@@ -8,8 +8,9 @@
     <p data-summary>In addition to the toolbar search box you can also add filters to individual columns. String based columns support wildcard searching and date/time and numeric columns support the use of operators such as <b>&lt;, &gt;,&lt;=, &gt;=</b> and <b>!=</b>. Columns with lookups has selection based filters based on the values available in the dataset column.</p>
 }
 @section Control {
-    @{
-        var columns = new List<GridColumn>() {
+@{
+    var ordersGrid = new GridModel(DataSourceType.SQLite, "northwind", "Orders");
+    ordersGrid.Columns = new List<GridColumn>() {
         new GridColumn("OrderID") {Filter = FilterType.Default },
         new GridColumn("CustomerID", "Customer") {Filter = FilterType.Default, Lookup = new Lookup("Customers", "CustomerID", "CompanyName")},
         new GridColumn("EmployeeID", "Employee") {Filter = FilterType.Default, Lookup = new Lookup("Employees", "EmployeeID", "LastName || ', ' || FirstName")},
@@ -25,9 +26,5 @@
         new GridColumn("ShipPostalCode"),
         new GridColumn("ShipCountry") {Filter = FilterType.Distinct}
     };
-
-        var ordersGrid = new GridModel(DataSourceType.SQLite, "northwind", "Orders");
-        ordersGrid.Columns = columns;
-        @(await new DbNetSuiteCore.GridControl(HttpContext).Render(ordersGrid))
-    }
-}
+    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(ordersGrid))
+}}

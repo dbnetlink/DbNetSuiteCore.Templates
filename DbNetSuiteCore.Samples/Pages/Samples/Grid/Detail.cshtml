@@ -8,43 +8,42 @@
 }
 
 @section Control {
-    @{
-        if (string.IsNullOrEmpty(Model.CustomerId) == false)
+@{
+    if (!string.IsNullOrEmpty(Model.CustomerId))
+    {
+        <h2>Customer ID - @Model.CustomerId</h2>
+        GridModel ordersGrid = new GridModel(DataSourceType.SQLite, "northwind", "orders");
+        ordersGrid.Columns = new List<GridColumn>()
         {
-            <h2>Customer ID - @Model.CustomerId</h2>
-            GridModel ordersGrid = new GridModel(DataSourceType.SQLite, "northwind", "orders");
-            ordersGrid.Columns = new List<GridColumn>()
-            {
-                new GridColumn("EmployeeID","Employee") {Lookup = new Lookup("Employees", "EmployeeId", "lastname || ',' || firstname")},
-                new GridColumn("OrderDate","Ordered"),
-                new GridColumn("RequiredDate","Required"),
-                new GridColumn("ShippedDate","Shipped"),
-                new GridColumn("ShipVia") {Lookup = new Lookup("Shippers", "ShipperId", "CompanyName")},
-                new GridColumn("Freight") { Format = "c"},
-                new GridColumn("OrderId","") {Format = "<a target='_blank' href='/samples/grid/detail?orderid={0}'><button type=\"button\" class=\"btn btn-secondary btn-sm\">Order Lines</button></a>", Style = "white-space:norwrap" }
-            };
+            new GridColumn("EmployeeID","Employee") {Lookup = new Lookup("Employees", "EmployeeId", "lastname || ',' || firstname")},
+            new GridColumn("OrderDate","Ordered"),
+            new GridColumn("RequiredDate","Required"),
+            new GridColumn("ShippedDate","Shipped"),
+            new GridColumn("ShipVia") {Lookup = new Lookup("Shippers", "ShipperId", "CompanyName")},
+            new GridColumn("Freight") { Format = "c"},
+            new GridColumn("OrderId","") {Format = "<a target='_blank' href='/samples/grid/detail?orderid={0}'><button type=\"button\" class=\"btn btn-secondary btn-sm\">Order Lines</button></a>", Style = "white-space:norwrap" }
+        };
 
-            ordersGrid.FixedFilter = "CustomerId = @CustomerId";
-            ordersGrid.FixedFilterParameters.Add(new DbParameter("@CustomerId", Model.CustomerId));
+        ordersGrid.FixedFilter = "CustomerId = @CustomerId";
+        ordersGrid.FixedFilterParameters.Add(new DbParameter("@CustomerId", Model.CustomerId));
 
-            ordersGrid.RowSelection = RowSelection.None;
-            @(await new DbNetSuiteCore.GridControl(HttpContext).Render(ordersGrid))
-        }
-
-        if (Model.OrderId.HasValue)
-        {
-            <h2>Order ID - @Model.OrderId.Value</h2>
-            GridModel orderDetailsGrid = new GridModel(DataSourceType.SQLite, "northwind", "[order details]");
-            orderDetailsGrid.Columns = new List<GridColumn>()
-            {
-                new GridColumn("ProductID","Product") {Lookup = new Lookup("Products", "ProductID", "ProductName")},
-                new GridColumn("UnitPrice") { Format = "c"},
-                new GridColumn("Quantity"),
-                new GridColumn("Discount") { Format = "p"}
-            };
-            orderDetailsGrid.FixedFilter = "OrderId = @OrderId";
-            orderDetailsGrid.FixedFilterParameters.Add(new DbParameter("@OrderId", Model.OrderId.Value));
-            @(await new DbNetSuiteCore.GridControl(HttpContext).Render(orderDetailsGrid))
-        }
+        ordersGrid.RowSelection = RowSelection.None;
+        @(await new DbNetSuiteCore.GridControl(HttpContext).Render(ordersGrid))
     }
-}
+
+    if (Model.OrderId.HasValue)
+    {
+        <h2>Order ID - @Model.OrderId.Value</h2>
+        GridModel orderDetailsGrid = new GridModel(DataSourceType.SQLite, "northwind", "[order details]");
+        orderDetailsGrid.Columns = new List<GridColumn>()
+        {
+            new GridColumn("ProductID","Product") {Lookup = new Lookup("Products", "ProductID", "ProductName")},
+            new GridColumn("UnitPrice") { Format = "c"},
+            new GridColumn("Quantity"),
+            new GridColumn("Discount") { Format = "p"}
+        };
+        orderDetailsGrid.FixedFilter = "OrderId = @OrderId";
+        orderDetailsGrid.FixedFilterParameters.Add(new DbParameter("@OrderId", Model.OrderId.Value));
+        @(await new DbNetSuiteCore.GridControl(HttpContext).Render(orderDetailsGrid))
+    }
+}}

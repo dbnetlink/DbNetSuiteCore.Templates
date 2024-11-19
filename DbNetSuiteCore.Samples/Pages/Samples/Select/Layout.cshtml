@@ -1,0 +1,45 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>The layout of the control can be controlled using the <b>Layout</b> property which can be set to <b>Column</b> (default) or <b>Row</b>. </p>
+}
+@section Control {
+@{
+    SelectModel customerSelect = new SelectModel(DataSourceType.SQLite, "northwind", "Customers")
+    {
+        Caption = "Customer",
+        Searchable = true,
+        Layout = LayoutType.Row,
+        EmptyOption = "Please select a customer",
+        Columns = new List<SelectColumn>()
+        {
+            new SelectColumn("CustomerID"),
+            new SelectColumn("CompanyName")
+        }
+    };
+    customerSelect.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCustomer";
+    @(await new DbNetSuiteCore.SelectControl(HttpContext).Render(customerSelect))
+
+    <div id="selectedCustomer"></div>
+}}
+
+@section Scripts
+{
+<script type="text/javascript" class="source">
+    function showSelectedCustomer(selectControl, args) {
+        var selectedCustomer = document.querySelector("#selectedCustomer");
+        if (selectControl.select.value == "") {
+            selectedCustomer.innerText = ""
+        }
+        else {
+            var selectedOption = args.selectedOptions[0];
+            selectedCustomer.innerHTML = `You selected customer - <b>${selectedOption.text} (${selectedOption.value})</b>`
+        }
+    }
+</script>
+}
+
+   

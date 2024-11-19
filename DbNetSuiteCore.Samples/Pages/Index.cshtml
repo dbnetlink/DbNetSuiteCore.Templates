@@ -6,41 +6,47 @@
 
 @section Title
 {
-    <p>Welcome to the <b>DbNetSuiteCore</b> samples application. The aim is to demonstrate the capabilities of <b>DbNetSuiteCore</b> in terms of transforming data from different sources into a useable web UI. The samples menu itself uses the <b>Grid</b> control to pull information from the file system to create a dynamic menu from the solutiuon Razor pages folder.</p> <p>With all the samples you can click on the <b>Source</b> table to see the code required to create the interface. In generating the menu from the Pages folder in the solution the <b>Summary</b> column uses th RegualarExpression property on the column to extract summary information from the Razor page.</p>
+    <p>Welcome to the <b>DbNetSuiteCore</b> samples application. The aim is to demonstrate the capabilities of <b>DbNetSuiteCore</b> in terms of transforming data from different sources into a useable web UI. The samples menu itself uses the <b>Grid</b> control to pull information from the file system to create a dynamic menu from the solutiuon Razor pages folder.</p> <p>With all the samples you can click on the <b>Source</b> table to see the code required to create the interface. In generating the menu from the Pages folder in the solution the <b>Summary</b> column uses the <b>RegularExpression</b> property on the column to extract summary information from the Razor page.</p>
 }
 
 @section Control {
-    @{
-    var columns = new List<GridColumn>()
+@{
+    var components = new List<string> { "Grid", "Select" };
+
+    foreach (string component in components)
     {
-        new GridColumn(FileSystemColumn.Name.ToString(), "Sample"),
-        new GridColumn(FileSystemColumn.Content.ToString(), "Summary") { RegularExpression = "<p data-summary>(.*?)</p>"}
-    };
-    var gridModel = new GridModel(DataSourceType.FileSystem, "../Pages/Samples/Grid") { 
-                    FixedFilter = "(IsDirectory = 1 or Name like '%.cshtml') and Name not in ('Shared','_ViewStart.cshtml','index.cshtml','detail.cshtml', 'renderfile.cshtml')",
-        Columns = columns,
-        ToolbarPosition = ToolbarPosition.Hidden,
-    };
+        var columns = new List<GridColumn>()
+        {
+            new GridColumn(FileSystemColumn.Name.ToString(), "Sample"),
+            new GridColumn(FileSystemColumn.Content.ToString(), "Summary") { RegularExpression = "<p data-summary>(.*?)</p>"}
+        };
+        var samplesGrid = new GridModel(DataSourceType.FileSystem, $"../Pages/Samples/{component}")
+        {
+            FixedFilter = "(IsDirectory = 1 or Name like '%.cshtml') and Name not in ('Shared','_ViewStart.cshtml','index.cshtml','detail.cshtml', 'renderfile.cshtml')",
+            Columns = columns,
+            ToolbarPosition = ToolbarPosition.Hidden,
+            Caption = $"{component} Samples"
+        };
 
-    gridModel.ClientEvents[GridClientEvent.CellTransform] = "createLink";
+        samplesGrid.ClientEvents[GridClientEvent.CellTransform] = "createLink";
 
-    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(gridModel));
+        @(await new DbNetSuiteCore.GridControl(HttpContext).Render(samplesGrid))
     }
-}
+}}
 @section Scripts {
     <script type="text/javascript" class="source">
-    function createLink(gridControl, args) {
-        var tbody = args.cell.closest("tbody")
-        var url = tbody.dataset.url.toString().toLowerCase().replace('../pages', '')
+        function createLink(gridControl, args) {
+            var tbody = args.cell.closest("tbody")
+            var url = tbody.dataset.url.toString().toLowerCase().replace('../pages', '')
 
-        switch (args.columnName.toLowerCase()) {
-            case "name":
-                var name = args.cell.dataset.value.toString()
-                if (name.endsWith(".cshtml") && name.startsWith("_") == false) {
-                    args.cell.innerHTML = `<a target='_blank' href='${window.location.origin}${url}/${name.replace(".cshtml", "")}'>${name.replace(".cshtml", "")}</a>`
-                }
-                break;
+            switch (args.columnName.toLowerCase()) {
+                case "name":
+                    var name = args.cell.dataset.value.toString()
+                    if (name.endsWith(".cshtml") && name.startsWith("_") == false) {
+                        args.cell.innerHTML = `<a target='_blank' href='${window.location.origin}${url}/${name.replace(".cshtml", "")}'>${name.replace(".cshtml", "")}</a>`
+                    }
+                    break;
+            }
         }
-    }
-</script>
+    </script>
 }

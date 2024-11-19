@@ -21,8 +21,40 @@
 
 
 @section Control {
-    @{
-        var customerColumns = new List<GridColumn>
+@{
+    var invoiceLineGridModel = new GridModel("Invoice_items");
+    invoiceLineGridModel.Columns = new List<GridColumn>
+    {
+        new GridColumn("invoicelineid", "Invoice Line ID"),
+        new GridColumn("invoiceid", "Invoice ID") {ForeignKey = true, DataOnly = true },
+        new GridColumn("trackid", "Track ID") {Lookup = new Lookup("tracks","trackid","name")},
+        new GridColumn("unitprice", "Price") { Format = "c"},
+        new GridColumn("quantity", "Qty"),
+    };
+    invoiceLineGridModel.Caption = "Invoice Lines";
+    invoiceLineGridModel.PageSize = 10;
+    invoiceLineGridModel.ToolbarPosition = ToolbarPosition.Hidden;
+
+    var invoiceGridModel = new GridModel("Invoices");
+    invoiceGridModel.Columns = new List<GridColumn>
+    {
+        new GridColumn("invoiceid", "Invoice ID") {PrimaryKey = true },
+        new GridColumn("customerid", "Customer ID") {ForeignKey = true, DataOnly = true },
+        new GridColumn("invoicedate", "Date") { DataType = typeof(DateTime) },
+        new GridColumn("billingaddress", "Address"),
+        new GridColumn("billingcity", "City"),
+        new GridColumn("billingstate", "State"),
+        new GridColumn("billingcountry", "Country"),
+        new GridColumn("billingpostalcode", "Post Code")
+    }; 
+    invoiceGridModel.LinkedControl = invoiceLineGridModel;
+    invoiceGridModel.Caption = "Invoices";
+    invoiceGridModel.PageSize = 10;
+    invoiceGridModel.ToolbarPosition = ToolbarPosition.Hidden;
+    invoiceGridModel.ClientEvents[GridClientEvent.RowSelected] = "setOrderDetailsTabLabel";
+
+    var customerGridModel = new GridModel(DataSourceType.SQLite, "Chinook", "Customers");
+    customerGridModel.Columns = new List<GridColumn>
     {
         new GridColumn("customerid", "CustomerID") {PrimaryKey = true },
         new GridColumn("firstname", "Forename"),
@@ -32,80 +64,40 @@
         new GridColumn("city", "City") { InitialSortOrder = SortOrder.Desc},
         new GridColumn("postalcode", "Post Code"),
     };
+    customerGridModel.LinkedControl = invoiceGridModel;
+    customerGridModel.PageSize = 10;
+    customerGridModel.ClientEvents[GridClientEvent.RowSelected] = "setOrderTabLabel";
 
-        var invoiceColumns = new List<GridColumn>
-    {
-        new GridColumn("invoiceid", "Invoice ID") {PrimaryKey = true },
-        new GridColumn("customerid", "Customer ID") {ForeignKey = true, DataOnly = true },
-        new GridColumn("invoicedate", "Date") { DataType = typeof(DateTime) },
-        new GridColumn("billingaddress", "Address"),
-        new GridColumn("billingcity", "City"),
-        new GridColumn("billingstate", "State"),
-        new GridColumn("billingcountry", "Country"),
-        new GridColumn("billingpostalcode", "Post Code"),
-    };
-
-        var invoiceItemColumns = new List<GridColumn>
-    {
-        new GridColumn("invoicelineid", "Invoice Line ID"),
-        new GridColumn("invoiceid", "Invoice ID") {ForeignKey = true, DataOnly = true },
-        new GridColumn("trackid", "Track ID") {Lookup = new Lookup("tracks","trackid","name")},
-        new GridColumn("unitprice", "Price") { Format = "c"},
-        new GridColumn("quantity", "Qty"),
-    };
-
-        var invoiceLineGridModel = new GridModel("Invoice_items");
-        invoiceLineGridModel.Columns = invoiceItemColumns;
-        invoiceLineGridModel.Caption = "Invoice Lines";
-        invoiceLineGridModel.PageSize = 10;
-        invoiceLineGridModel.ToolbarPosition = ToolbarPosition.Hidden;
-
-        var invoiceGridModel = new GridModel("Invoices");
-        invoiceGridModel.Columns = invoiceColumns;
-        invoiceGridModel.AddLinkedGrid(invoiceLineGridModel);
-        invoiceGridModel.Caption = "Invoices";
-        invoiceGridModel.PageSize = 10;
-        invoiceGridModel.ToolbarPosition = ToolbarPosition.Hidden;
-        invoiceGridModel.ClientEvents[GridClientEvent.RowSelected] = "setOrderDetailsTabLabel";
-
-        var customerGridModel = new GridModel(DataSourceType.SQLite, "Chinook", "Customers");
-        customerGridModel.Columns = customerColumns;
-        customerGridModel.AddLinkedGrid(invoiceGridModel);
-        customerGridModel.PageSize = 10;
-        customerGridModel.ClientEvents[GridClientEvent.RowSelected] = "setOrderTabLabel";
-
-        <div class="source">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                @Tab("Customers", true)
-                @Tab("Orders", false)
-                @Tab("Order Details", false)
-            </ul>
-            <div class="tab-content" id="linkedGrids">
-                <div class="tab-pane fade show active" id="customers" role="tabpanel" aria-labelledby="customers-tab">
-                    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(customerGridModel))
-                </div>
-                <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(invoiceGridModel))
-                </div>
-                <div class="tab-pane fade" id="orderdetails" role="tabpanel" aria-labelledby="orderdetails-tab">
-                    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(invoiceLineGridModel))
-                </div>
+    <div class="source">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            @Tab("Customers", true)
+            @Tab("Orders", false)
+            @Tab("Order Details", false)
+        </ul>
+        <div class="tab-content" id="linkedGrids">
+            <div class="tab-pane fade show active" id="customers" role="tabpanel" aria-labelledby="customers-tab">
+                @(await new DbNetSuiteCore.GridControl(HttpContext).Render(customerGridModel))
+            </div>
+            <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                @(await new DbNetSuiteCore.GridControl(HttpContext).Render(invoiceGridModel))
+            </div>
+            <div class="tab-pane fade" id="orderdetails" role="tabpanel" aria-labelledby="orderdetails-tab">
+                @(await new DbNetSuiteCore.GridControl(HttpContext).Render(invoiceLineGridModel))
             </div>
         </div>
+    </div>
+}}
+
+@section Scripts {
+<script type="text/javascript" class="source">
+    function setOrderTabLabel(grid, args) {
+        $("button#orders-tab").html("Customer <b>" + grid.columnValue("customerid", args.selectedRow) + "</b> orders")
     }
-}
 
-@section Scripts
-                {
-    <script type="text/javascript" class="source">
-        function setOrderTabLabel(grid, args) {
-            $("button#orders-tab").html("Customer <b>" + grid.columnValue("customerid", args.selectedRow) + "</b> orders")
-        }
-
-        function setOrderDetailsTabLabel(grid, args) {
-            $("button#orderdetails-tab").html("Invoice <b>" + grid.columnValue("invoiceid", args.selectedRow) + "</b> details")
-        }
-    </script>
+    function setOrderDetailsTabLabel(grid, args) {
+        $("button#orderdetails-tab").html("Invoice <b>" + grid.columnValue("invoiceid", args.selectedRow) + "</b> details")
+    }
+</script>
 }
 
 @functions

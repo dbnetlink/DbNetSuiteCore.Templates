@@ -1,0 +1,53 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>A <b>Select</b> control can also link to a <b>Grid</b> control using the <b>LinkedControl</b> property</p>
+}
+@section Control {
+@{
+    var orderDetailsGrid = new GridModel("[Order Details]");
+    orderDetailsGrid.Columns = new List<GridColumn>
+    {
+        new GridColumn("OrderId", "Invoice Line ID") {ForeignKey = true },
+        new GridColumn("ProductID", "Product")  {Lookup = new Lookup("Products","ProductID","ProductName")},
+        new GridColumn("UNitPrice", "Price") { Format = "c"},
+        new GridColumn("QUantity", "Quantity"),
+        new GridColumn("UnitPrice*Quantity", "Cost") { Format = "c", DataType = typeof(Decimal)},
+        new GridColumn("Discount", "Discount") { Format = "p"},
+        new GridColumn( "UnitPrice*Quantity* (1-Discount)", "Net Cost") { Format = "c", DataType = typeof(Decimal)},
+    };
+
+    orderDetailsGrid.Caption = "Order Details";
+    orderDetailsGrid.PageSize = 5;
+
+    var ordersGrid = new GridModel("Orders");
+    ordersGrid.Columns = new List<GridColumn>
+    {
+        new GridColumn("OrderId", "Order ID") {PrimaryKey = true },
+        new GridColumn("customerid", "Customer ID") {ForeignKey = true },
+        new GridColumn("employeeid", "Employee") { Lookup = new Lookup("Employees","EmployeeID","coalesce(LastName,'') || ', ' || coalesce(FirstName,'')" ) },
+        new GridColumn("OrderDate", "Ordered"),
+        new GridColumn("RequiredDate", "Required"),
+        new GridColumn("ShippedDate", "Shipped"),
+        new GridColumn("Freight", "Cost") { Format = "c"}
+    };
+    ordersGrid.LinkedControl = orderDetailsGrid;
+    ordersGrid.Caption = "Orders";
+    ordersGrid.PageSize = 5;
+
+    var customerSelect = new SelectModel(DataSourceType.SQLite, "Northwind", "customers") { Caption = "Customers", EmptyOption = "Please select a customer", Searchable = true };
+
+    customerSelect.Columns = new List<SelectColumn>
+    {
+        new SelectColumn("CustomerID"),
+        new SelectColumn("coalesce(CompanyName,'') || ', ' || coalesce(Address,'') || ', ' || coalesce(City,'')") {DataType = typeof(String)}
+    };
+    customerSelect.LinkedControl = ordersGrid;
+
+    @(await new DbNetSuiteCore.SelectControl(HttpContext).Render(customerSelect))
+    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(ordersGrid))
+    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(orderDetailsGrid))
+}}

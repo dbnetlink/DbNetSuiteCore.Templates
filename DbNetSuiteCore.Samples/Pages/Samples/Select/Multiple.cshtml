@@ -1,0 +1,54 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>Setting the <b>Size</b> property to a number greater than 1 and the <b>RowSelection</b> property to <b>Multiple</b> true allows the user to select multiple rows. </p>
+}
+@section Control {
+@{
+    SelectModel customerSelect = new SelectModel(DataSourceType.SQLite, "northwind", "Customers")
+    {
+        Caption = "Customer",
+        Searchable = true,
+        Size = 20,
+        RowSelection = RowSelection.Multiple,
+        Columns = new List<SelectColumn>()
+        {
+            new SelectColumn("CustomerID"),
+            new SelectColumn("CompanyName")
+        }
+    };
+    customerSelect.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCustomers";
+
+    <div class="flex flex-row">
+        <div class="flex">
+            @(await new DbNetSuiteCore.SelectControl(HttpContext).Render(customerSelect))
+        </div>
+        <div class="flex flex-column" style="padding:10px">
+            <h5>Selected Customers</h5> 
+            <div id="selectedCustomers"></div>
+        </div>
+    </div>
+}}
+
+
+@section Scripts
+{
+<script type="text/javascript" class="source">
+function showSelectedCustomers(selectControl, args) {
+    var selectedCustomerDiv = document.querySelector("#selectedCustomers");
+    if (selectControl.select.value == "") {
+        selectedCustomerDiv.innerText = ""
+    }
+    else {
+        var selectedCustomers = []
+        Array.from(args.selectedOptions).forEach((o) => selectedCustomers.push(`${o.text} (${o.value})`));
+        selectedCustomerDiv.innerHTML = selectedCustomers.join('<br/>')
+    }
+}
+</script>
+}
+
+   
