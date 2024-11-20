@@ -8,19 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DbNetSuiteCore" Version="2.0.15" />
-    <PackageReference Include="MySqlConnector" Version="2.3.7" />
-    <PackageReference Include="Npgsql" Version="8.0.5" />
+    <Compile Remove="wwwroot\data\Excel\Excel\**" />
+    <Content Remove="wwwroot\data\Excel\Excel\**" />
+    <EmbeddedResource Remove="wwwroot\data\Excel\Excel\**" />
+    <None Remove="wwwroot\data\Excel\Excel\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\data\Excel\Excel\books.csv" />
-    <None Include="wwwroot\data\Excel\Excel\countries.csv" />
-    <None Include="wwwroot\data\Excel\Excel\FSI-2023-DOWNLOAD.xlsx" />
-    <None Include="wwwroot\data\Excel\Excel\people.xlsx" />
-    <None Include="wwwroot\data\Excel\Excel\states.csv" />
-    <None Include="wwwroot\data\Excel\Excel\Superstore.xlsx" />
-    <None Include="wwwroot\data\Excel\Excel\USDANationalNutrientDatabase.xlsx" />
+    <PackageReference Include="DbNetSuiteCore" Version="2.0.15" />
+    <PackageReference Include="MySqlConnector" Version="2.3.7" />
+    <PackageReference Include="Npgsql" Version="8.0.5" />
   </ItemGroup>
 
 </Project>

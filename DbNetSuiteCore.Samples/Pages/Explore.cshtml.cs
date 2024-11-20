@@ -1,10 +1,8 @@
 ﻿using DbNetSuiteCore.Enums;
 using DbNetSuiteCore.Helpers;
-using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.IdentityModel.Tokens;
 
 namespace DbNetSuiteCoreSamples.Pages;
 
@@ -80,7 +78,7 @@ public class ExploreModel : PageModel
                     DatabaseName = Databases.FirstOrDefault()?.Value ?? string.Empty;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 TableName = string.Empty;
                 ErrorMessage = $"Unable to connect to <b>{DataSourceType}</b> data source. Please check your selected connection.";
@@ -115,7 +113,7 @@ public class ExploreModel : PageModel
                 TableName = Tables.FirstOrDefault()?.Value ?? string.Empty;
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             Tables = new List<SelectListItem>();
         }
