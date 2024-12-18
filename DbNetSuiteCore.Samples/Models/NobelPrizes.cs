@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DbNetSuiteCoreSamples.Models
+﻿namespace DbNetSuiteCoreSamples.Models
 {
     public class NobelPrizes
     {
-        public List<NobelPrize> prizes { get; set; }
+        public List<NobelPrize> prizes { get; set; } = new List<NobelPrize>();
     }
     public class NobelPrize
     {
@@ -44,6 +41,4 @@ namespace DbNetSuiteCoreSamples.Models
         public string motivation { get; set; }
         public int share { get; set; }
     }
-
-
 }

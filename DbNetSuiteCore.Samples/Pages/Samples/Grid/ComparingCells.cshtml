@@ -1,13 +1,14 @@
 ﻿@page
 @using DbNetSuiteCore.Models;
 @using DbNetSuiteCore.Enums;
+@using DbNetSuiteCore.Samples.Helpers
 
 @model DbNetSuiteCoreSamples.ViewModels.SampleModel
 
 @section Title
 {
-    <p data-summary>Client-side events can be used to customise the grid UI after it has been rendered. In this example the <b>RowTransform</b> and <b>ViewDialogUpdated</b> client-side events are used to highlighted records where the stock is less than the re-order level and also records for discontinued products</p>
-    <p>Client-side events are passed a reference to the client-side grid control object along with a second args object which contains data relevant to the event. The client-side control has its own <a target="_blank" href="https://dbnetsuitecore.document360.io/docs">API</a>  and in this example the <b>columnValue</b> and <b>columnCell</b> methods are used to interact with the grid page after it has rendered.</p>
+    <p data-summary>Client-side events can be used to customise the grid UI after it has been rendered. In this example the @RazorHelper.HelpLink("gridmodel-events#rowtransform", "RowTransform") and @RazorHelper.HelpLink("gridmodel-events#viewdialogupdated", "ViewDialogUpdated") client-side events are used to highlighted records where the stock is less than the re-order level and also records for discontinued products</p>
+    <p>Client-side events are passed a reference to the client-side grid control object along with a second args object which contains data relevant to the event. The client-side control has its own @RazorHelper.HelpLink("grid-client-side-api", "API")  and in this example the @RazorHelper.HelpLink("grid-client-side-api#columnvalue", "columnValue") and @RazorHelper.HelpLink("grid-client-side-api#columncell", "columnCell") methods are used to interact with the grid page after it has rendered.</p>
 }
 
 @section Control {

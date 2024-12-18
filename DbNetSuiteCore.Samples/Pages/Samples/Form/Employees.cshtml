@@ -1,0 +1,35 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>The form layout uses a grid system which has a number of columns specified by the @RazorHelper.HelpLink("formmodel-properties#layoutcolumns-int", "LayoutColumns") property. Individual form elements by default take up 1 column and 1 row of the grid but this can overriden using the @RazorHelper.HelpLink("formcolumn-properties#colspan-int", "ColSpan") and @RazorHelper.HelpLink("formcolumn-properties#rowspan-int", "RowSpan") properties.</p>
+}
+@section Control {
+    @{
+var employeeForm = new FormModel(DataSourceType.SQLite, "Northwind", "Employees") { LayoutColumns = 4, Insert = true, Delete = true };
+employeeForm.Columns = new List<FormColumn>()
+{
+    new FormColumn("EmployeeID") { PrimaryKey = true},
+    new FormColumn("LastName"),
+    new FormColumn("FirstName"),
+    new FormColumn("BirthDate"),
+    new FormColumn("Title") { ColSpan = 2 },
+    new FormColumn("TitleOfCourtesy"),
+    new FormColumn("HireDate") { MaxValue = DateTime.Today, HelpText = "Hire date cannot be after today", InitialValue = DateTime.Today },
+    new FormColumn("ReportsTo") {Lookup = new Lookup("employees","EmployeeID","LastName || ',' || FirstName")},
+    new FormColumn("Notes") {ControlType = FormControlType.TextArea, TextAreaRows = 10, ColSpan = 3, RowSpan = 4},
+    new FormColumn("Address") {ControlType = FormControlType.TextArea, TextAreaRows = 2},
+    new FormColumn("City"),
+    new FormColumn("Region"),
+    new FormColumn("PostalCode"),
+    new FormColumn("Country"),
+    new FormColumn("HomePhone"),
+    new FormColumn("Extension")
+};
+@(await new DbNetSuiteCore.FormControl(HttpContext).Render(employeeForm))
+    }
+}

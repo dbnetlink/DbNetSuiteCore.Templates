@@ -7,9 +7,6 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    @{
-        string description = "DbNetSuiteCore - ASP.NET Core Razor UI Components";
-    }
 
     @DbNetSuiteCore.Resources.StyleSheet()
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -30,7 +27,7 @@
 <body>
     @(await Html.PartialAsync("Header"))
 
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div class="col-12 mt-3 mb-3">
                 <div class="border border-1 rounded bg-light text-dark p-2">

@@ -1,10 +1,11 @@
 ﻿@page
 @using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
 @model DbNetSuiteCoreSamples.ViewModels.SampleModel
 @section Title
 {
-    <p data-summary>A <b>Select</b> control can also link to a <b>Grid</b> control using the <b>LinkedControl</b> property</p>
+    <p data-summary>A @RazorHelper.HelpLink("select-overview", "Select") control can also link to a @RazorHelper.HelpLink("grid-overview", "Grid") control using the @RazorHelper.HelpLink("selectmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property</p>
 }
 @section Control {
 @{

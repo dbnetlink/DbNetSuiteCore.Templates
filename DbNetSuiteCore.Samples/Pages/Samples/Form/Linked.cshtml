@@ -1,0 +1,57 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>Like the Grid and Select controls the Form control can be linked together using the @RazorHelper.HelpLink("formmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property</p>
+}
+@section Control {
+    @{
+        var customerForm = new FormModel(DataSourceType.SQLite, "Northwind", "Customers") { Insert = true, Delete = true, Caption = "Customers" };
+        customerForm.Columns = new List<FormColumn>() {
+        new FormColumn("CustomerID") { TextTransform = TextTransform.Uppercase},
+        new FormColumn("CompanyName") {Required = true},
+        new FormColumn("ContactName"),
+        new FormColumn("ContactTitle"),
+        new FormColumn("Address") { ColSpan = 2},
+        new FormColumn("City"),
+        new FormColumn("Region"),
+        new FormColumn("PostalCode"),
+        new FormColumn("Country"),
+        new FormColumn("Phone"),
+        new FormColumn("Fax")
+    };
+
+        var orderForm = new FormModel("Orders") { Insert = true, Delete = true, Caption = "Orders" };
+        orderForm.Columns = new List<FormColumn>() {
+        new FormColumn("OrderID"),
+        new FormColumn("CustomerID") { ForeignKey = true, DataOnly = true},
+        new FormColumn("EmployeeID")  { Lookup = new Lookup("Employees", "EmployeeID", "LastName || ',' || FirstName"),Required = true },
+        new FormColumn("OrderDate") { DataType = typeof(DateTime), ControlType = FormControlType.Date },
+        new FormColumn("RequiredDate") { DataType = typeof(DateTime), ControlType = FormControlType.Date },
+        new FormColumn("ShippedDate") { DataType = typeof(DateTime), ControlType = FormControlType.Date },
+        new FormColumn("ShipVia") { Lookup = new Lookup("Shippers", "ShipperId", "CompanyName"),Required = true },
+        new FormColumn("Freight") { Format = "c" },
+        new FormColumn("ShipName") { ColSpan = 2},
+        new FormColumn("ShipAddress") { ColSpan = 2},
+        new FormColumn("ShipCity"),
+        new FormColumn("ShipRegion"),
+        new FormColumn("ShipPostalCode"),
+        new FormColumn("ShipCountry")
+    };
+
+        customerForm.LinkedControl = orderForm;
+
+        <div style="display:flex; flex-direction: column; gap:10px;">
+            <div>
+                @(await new DbNetSuiteCore.Control(HttpContext).Render(customerForm))
+            </div>
+            <div>
+                @(await new DbNetSuiteCore.Control(HttpContext).Render(orderForm))
+            </div>
+        </div>
+    }
+}

@@ -1,0 +1,49 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>For a Form with multiple records you can increase the visibility of the dataset by linking the Form control to a parent Grid control using the @RazorHelper.HelpLink("gridmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property. This also adds the enhanced navigation, sorting and filtering capabilities which can be particularly helpful with larger number of records. The sample also demonstrates use of the @RazorHelper.HelpLink("formcolumn-properties#required-boolean", "Required"), @RazorHelper.HelpLink("formcolumn-properties#initialvalue-object", "InitialValue"), @RazorHelper.HelpLink("formcolumn-properties#minvalue-object", "MinValue") and @RazorHelper.HelpLink("formcolumn-properties#maxvalue-object", "MaxValue") column properties</p>
+}
+@section Control {
+    @{
+        var productsGrid = new GridModel(DataSourceType.SQLite, "Northwind", "Products") { ViewDialog = new ViewDialog() { LayoutColumns = 2 }, PageSize = 5, Caption = "Products" };
+        productsGrid.Columns = new List<GridColumn>() {
+        new GridColumn("ProductID") { PrimaryKey = true },
+        new GridColumn("ProductName"),
+        new GridColumn("SupplierID","Supplier") { Lookup = new Lookup("Suppliers", "SupplierId", "CompanyName"), Filter = FilterType.Default },
+        new GridColumn("CategoryID","Category") { Lookup = new Lookup("Categories", "CategoryID", "CategoryName"), Filter = FilterType.Default },
+        new GridColumn("QuantityPerUnit", "Qty."),
+        new GridColumn("UnitPrice","Price") { Format = "c"},
+        new GridColumn("UnitsInStock", "Stock"),
+        new GridColumn("UnitsOnOrder","On Order"),
+        new GridColumn("ReorderLevel"),
+        new GridColumn("Discontinued") { DataType = typeof(Boolean), Filter = FilterType.Default}
+    };
+        var productForm = new FormModel("Products") { Insert = true, Delete = true };
+        productForm.Columns = new List<FormColumn>() {
+        new FormColumn("ProductID","ID") { ForeignKey = true },
+        new FormColumn("ProductName", "Name"),
+        new FormColumn("SupplierID","Supplier") { Lookup = new Lookup("Suppliers", "SupplierId", "CompanyName"),Required = true },
+        new FormColumn("CategoryID","Category") { Lookup = new Lookup("Categories", "CategoryID", "CategoryName"),Required = true},
+        new FormColumn("QuantityPerUnit", "Qty"){ InitialValue = 0},
+        new FormColumn("UnitPrice", "Price") {Required = true,InitialValue = 0, MinValue = 0, MaxValue = 100 },
+        new FormColumn("UnitsInStock", "Stock") {Required = true,InitialValue = 0, MinValue = 0 },
+        new FormColumn("UnitsOnOrder", "On Order") {Required = true,InitialValue = 0 },
+        new FormColumn("ReorderLevel", "Re-order Level") {Required = true,InitialValue = 0, MaxValue = 50 },
+        new FormColumn("Discontinued") {DataType = typeof(bool), InitialValue = false}
+    };
+
+        productsGrid.LinkedControl = productForm;
+        <div style="display:flex; flex-direction: column; gap:10px;">
+            <div>
+                @(await new DbNetSuiteCore.Control(HttpContext).Render(productsGrid))
+            </div>
+            <div>
+                @(await new DbNetSuiteCore.Control(HttpContext).Render(productForm))
+            </div>
+        </div>
+}}

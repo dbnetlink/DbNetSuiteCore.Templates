@@ -3,12 +3,13 @@
 @using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
 @model DbNetSuiteCoreSamples.ViewModels.SampleModel
 
 @section Title
 {
-    <p data-summary>Hierarchical data can be presented in a tree like structure by nesting grids. A child grid can be added to the parent grid as a nested grid which is displayed adjacent to the parent row.</p> 
-    <p>To add a nested grid simply create the instance of the control and assign the reference of the child grid control to the <b>NestedGrid</b> property of the parent grid control. You will also need to specify which column in the child grid is the <b>ForeignKey</b> which is matched against the <b>PrimaryKey</b> in the parent control.</p>
+    <p data-summary>Hierarchical data can be presented in a tree like structure by nesting grids. A child grid can be added to the parent grid as a nested grid which is displayed adjacent to the parent row.</p>
+    <p>To add a nested grid simply create the instance of the control and assign the reference of the child grid control to the @RazorHelper.HelpLink("gridmodel-properties#nestedgrid-gridmodel", "NestedGrid") property of the parent grid control. You will also need to specify which column in the child grid is the @RazorHelper.HelpLink("gridcolumn-properties#foreignkey-bool", "ForeignKey") which is matched against the @RazorHelper.HelpLink("gridcolumn-properties#primarykey-bool", "PrimaryKey") in the parent control.</p>
 }
 
 @section Control {

@@ -3,11 +3,12 @@
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Models
 
+@using DbNetSuiteCore.Samples.Helpers
 @using Microsoft.AspNetCore.Html
 @model DbNetSuiteCoreSamples.ViewModels.SampleModel
 @section Title
 {
-    <p data-summary>On of the more powerful features of the grid control is that they can be linked together to create parent child relationships.</p> <p>To link a child grid simply add it to the parent control using the <b>AddLinkedGrid</b> method. The grids are linked by automatically associating the column in the child grid specified as a <b>ForeignKey</b> with the column in the parent grid identified as a <b>PrimaryKey</b>. The sample also demonstrates use of the client-side event <b>RowSelected</b> to set the tab label using the client-side <b>columnValue</b>. method</p> <p>The sample use Bootstrap tabs to present the linked grids and uses the client-side event <b>RowSelected</b> to update the tab lable inline with the records selected</p>
+    <p data-summary>On of the more powerful features of the grid control is that they can be linked together to create parent child relationships.</p> <p>To link a child grid simply add it to the parent control using the @RazorHelper.HelpLink("gridmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property. The grids are linked by associating the column in the child grid specified as a @RazorHelper.HelpLink("gridcolumn-properties#foreignkey-bool", "ForeignKey") with the column in the parent grid identified as a @RazorHelper.HelpLink("gridcolumn-properties#primarykey-bool", "PrimaryKey"). The sample also demonstrates use of the client-side event @RazorHelper.HelpLink("gridmodel-events#rowselected", "RowSelected") to set the tab label using the client-side @RazorHelper.HelpLink("grid-client-side-api#columnvalue", "columnValue"). method</p>
 }
 
 @section Styles

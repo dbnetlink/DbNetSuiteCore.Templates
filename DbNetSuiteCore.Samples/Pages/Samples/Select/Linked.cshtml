@@ -1,10 +1,11 @@
 ﻿@page
 @using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
 @model DbNetSuiteCoreSamples.ViewModels.SampleModel
 @section Title
 {
-    <p data-summary>Like <b>Grid</b> controls <b>Select</b> controls can be linked together using the <b>LinkedControl</b> to create a hierarchy of dependent select controls. You can also use events to easily integrate 3rd party libraries such as maps.</p>
+    <p data-summary><b>Select</b> controls can be linked together using the @RazorHelper.HelpLink("selectmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property to create a hierarchy of dependent select controls. You can also use @RazorHelper.HelpLink("selectmodel-events", "events") to easily integrate 3rd party libraries such as maps.</p>
 }
 @section Control {
 @{

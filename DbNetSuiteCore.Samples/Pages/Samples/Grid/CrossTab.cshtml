@@ -1,12 +1,13 @@
 ﻿@page
 @using DbNetSuiteCore.Models;
 @using DbNetSuiteCore.Enums;
+@using DbNetSuiteCore.Samples.Helpers
 
 @model DbNetSuiteCoreSamples.ViewModels.SampleModel
 
 @section Title
 {
-    <p data-summary>In this example we use the <b>Aggregate</b> column property and built-in database functions to create a cross-tabulation example. It also use the <b>CellTransform</b> client-side event to highlight values over 100</p>
+    <p data-summary>In this example we use the @RazorHelper.HelpLink("gridcolumn-properties#aggregate-aggregatetype", "Aggregate") column property and built-in database functions to create a cross-tabulation example. It also use the @RazorHelper.HelpLink("gridmodel-events#celltransform", "CellTransform") client-side event to highlight values over 100</p>
 }
 
 @section Control {

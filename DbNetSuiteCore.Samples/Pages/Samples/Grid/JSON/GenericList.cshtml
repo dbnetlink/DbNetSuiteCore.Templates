@@ -3,18 +3,19 @@
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Models
 @using System.Net.Http
+@using DbNetSuiteCore.Samples.Helpers
 @using DbNetSuiteCoreSamples.Models
 @model DbNetSuiteCoreSamples.ViewModels.SampleModel
 
 @section Title {
-    <p data-summary>If you want to customise your JSON data source you can do so and then supply the transformed JSON as a string to the GridModel constructor</p>
+    <p data-summary>If you want to customise your JSON data source you can do so and then supply the transformed JSON as a string to the GridModel @RazorHelper.HelpLink("gridmodel-constructors#excel-and-json", "constructor")</p>
 }
 
 @section Control {
 @{
     HttpClient client = new HttpClient();
     string json = await client.GetStringAsync("https://api.nobelprize.org/v1/prize.json");
-    NobelPrizes nobelPrizes = System.Text.Json.JsonSerializer.Deserialize<NobelPrizes>(json);
+    NobelPrizes nobelPrizes = System.Text.Json.JsonSerializer.Deserialize<NobelPrizes>(json) ?? new NobelPrizes();
     List<NobelPrizeLaureate> transformedList = nobelPrizes.prizes.Where(p => p.laureates != null).SelectMany(p => p.laureates.Select(l => new { p, l })).Select(x => new NobelPrizeLaureate(x.p, x.l)).ToList();
     var gridModel = new GridModel(DataSourceType.JSON, System.Text.Json.JsonSerializer.Serialize(transformedList));
 

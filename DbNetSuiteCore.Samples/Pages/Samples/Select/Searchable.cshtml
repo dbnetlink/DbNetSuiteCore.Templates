@@ -1,10 +1,11 @@
 ﻿@page
 @using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
 @model DbNetSuiteCoreSamples.ViewModels.SampleModel
 @section Title
 {
-    <p data-summary>Setting the <b>Searchable</b> property to true allows the user to find the option using wildcard searching. </p>
+    <p data-summary>Setting the @RazorHelper.HelpLink("selectmodel-properties#searchable-bool", "Searchable") property to true allows the user to find an option using wildcard searching. The sample also demonstrates use of the @RazorHelper.HelpLink("selectmodel-properties#emptyoption-string", "EmptyOption") property which allows custom text to be shown for the empty (unselected) option</p>
 }
 @section Control {
 @{

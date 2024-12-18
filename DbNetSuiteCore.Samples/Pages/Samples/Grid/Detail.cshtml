@@ -1,10 +1,11 @@
 ﻿@page
 @using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
 
 @model DbNetSuiteCoreSamples.ViewModels.SampleModel
 @section Title {
-    <p data-summary>The <b>FixedFilter</b> and <b>FixedFilterParameters</b> allows a filter to be applied to the dataset restricting the rows returned by the data source. In this example either CustomerId or OrderId is passed on the query string and used to filter either the <b>Orders</b> or <b>OrderDetails</b> tables.</p>
+    <p data-summary>The @RazorHelper.HelpLink("gridmodel-properties#fixedfilter-string", "FixedFilter") and @RazorHelper.HelpLink("gridmodel-properties#fixedfilterparameters-listdbparameter", "FixedFilterParameters") applies a filter to the dataset restricting the rows returned by the data source. In this example either CustomerId or OrderId is passed on the query string and used to filter either the <b>Orders</b> or <b>OrderDetails</b> tables. The sample also use the GridColumn @RazorHelper.HelpLink("gridcolumn-properties#format-string", "Format") property to put a column value into a parameterised template string to create a clickable button in the grid</p>
 }
 
 @section Control {
@@ -26,8 +27,8 @@
 
         ordersGrid.FixedFilter = "CustomerId = @CustomerId";
         ordersGrid.FixedFilterParameters.Add(new DbParameter("@CustomerId", Model.CustomerId));
-
         ordersGrid.RowSelection = RowSelection.None;
+
         @(await new DbNetSuiteCore.GridControl(HttpContext).Render(ordersGrid))
     }
 
