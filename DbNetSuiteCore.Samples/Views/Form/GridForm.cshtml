@@ -1,0 +1,20 @@
+﻿@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>For a Form with multiple records you can increase the visibility of the dataset by linking the Form control to a parent Grid control using the @RazorHelper.HelpLink("gridmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property. This also adds the enhanced navigation, sorting and filtering capabilities which can be particularly helpful with larger number of records. The sample also demonstrates use of the @RazorHelper.HelpLink("formcolumn-properties#required-boolean", "Required"), @RazorHelper.HelpLink("formcolumn-properties#initialvalue-object", "InitialValue"), @RazorHelper.HelpLink("formcolumn-properties#minvalue-object", "MinValue") and @RazorHelper.HelpLink("formcolumn-properties#maxvalue-object", "MaxValue") column properties</p>
+}
+@section Control {
+    @{
+        <div style="display:flex; flex-direction: column; gap:10px;">
+            <div>
+                @(await new DbNetSuiteCore.Control(Context).Render(Model.GridModel))
+            </div>
+            <div>
+                @(await new DbNetSuiteCore.Control(Context).Render(Model.FormModel))
+            </div>
+        </div>
+}}

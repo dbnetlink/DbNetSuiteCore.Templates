@@ -13,14 +13,17 @@
 @{
         var components = new List<string> { "Grid", "Form", "Select" };
 
-        <ul class="nav nav-tabs" id="componentTabs" role="tablist">
-            @foreach (string component in components)
-            {
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link @(component == components.First() ? "active" : string.Empty)" id="@(component)-tab" data-bs-toggle="tab" data-bs-target="#@(component)" type="button" role="tab" aria-controls="home" aria-selected="true">@(component) Samples</button>
-                </li>
-            }
-        </ul>
+        <div class="d-flex justify-content-between align-items-start">
+            <ul class="nav nav-tabs" id="componentTabs" role="tablist">
+                @foreach (string component in components)
+                {
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link @(component == components.First() ? "active" : string.Empty)" id="@(component)-tab" data-bs-toggle="tab" data-bs-target="#@(component)" type="button" role="tab" aria-controls="home" aria-selected="true">Razor @(component) Samples</button>
+                    </li>
+                }
+            </ul>
+            <a class="btn btn-outline-primary btn-sm ms-2 pull-right" href="/home/index" role="button">MVC Samples</a>
+        </div>
         <div class="tab-content" id="componentMenu">
             @foreach (string component in components)
             {
@@ -36,7 +39,7 @@
                         FixedFilter = "(IsDirectory = 1 or Name like '%.cshtml') and Name not in ('Shared','_ViewStart.cshtml','index.cshtml','detail.cshtml', 'renderfile.cshtml')",
                         Columns = columns,
                         ToolbarPosition = ToolbarPosition.Hidden,
-                        Caption = $"{component} Samples",
+                        Caption = $"Razor {component} Samples",
                         RowSelection = RowSelection.None
                     };
 

@@ -1,0 +1,21 @@
+﻿@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>Like the @RazorHelper.HelpLink("grid-overview", "Grid") and @RazorHelper.HelpLink("select-overview", "Select") controls the Form control can be linked together using the @RazorHelper.HelpLink("formmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property</p>
+}
+@section Control {
+    @{
+        <div style="display:flex; flex-direction: column; gap:10px;">
+            <div>
+                @(await new DbNetSuiteCore.Control(Context).Render(Model.FormModels[0]))
+            </div>
+            <div>
+                @(await new DbNetSuiteCore.Control(Context).Render(Model.FormModels[1]))
+            </div>
+        </div>
+    }
+}

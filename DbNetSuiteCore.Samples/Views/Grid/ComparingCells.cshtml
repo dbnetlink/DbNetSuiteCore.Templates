@@ -1,0 +1,65 @@
+﻿@using DbNetSuiteCore.Models;
+@using DbNetSuiteCore.Enums;
+@using DbNetSuiteCore.Samples.Helpers
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+
+@section Title
+{
+    <p data-summary>Client-side events can be used to customise the grid UI after it has been rendered. In this example the @RazorHelper.HelpLink("gridmodel-events#rowtransform", "RowTransform") and @RazorHelper.HelpLink("gridmodel-events#viewdialogupdated", "ViewDialogUpdated") client-side events are used to highlighted records where the stock is less than the re-order level and also records for discontinued products</p>
+    <p>Client-side events are passed a reference to the client-side grid control object along with a second args object which contains data relevant to the event. The client-side control has its own @RazorHelper.HelpLink("grid-client-side-api", "API")  and in this example the @RazorHelper.HelpLink("grid-client-side-api#columnvalue", "columnValue") and @RazorHelper.HelpLink("grid-client-side-api#columncell", "columnCell") methods are used to interact with the grid page after it has rendered.</p>
+}
+
+@section Control {
+@{
+        Model.GridModel.Bind(GridClientEvent.RowTransform, "highlightGridLowStock");
+        Model.GridModel.Bind(GridClientEvent.ViewDialogUpdated, "highlightViewLowStock");
+
+        @(await new DbNetSuiteCore.Control(Context).Render(Model.GridModel))
+}}
+
+        
+@section Scripts {
+<script type="text/javascript" class="source">
+    function highlightGridLowStock(gridControl, args) {
+        highlightLowStock(gridControl, args.row)
+        highlightDiscontinued(gridControl, args.row);
+    }
+
+    function highlightViewLowStock(gridControl, args) {
+        highlightLowStock(args.viewDialog)
+    }
+
+    // Either the grid control or view dialog control are passed in depending on the event
+    function highlightLowStock(control, row) {
+        var unitsInStock = parseInt(control.columnValue("UnitsInStock", row));
+        var reorderLevel = parseInt(control.columnValue("ReorderLevel", row));
+
+        if (unitsInStock < reorderLevel) {
+            if (row) {
+                row.style.fontWeight = "bold";
+            }
+            let unitsInStockCell = control.columnCell("UnitsInStock", row);
+            let reorderLevelCell = control.columnCell("ReorderLevel", row);
+
+            unitsInStockCell.style.backgroundColor = "#CD6155"
+            unitsInStockCell.style.color = "#F2D7D5";
+
+            reorderLevelCell.style.backgroundColor = "#CD6155"
+            reorderLevelCell.style.color = "#F2D7D5";
+        }
+    }
+
+    function highlightDiscontinued(gridControl, row) {
+
+        if (gridControl.columnValue("Discontinued", row) == "False") {
+            return
+        }
+
+        console.log(gridControl.columnValue("Discontinued", row))
+
+        row.style.backgroundColor = "whitesmoke";
+        row.style.color = "gainsboro";
+    }
+</script>
+}

@@ -1,0 +1,77 @@
+﻿@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Helpers
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCoreSamples.ViewModels
+@model SampleModel
+
+@section Title
+{
+    <p data-summary>These samples demonstrate how to implent <b>DbNetSuiteCore</b> in MVC as opposed to Razor pages. The difference being minzmal in that the routing is done through the controller instead of the Razor page. If you like to keep your views as light as possible you  have the option of building your control models in the controller or service layer and passing through to the view in the view model.</p>
+}
+
+@section Control {
+    @{
+        var components = new List<string> { "Grid", "Form", "Select" };
+        <div class="d-flex justify-content-between align-items-start">
+            <ul class="nav nav-tabs" id="componentTabs" role="tablist">
+                @foreach (string component in components)
+                {
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link @(component == components.First() ? "active" : string.Empty)" id="@(component)-tab" data-bs-toggle="tab" data-bs-target="#@(component)" type="button" role="tab" aria-controls="home" aria-selected="true">MVC @(component) Samples</button>
+                    </li>
+                }
+            </ul>
+            <a class="btn btn-outline-primary btn-sm ms-2" href="/" role="button">Razor Page Samples</a>
+        </div>
+        <div class="tab-content" id="componentMenu">
+            @foreach (string component in components)
+            {
+                <div class="tab-pane fade show @(component == components.First() ? "active" : string.Empty)" id="@(component)" role="tabpanel" aria-labelledby="@(component)-tab">
+                    @{
+                        var columns = new List<GridColumn>()
+                        {
+                            new GridColumn(FileSystemColumn.Name.ToString(), "Sample"),
+                            new GridColumn(FileSystemColumn.Content.ToString(), "Summary") { RegularExpression = "<p data-summary>(.*?)</p>"}
+                        };
+                        var samplesGrid = new GridModel(DataSourceType.FileSystem, $"../Views/{component}")
+                        {
+                            FixedFilter = "(IsDirectory = 1 or Name like '%.cshtml') and Name not in ('Shared','_ViewStart.cshtml','index.cshtml','detail.cshtml', 'renderfile.cshtml')",
+                            Columns = columns,
+                            ToolbarPosition = ToolbarPosition.Hidden,
+                            Caption = $"MVC {component} Samples",
+                            RowSelection = RowSelection.None
+                        };
+
+                        samplesGrid.ClientEvents[GridClientEvent.CellTransform] = "createLink";
+                        @(await new DbNetSuiteCore.GridControl(Context).Render(samplesGrid))
+                    }
+
+                </div>
+            }
+        </div>
+    }
+}
+@section Scripts {
+    <script type="text/javascript" class="source">
+        function createLink(gridControl, args) {
+            var tbody = args.cell.closest("tbody")
+            var url = tbody.dataset.url.toString().toLowerCase().replace('../views', '')
+
+               switch (args.columnName.toLowerCase()) {
+                case "name":
+                    var name = args.cell.dataset.value.toString()
+                    if (name.endsWith(".cshtml") && name.startsWith("_") == false) {
+                        args.cell.innerHTML = `<a target='_blank' href='${window.location.origin}${url}/${name.replace(".cshtml", "")}'>${name.replace(".cshtml", "")}</a>`
+                    }
+                    break;
+                case "content0":
+                    var html = args.cell.innerHTML
+                    html = html.replace(/@@RazorHelper.HelpLink\("/g, '<a style="font-weight:bold" href="https://dbnetsuitecore.document360.io/docs/')
+                    html = html.replace(/", "/g, '" target="_blank">')
+                    html = html.replace(/"\)/g, '</a>')
+                    args.cell.innerHTML = html;
+                    break;
+            }
+        }
+    </script>
+}

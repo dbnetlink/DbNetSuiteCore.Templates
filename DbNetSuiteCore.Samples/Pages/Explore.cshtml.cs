@@ -13,6 +13,7 @@ public class ExploreModel : PageModel
     public List<SelectListItem> Databases { get; set; } = new List<SelectListItem>();
     public List<SelectListItem> Connections { get; set; } = new List<SelectListItem>();
     public List<SelectListItem> DataSourceTypeItems => DataSourceTypes.Select(x => new SelectListItem(x.ToString(), x.ToString())).ToList();
+    public List<SelectListItem> ControlTypes { get; set; } = new List<SelectListItem>();
 
     public DataSourceType DataSourceType => (DataSourceType)Enum.Parse(typeof(DataSourceType), DataSourceTypeName);
 
@@ -23,8 +24,11 @@ public class ExploreModel : PageModel
     [BindProperty]
     public string DatabaseName { get; set; } = string.Empty;
     [BindProperty]
-    public string ConnectionAlias { get; set; } = string.Empty;
+    public string ConnectionAlias { get; set; } = string.Empty; 
+    [BindProperty]
+    public string ControlType { get; set; } = string.Empty;
     public string ErrorMessage { get; set; } = string.Empty;
+
 
     private IConfiguration configuration;
     private IWebHostEnvironment? env;
@@ -38,6 +42,7 @@ public class ExploreModel : PageModel
         LoadConnections();
         LoadDatabases();
         LoadTables();
+        LoadControlTypes();
     }
 
     public void OnPost()
@@ -45,6 +50,7 @@ public class ExploreModel : PageModel
         LoadConnections();
         LoadDatabases();
         LoadTables();
+        LoadControlTypes();
     }
 
     public void LoadConnections()
@@ -58,6 +64,16 @@ public class ExploreModel : PageModel
         if (string.IsNullOrEmpty(ConnectionAlias))
         {
             ConnectionAlias = Connections.FirstOrDefault()?.Value ?? string.Empty;
+        }
+    }
+
+    public void LoadControlTypes()
+    {
+        List<string> controlTypes = new List<string>() { "Grid", "Form" };
+        ControlTypes = controlTypes.Select(c => new SelectListItem(c, c)).ToList();
+        if (string.IsNullOrEmpty(ControlType))
+        {
+            ControlType = controlTypes.First();
         }
     }
 

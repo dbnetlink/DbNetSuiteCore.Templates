@@ -15,9 +15,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DbNetSuiteCore" Version="2.0.18" />
-    <PackageReference Include="MySqlConnector" Version="2.3.7" />
-    <PackageReference Include="Npgsql" Version="8.0.5" />
+    <PackageReference Include="DbNetSuiteCore" Version="2.0.27" />
+    <PackageReference Include="MySqlConnector" Version="2.4.0" />
+    <PackageReference Include="Npgsql" Version="9.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Grid\NestedGrid.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

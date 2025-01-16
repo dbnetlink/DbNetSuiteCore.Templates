@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data;
-using System.Web;
+﻿using DbNetSuiteCore.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DbNetSuiteCoreSamples.ViewModels
 {
@@ -18,9 +18,17 @@ namespace DbNetSuiteCoreSamples.ViewModels
         public Enums.Components Component { get; set; }
         public string Title { get; set; }
         public string SourceCode { get; set; }
+        public string ControllerSourceCode { get; set; }
         public string PageName { get; set; }
         public string? CustomerId { get; set; } = null;
         public int? OrderId { get; set; } = null;
+        public GridModel GridModel { get; set; }
+        public List<GridModel> GridModels { get; set; } = new List<GridModel>();
+        public FormModel FormModel { get; set; }
+        public List<FormModel> FormModels { get; set; } = new List<FormModel>();
+        public SelectModel SelectModel { get; set; }
+        public List<SelectModel> SelectModels { get; set; } = new List<SelectModel>();
+
 
         public void OnGet(
             string? customerId = null,
@@ -32,24 +40,18 @@ namespace DbNetSuiteCoreSamples.ViewModels
             GetSourceCode();
         }
 
-        protected void GetSourceCode()
+        public void GetSourceCode(HttpContext? httpContext = null)
         {
             try
             {
-                var routeName = (HttpContext.GetEndpoint() as RouteEndpoint)?.RoutePattern.RawText;
-                routeName = String.IsNullOrEmpty(routeName) ? "index" : routeName;
-                var fileInfo = _webHostEnvironment.ContentRootFileProvider.GetFileInfo($"pages/{routeName}.cshtml");
-                string fileContents = string.Empty;
-                if (fileInfo.PhysicalPath != null)
+                if (httpContext == null)
                 {
-                    using (var sr = new StreamReader(fileInfo.PhysicalPath))
-                    {
-                        fileContents = sr.ReadToEnd();
-                    }
+                    httpContext = HttpContext;
                 }
-
-                fileContents = fileContents.Replace(">","&gt;").Replace("<", "&lt;");
-                var fileLines = fileContents.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                var routeName = httpContext.Request.Path.Value;
+                routeName = routeName == "/" ? "index" : routeName;
+                var subPath = routeName.StartsWith("/samples") ? $"pages{routeName}.cshtml" : $"views{routeName}.cshtml";
+                var fileLines = GetSourceLines(subPath);
                 var collect = false;
                 var source = new List<string>();
                 foreach (string line in fileLines)
@@ -76,7 +78,7 @@ namespace DbNetSuiteCoreSamples.ViewModels
                     }
                 }
                 source.Insert(0, string.Empty);
-               // source = source.Select(s => s.TrimStart()).ToList();
+                // source = source.Select(s => s.TrimStart()).ToList();
                 int indent = 0;
                 var indentedSource = new List<string>();
                 foreach (string line in source)
@@ -104,6 +106,70 @@ namespace DbNetSuiteCoreSamples.ViewModels
                 {
                     SourceCode = e.Message;
                 }
+            }
+        }
+
+        private string[] GetSourceLines(string filePath)
+        {
+            var fileInfo = _webHostEnvironment.ContentRootFileProvider.GetFileInfo(filePath);
+            string fileContents = string.Empty;
+            if (fileInfo.PhysicalPath != null)
+            {
+                using (var sr = new StreamReader(fileInfo.PhysicalPath))
+                {
+                    fileContents = sr.ReadToEnd();
+                }
+            }
+
+            fileContents = fileContents.Replace(">", "&gt;").Replace("<", "&lt;");
+            return fileContents.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+        }
+
+        public void GetControllerSourceCode(HttpContext httpContext)
+        {
+            try
+            {
+                if (httpContext == null)
+                {
+                    httpContext = HttpContext;
+                }
+                var routeName = httpContext.Request.Path.Value;
+                routeName = routeName == "/" ? "index" : routeName;
+                var controllerName = $"{routeName.Split("/")[1]}controller.cs";
+                var actionName = $"{routeName.Split("/")[2]}";
+                var subPath = $"controllers/{controllerName}";
+
+                var fileLines = GetSourceLines(subPath);
+                var collect = false;
+                var source = new List<string>() { string.Empty};
+                foreach (string line in fileLines)
+                {
+                    if (line.Trim().ToLower().StartsWith($"public IActionResult {actionName}()".ToLower()))
+                    {
+                        collect = true;
+                    }
+                    if (collect)
+                    {
+                        if (line.Length > 4)
+                        {
+                            source.Add(line.Remove(0, 4));
+                        }
+                        else
+                        {
+                            source.Add(line);
+                        }
+                    }
+                    if (line == "        }" && collect)
+                    {
+                        break;
+                    }
+                }
+
+                ControllerSourceCode = string.Join(Environment.NewLine, source);
+            }
+            catch (Exception e)
+            {
+                ControllerSourceCode = e.Message;
             }
         }
     }

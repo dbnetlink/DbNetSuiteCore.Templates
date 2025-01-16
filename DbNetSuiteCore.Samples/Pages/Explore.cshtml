@@ -39,6 +39,10 @@
                 <div>
                     <select class="form-select" asp-for="@Model.TableName" asp-items="Model.Tables" onchange="this.form.submit()"></select>
                 </div>
+                <div>Control Type</div>
+                <div>
+                    <select class="form-select" asp-for="@Model.ControlType" asp-items="Model.ControlTypes" onchange="this.form.submit()"></select>
+                </div>
             </div>
         </form>
 
@@ -46,9 +50,17 @@
             @{
                 if (string.IsNullOrEmpty(Model.TableName) == false)
                 {
-                    GridModel gridModel = new GridModel(Model.DataSourceType, Model.ConnectionAlias, Model.TableName) { DatabaseName = Model.DatabaseName, QueryLimit = 5000};
-                    gridModel.ClientEvents[GridClientEvent.FileDownload] = "setFileName";
-                    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(gridModel))
+                    if (Model.ControlType == "Grid")
+                    {
+                        GridModel gridModel = new GridModel(Model.DataSourceType, Model.ConnectionAlias, Model.TableName) { DatabaseName = Model.DatabaseName, QueryLimit = 500 };
+                        gridModel.ClientEvents[GridClientEvent.FileDownload] = "setFileName";
+                        @(await new DbNetSuiteCore.Control(HttpContext).Render(gridModel))
+                    }
+                    else
+                    {
+                        FormModel formModel = new FormModel(Model.DataSourceType, Model.ConnectionAlias, Model.TableName) { DatabaseName = Model.DatabaseName, QueryLimit = 500 };
+                        @(await new DbNetSuiteCore.Control(HttpContext).Render(formModel))
+                    }
                 }
 
                 if (string.IsNullOrEmpty(Model.ErrorMessage) == false)

@@ -1,5 +1,4 @@
-﻿@page
-@using DbNetSuiteCore.Enums
+﻿@using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
 
@@ -10,7 +9,6 @@
 }
 @section Control {
     @{
-        FormModel customerForm = new FormModel(DataSourceType.SQLite, "northwind", "Customers") { Insert = true, Delete = false };
-        @(await new DbNetSuiteCore.Control(HttpContext).Render(customerForm))
+        @(await new DbNetSuiteCore.Control(Context).Render(Model.FormModel))
     }
 }

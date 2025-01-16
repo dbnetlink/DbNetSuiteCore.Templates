@@ -1,5 +1,4 @@
-﻿@page
-@using DbNetSuiteCore.Enums
+﻿@using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
 @model DbNetSuiteCoreSamples.ViewModels.SampleModel
@@ -9,43 +8,15 @@
 }
 @section Control {
 @{
-    var citySelect = new SelectModel("Cities") { Caption = "City", Searchable = true, Layout = LayoutType.Row, EmptyOption = "Select a city" };
-    citySelect.Columns = new List<SelectColumn>
-    {
-        new SelectColumn("cityid") {PrimaryKey = true },
-        new SelectColumn("cityname"),
-        new SelectColumn("stateid") { ForeignKey = true },
-        new SelectColumn("latitude"),
-        new SelectColumn("longitude")
-    };
-    citySelect.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCity";
-
-    var stateSelect = new SelectModel("States") { Caption = "State", Searchable = true, Layout = LayoutType.Row, EmptyOption = "Select a state" };
-    stateSelect.Columns = new List<SelectColumn>
-    {
-        new SelectColumn("stateid") {PrimaryKey = true },
-        new SelectColumn("statename"),
-        new SelectColumn("countryid") { ForeignKey = true}
-    };
-    stateSelect.LinkedControl = citySelect;
-
-    var countrySelect = new SelectModel(DataSourceType.SQLite, "DbNetSuiteCore", "Countries") { Caption = "Country", Searchable = true, Layout = LayoutType.Row, EmptyOption = "Select a country" };
-    countrySelect.Columns = new List<SelectColumn>
-    {
-        new SelectColumn("countryid") {PrimaryKey = true },
-        new SelectColumn("countryname")
-    };
-    countrySelect.LinkedControl = stateSelect;
-
     <div class="flex flex-column">
         <div class="flex">
-        @(await new DbNetSuiteCore.SelectControl(HttpContext).Render(countrySelect))
+            @(await new DbNetSuiteCore.SelectControl(Context).Render(Model.SelectModels[0]))
         </div>
         <div class="flex">
-        @(await new DbNetSuiteCore.SelectControl(HttpContext).Render(stateSelect))
+            @(await new DbNetSuiteCore.SelectControl(Context).Render(Model.SelectModels[1]))
         </div>
         <div class="flex">
-        @(await new DbNetSuiteCore.SelectControl(HttpContext).Render(citySelect))
+            @(await new DbNetSuiteCore.SelectControl(Context).Render(Model.SelectModels[2]))
         </div>
         <div class="flex" id="selectedCity" style="padding-top:10px"></div>
     </div>
@@ -57,7 +28,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-        <div class="flex p-1" id="map" style="height:400px; width:800px;margin-top:10px; border:1pt solid gainsboro; border-radius:5px;"></div>
+    <div class="flex p-1" id="map" style="height:400px; width:800px;margin-top:10px; border:1pt solid gainsboro; border-radius:5px;"></div>
 }}
 
 @section Scripts

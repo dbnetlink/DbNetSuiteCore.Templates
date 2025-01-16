@@ -1,0 +1,33 @@
+﻿@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>The @RazorHelper.HelpLink("select-overview", "Select") control uses the HTML Select element to create a data-driven selection control that can be populated with all the supported data sources. You can use the @RazorHelper.HelpLink("selectmodel-events#optionselected", "OptionSelected") event to interact with the selected value.</p>
+}
+@section Control {
+@{
+   
+    Model.SelectModel.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCustomer";
+        @(await new DbNetSuiteCore.SelectControl(Context).Render(Model.SelectModel))
+    <div id="selectedCustomer"></div>
+}}
+
+@section Scripts
+{
+<script type="text/javascript" class="source">
+function showSelectedCustomer(selectControl, args) {
+    var selectedCustomer = document.querySelector("#selectedCustomer");
+    if (selectControl.select.value == "") {
+        selectedCustomer.innerText = ""
+    }
+    else {
+        var selectedOption = args.selectedOptions[0];
+        selectedCustomer.innerHTML = `You selected customer - <b>${selectedOption.text} (${selectedOption.value})</b>`
+    }
+}
+</script>
+}
+
+   

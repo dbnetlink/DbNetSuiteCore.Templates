@@ -1,0 +1,34 @@
+﻿@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>Setting the @RazorHelper.HelpLink("selectmodel-properties#searchable-bool", "Searchable") property to true allows the user to find an option using wildcard searching. The sample also demonstrates use of the @RazorHelper.HelpLink("selectmodel-properties#emptyoption-string", "EmptyOption") property which allows custom text to be shown for the empty (unselected) option</p>
+}
+@section Control {
+@{
+ 
+    Model.SelectModel.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCustomer";
+    @(await new DbNetSuiteCore.SelectControl(Context).Render(Model.SelectModel))
+
+    <div id="selectedCustomer"></div>
+}}
+
+@section Scripts
+{
+<script type="text/javascript" class="source">
+function showSelectedCustomer(selectControl, args) {
+    var selectedCustomer = document.querySelector("#selectedCustomer");
+    if (selectControl.select.value == "") {
+        selectedCustomer.innerText = ""
+    }
+    else {
+        var selectedOption = args.selectedOptions[0];
+        selectedCustomer.innerHTML = `You selected customer - <b>${selectedOption.text} (${selectedOption.value})</b>`
+    }
+}
+</script>
+}
+
+   
