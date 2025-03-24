@@ -1,0 +1,58 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>To speed up the rendering of the page and to reduce the loading on the server you can set the <b>DeferredLoad</b> property to true which will defer the loading of the grid until it becomes visible to the user. In this sample the grids in the hidden tabs are only loaded when you click on the tab instead of when the page loads. The sample also demonstrates use of the <b>MaxChars</b> column property which can be used to limit the number of characters of a long text value shown directly in a grid with the full text shown by hovering the cursor over the cell.</p>
+}
+@section Control {
+    @{
+    var ratings = new List<string> { "G", "NC-17", "PG", "PG-13", "R" };
+}
+
+<ul class="nav nav-tabs">
+    @{
+        foreach (string tab in ratings)
+        {
+            <li class="nav-item">
+                <button class="nav-link @(tab == ratings.First() ? "active" : string.Empty)" id="@(tab)-tab" data-bs-toggle="tab" data-bs-target="#@(tab)-pane" type="button" role="tab" aria-controls="@tab" aria-selected="true">@tab</button>
+            </li>
+        }
+    }
+</ul>
+
+<div class="tab-content" id="tabContent">
+    @foreach (string tab in ratings)
+    {
+        var filmsModel = new GridModel(DataSourceType.SQLite, "sakila", "Film join Language on Film.Language_id = language.language_id")
+                {
+                    Columns = new List<GridColumn>()
+    {
+    new GridColumn("film.film_id", "FilmID") { PrimaryKey = true, DataOnly = true},
+    new GridColumn("film.title", "Title"),
+    new GridColumn("film.description", "Description") {MaxChars = 30},
+    new GridColumn("film.release_year", "Year Of Release"),
+    new GridColumn("language.name", "Language"),
+    new GridColumn("film.rental_duration", "Duration"),
+    new GridColumn("film.rental_rate", "Rental Rate"){Format = "C" },
+    new GridColumn("film.length", "Length"),
+    new GridColumn("film.replacement_cost", "Replacement Cost"){Format = "C" },
+    new GridColumn("film.rating", "Rating") ,
+    new GridColumn("film.special_features", "Special Features") {MaxChars = 20},
+    new GridColumn("film.last_update", "Last Updated") {Format = "dd/MM/yy", DataType = typeof(DateTime)},
+    },
+                    DeferredLoad = true,
+                    FixedFilter = "rating = @rating",
+                    FixedFilterParameters = new List<DbParameter>() { new DbParameter("@rating", tab) },
+                    ViewDialog = new ViewDialog()
+                };
+
+        <div class="tab-pane fade @(tab == ratings.First() ? "show active" : string.Empty)" id="@(tab)-pane" role="tabpanel" aria-labelledby="@(tab)-tab">
+            @(await new DbNetSuiteCore.GridControl(HttpContext).Render(filmsModel))
+        </div>
+    }
+</div>
+}

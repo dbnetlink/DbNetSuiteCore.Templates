@@ -8,7 +8,7 @@ namespace DbNetSuiteCoreSamples.Pages;
 
 public class ExploreModel : PageModel
 {
-    public List<DataSourceType> DataSourceTypes => new List<DataSourceType> { DataSourceType.SQLite, DataSourceType.MSSQL, DataSourceType.MySql, DataSourceType.PostgreSql, DataSourceType.MongoDB };
+    public List<DataSourceType> DataSourceTypes => new List<DataSourceType> { DataSourceType.SQLite, DataSourceType.MSSQL, DataSourceType.MySql, DataSourceType.PostgreSql, DataSourceType.Oracle, DataSourceType.MongoDB };
     public List<SelectListItem> Tables { get; set; } = new List<SelectListItem>();
     public List<SelectListItem> Databases { get; set; } = new List<SelectListItem>();
     public List<SelectListItem> Connections { get; set; } = new List<SelectListItem>();
