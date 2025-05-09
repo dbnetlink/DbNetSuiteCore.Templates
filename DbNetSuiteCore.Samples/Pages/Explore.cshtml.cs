@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DbNetSuiteCoreSamples.Pages;
 
-public class ExploreModel : PageModel
+public class ExploreModel : IndexModel
 {
     public List<DataSourceType> DataSourceTypes => new List<DataSourceType> { DataSourceType.SQLite, DataSourceType.MSSQL, DataSourceType.MySql, DataSourceType.PostgreSql, DataSourceType.MongoDB };
     public List<SelectListItem> Tables { get; set; } = new List<SelectListItem>();
