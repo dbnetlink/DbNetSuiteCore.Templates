@@ -1,0 +1,55 @@
+﻿@page
+@{
+    Layout = "_layout";
+}
+@model DbNetSuiteCoreSamples.Pages.ResourceModel
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using Microsoft.AspNetCore.Http
+@using System.Data
+@using System.Text.RegularExpressions
+@using DbNetSuiteCore.Helpers
+@using DbNetSuiteCore.Extensions
+
+@section Title
+{
+    <p>Want to localise DbNetSuiteCore for your own language ? You can use this page to create a translation of the strings used in DbNetSuiteCore which you can send to <b>info@dbnetlink.co.uk</b> which will then add as a resource file for your culture. Simply select your language, click <b>Update</b> then enter translations for each of the resource strings and save. Then click on <b>Download</b> to download the resource file and send it to us for inclusion in the DbNetSuiteCore package.</p>
+}
+
+@{
+    <div style="padding:20px">
+        <form method="post">
+            <div class="d-flex flex-row align-items-center" style="gap:10px">
+                <div>Language</div>
+                <div>
+                    <select class="form-select" asp-for="@Model.Culture" asp-items="Model.Cultures" onchange="this.form.submit()"></select>
+                </div>
+                <div>
+                    <button type="submit" name="update" class="btn btn-primary" asp-page-handler="UpdateResources">Update</button>
+                </div>
+                <div>
+                    <button type="submit" name="download" class="btn btn-secondary" asp-page-handler="DownloadResx">Download Resource File</button>
+                </div>
+            </div>
+        </form>
+
+        <div style="margin-top:10px">
+            @{
+                GridModel resourcesModel = new GridModel(DataSourceType.SQLite, "dbnetsuitecore", "resources") { PageSize = 100 };
+
+                resourcesModel.Columns = new List<GridColumn>
+        {
+        new GridColumn("id") {DataOnly = true, PrimaryKey = true},
+        new GridColumn("ResourceKey"),
+        new GridColumn("EnglishText"),
+        new GridColumn("CultureText", $"{Model.CultureText} Text") {Edit = true, Style = "width:600px"}
+        };
+
+                resourcesModel.FixedFilter = "CultureCode = @culturecode";
+                resourcesModel.FixedFilterParameters.Add(new DbParameter("culturecode", Model.Culture));
+
+                @(await new DbNetSuiteCore.Control(HttpContext).Render(resourcesModel))
+            }
+        </div>
+    </div>
+}

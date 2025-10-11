@@ -1,0 +1,40 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>A grid can be made editable by setting the column @RazorHelper.HelpLink("gridcolumn-properties#edit-bool", "Edit") property to <b>true</b>. Custom client-side validation can be implemented using the @RazorHelper.HelpLink("gridmodel-events#validateupdate", "ValidateUpdate") event.</p>
+}
+@section Control {
+@{
+        var productGrid = new GridModel(DataSourceType.SQLite, "northwind", "Products") { Caption = "Product Edit" };
+    productGrid.Columns = new List<GridColumn>() {
+        new GridColumn("ProductID","ID") { DataOnly = true},
+        new GridColumn("ProductName", "Name") {Edit = true, Required = true, MinLength = 3, MaxLength = 50 },
+        new GridColumn("SupplierID","Supplier") {Edit = true, Lookup = new Lookup("Suppliers", "SupplierId", "CompanyName"),Required = true },
+        new GridColumn("CategoryID","Category") {Edit = true, Lookup = new Lookup("Categories", "CategoryID", "CategoryName"),Required = true, HelpText = "Select a category for the product" },
+        new GridColumn("QuantityPerUnit", "Qty"){Edit = true },
+        new GridColumn("UnitPrice", "Price") {Edit = true,  Required = false, Format = "c" },
+        new GridColumn("UnitsInStock", "Stock") {Edit = true, Required = false, MinValue = 0 },
+        new GridColumn("UnitsOnOrder", "On Order") {Edit = true, Required = false },
+        new GridColumn("ReorderLevel", "Re-order Level") {Edit = true, Required = true, MaxValue = 50, LookupRange = Enumerable.Range(0,50) },
+        new GridColumn("Discontinued") {Edit = true, DataType = typeof(bool), HelpText = "Discontinued products must have a re-order level of 0"}
+    };
+  
+    productGrid.Bind(GridClientEvent.ValidateUpdate, "validateReOrderLevel");
+    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(productGrid))
+}}
+
+
+@section Scripts {
+<script type="text/javascript" class="source">
+    function validateReOrderLevel(gridControl, args) {
+        if (gridControl.columnValue("discontinued", args.row) && gridControl.columnValue("ReorderLevel") > 0) {
+            gridControl.highlightError("ReorderLevel");
+            args.message = `Re-order level must be zero for discontinued products`;
+        }
+    }
+</script>
+}
