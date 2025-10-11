@@ -1,0 +1,31 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+
+@section Title
+{
+	<p data-summary>A grid can be made editable by simply setting the @RazorHelper.HelpLink("gridcolumn-properties#edit-bool", "Edit") property of the grid column to true.</p>
+}
+
+@section Control {
+	@{
+		var productsGrid = new GridModel(DataSourceType.SQLite, "Northwind", "Products") { ViewDialog = new ViewDialog() { LayoutColumns = 2 } };
+		productsGrid.Columns = new List<GridColumn>() {
+		new GridColumn("ProductID") { PrimaryKey = true },
+		new GridColumn("ProductName") {Edit = true},
+		new GridColumn("SupplierID","Supplier") { Lookup = new Lookup("Suppliers", "SupplierId", "CompanyName"), Edit = true },
+		new GridColumn("CategoryID","Category") { Lookup = new Lookup("Categories", "CategoryID", "CategoryName"), Edit = true },
+		new GridColumn("QuantityPerUnit", "Qty.") {Edit = true},
+		new GridColumn("UnitPrice","Price") { Format = "c",Edit = true},
+		new GridColumn("UnitsInStock", "Stock") {Edit = true},
+		new GridColumn("UnitsOnOrder","On Order") {Edit = true},
+		new GridColumn("ReorderLevel") {Edit = true},
+		new GridColumn("Discontinued") { DataType = typeof(Boolean),Edit = true}
+	};
+
+		@(await new DbNetSuiteCore.GridControl(HttpContext).Render(productsGrid))
+	}
+}

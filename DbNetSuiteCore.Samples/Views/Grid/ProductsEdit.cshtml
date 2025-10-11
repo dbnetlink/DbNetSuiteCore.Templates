@@ -1,0 +1,16 @@
+﻿@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
+
+@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+
+@section Title
+{
+	<p data-summary>A grid can be made editable by simply setting the @RazorHelper.HelpLink("gridcolumn-properties#edit-bool", "Edit") property of the grid column to true.</p>
+}
+
+@section Control {
+	@{
+	@(await new DbNetSuiteCore.GridControl(Context).Render(Model.GridModel))
+	}
+}

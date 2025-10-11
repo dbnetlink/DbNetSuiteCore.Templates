@@ -6,7 +6,7 @@ namespace DbNetSuiteCore.Samples.Helpers
     {
         public static HtmlString HelpLink(string url, string text)
         {
-            return new HtmlString($"<a style=\"font-weight:bold\" href=\"https://dbnetsuitecore.document360.io/docs/{url}\" target=\"_blank\">{text}</a>");
+            return new HtmlString($"<a style=\"font-weight:bold\" href=\"https://github.com/dbnetlink/DbNetSuiteCore2/wiki\" target=\"_blank\">{text}</a>");
         }
     }
 }

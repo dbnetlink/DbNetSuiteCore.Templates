@@ -204,7 +204,7 @@ namespace DbNetSuiteCore.Samples.Controllers
         public IActionResult Orders()
         {
             var ordersGrid = new GridModel(DataSourceType.SQLite, "northwind", "Orders");
-            ordersGrid.Columns = new List<GridColumn>() 
+            ordersGrid.Columns = new List<GridColumn>()
             {
                 new GridColumn("OrderID") {Filter = FilterType.Default },
                 new GridColumn("CustomerID", "Customer") {Filter = FilterType.Default, Lookup = new Lookup("Customers", "CustomerID", "CompanyName")},
@@ -225,8 +225,26 @@ namespace DbNetSuiteCore.Samples.Controllers
             sampleModel.GridModel = ordersGrid;
             return View(sampleModel);
         }
-  
-      
+
+        public IActionResult ProductsEdit()
+        {
+            var productsGrid = new GridModel(DataSourceType.SQLite, "Northwind", "Products") { ViewDialog = new ViewDialog() { LayoutColumns = 2 } };
+            productsGrid.Columns = new List<GridColumn>() {
+                new GridColumn("ProductID") { PrimaryKey = true },
+                new GridColumn("ProductName") { Edit = true},
+                new GridColumn("SupplierID","Supplier") { Lookup = new Lookup("Suppliers", "SupplierId", "CompanyName"), Edit = true },
+                new GridColumn("CategoryID","Category") { Lookup = new Lookup("Categories", "CategoryID", "CategoryName"), Edit = true },
+                new GridColumn("QuantityPerUnit", "Qty.") { Edit = true},
+                new GridColumn("UnitPrice","Price") { Format = "c",Edit = true},
+                new GridColumn("UnitsInStock", "Stock") { Edit = true},
+                new GridColumn("UnitsOnOrder","On Order") { Edit = true},
+                new GridColumn("ReorderLevel") { Edit = true},
+                new GridColumn("Discontinued") { DataType = typeof(Boolean),Edit = true}
+            };
+            var sampleModel = GetSampleModel();
+            sampleModel.GridModel = productsGrid;
+            return View(sampleModel);
+        }
     }
 }
 
