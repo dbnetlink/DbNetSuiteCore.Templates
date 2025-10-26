@@ -15,15 +15,15 @@
 		var productsGrid = new GridModel(DataSourceType.SQLite, "Northwind", "Products") { ViewDialog = new ViewDialog() { LayoutColumns = 2 } };
 		productsGrid.Columns = new List<GridColumn>() {
 		new GridColumn("ProductID") { PrimaryKey = true },
-		new GridColumn("ProductName") {Edit = true},
-		new GridColumn("SupplierID","Supplier") { Lookup = new Lookup("Suppliers", "SupplierId", "CompanyName"), Edit = true },
-		new GridColumn("CategoryID","Category") { Lookup = new Lookup("Categories", "CategoryID", "CategoryName"), Edit = true },
-		new GridColumn("QuantityPerUnit", "Qty.") {Edit = true},
-		new GridColumn("UnitPrice","Price") { Format = "c",Edit = true},
-		new GridColumn("UnitsInStock", "Stock") {Edit = true},
-		new GridColumn("UnitsOnOrder","On Order") {Edit = true},
-		new GridColumn("ReorderLevel") {Edit = true},
-		new GridColumn("Discontinued") { DataType = typeof(Boolean),Edit = true}
+		new GridColumn("ProductName") {FormColumn = new FormColumn()},
+		new GridColumn("SupplierID","Supplier") { Lookup = new Lookup("Suppliers", "SupplierId", "CompanyName"), FormColumn = new FormColumn() },
+		new GridColumn("CategoryID","Category") { Lookup = new Lookup("Categories", "CategoryID", "CategoryName"), FormColumn = new FormColumn() },
+		new GridColumn("QuantityPerUnit", "Qty.") {FormColumn = new FormColumn()},
+		new GridColumn("UnitPrice","Price") { Format = "c",FormColumn = new FormColumn()},
+		new GridColumn("UnitsInStock", "Stock") {FormColumn = new FormColumn()},
+		new GridColumn("UnitsOnOrder","On Order") {FormColumn = new FormColumn()},
+		new GridColumn("ReorderLevel") {FormColumn = new FormColumn()},
+		new GridColumn("Discontinued") { DataType = typeof(Boolean),FormColumn = new FormColumn()}
 	};
 
 		@(await new DbNetSuiteCore.GridControl(HttpContext).Render(productsGrid))

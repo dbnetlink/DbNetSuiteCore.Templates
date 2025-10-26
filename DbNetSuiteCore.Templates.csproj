@@ -2,7 +2,7 @@
 
   <PropertyGroup>    
     <PackageId>DbNetSuiteCore.Templates</PackageId>
-    <PackageVersion>2.0.47</PackageVersion>
+    <PackageVersion>2.0.65</PackageVersion>
     <Title>DbNetSuiteCore Templates</Title>
     <Authors>DbNetLink Limited</Authors>
     <Description>Templates to illustrate use of DbNetSuiteCore UI components for Razor/MVC.</Description>
@@ -26,6 +26,10 @@
 	</ItemGroup>
   <ItemGroup>
     <Content Include="DbNetSuiteCore.Samples\**\*" Exclude="DbNetSuiteCore.Samples\**\bin\**;DbNetSuiteCore.Samples\**\obj\**" />
+    <Compile Remove="**\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DbNetSuiteCore.Blazor.Samples\**\*" Exclude="DbNetSuiteCore.Blazor.Samples\**\bin\**;DbNetSuiteCore.Blazor.Samples\**\obj\**" />
     <Compile Remove="**\*" />
   </ItemGroup>
 

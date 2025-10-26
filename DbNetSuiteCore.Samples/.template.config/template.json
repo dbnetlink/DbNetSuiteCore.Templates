@@ -8,7 +8,7 @@
 	],
   "identity": "DbNetSuiteCore.Samples",
   "name": "DbNetSuiteCore Samples",
-  "description": "A project template for demonstrating use of DbNetSuiteCore components in Razor pages",
+  "description": "A project template for demonstrating use of DbNetSuiteCore components in Razor pages and MVC",
   "shortName": "dbnetsuitecoresamples",
    "tags": {
     "language": "C#",

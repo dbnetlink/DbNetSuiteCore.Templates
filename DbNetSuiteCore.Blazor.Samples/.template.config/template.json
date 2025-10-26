@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "DbNetLink Limited",
+  "classifications": [ 
+	"Blazor"
+	],
+  "identity": "DbNetSuiteCore.Blazor.Samples",
+  "name": "DbNetSuiteCore Blazor Samples",
+  "description": "A project template for demonstrating use of DbNetSuiteCore components in Blazor server",
+  "shortName": "dbnetsuitecoreblazorsamples",
+   "tags": {
+    "language": "C#",
+    "type": "project"
+  }
+}

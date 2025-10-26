@@ -42,7 +42,7 @@
         new GridColumn("id") {DataOnly = true, PrimaryKey = true},
         new GridColumn("ResourceKey"),
         new GridColumn("EnglishText"),
-        new GridColumn("CultureText", $"{Model.CultureText} Text") {Edit = true, Style = "width:600px"}
+        new GridColumn("CultureText", $"{Model.CultureText} Text") {FormColumn = new FormColumn(), Style = "width:600px"}
         };
 
                 resourcesModel.FixedFilter = "CultureCode = @culturecode";
