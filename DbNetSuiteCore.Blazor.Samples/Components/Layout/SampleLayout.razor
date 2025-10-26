@@ -1,0 +1,47 @@
+﻿@using Microsoft.AspNetCore.Components.Sections
+@inherits LayoutComponentBase
+
+<div class="page">
+    <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 mt-3 mb-3">
+                    <div class="border border-1 rounded bg-light text-dark p-2">
+                        <SectionOutlet SectionName="summary" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <main role="main">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Example</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="source-tab" data-bs-toggle="tab" data-bs-target="#source" type="button" role="tab" aria-controls="source" aria-selected="false">Source</button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="samplesContent">
+                            <div class="tab-pane fade show active pt-3" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                @Body
+                            </div>
+                            <div class="tab-pane fade" id="source" role="tabpanel" aria-labelledby="source-tab" style="padding-top:20px">
+                                <h5>Component</h5>
+                                <pre>
+                                    <code class="language-csharp razor"><SectionOutlet SectionName="razor-source" /></code>
+                                </pre>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+                <footer class="py-2">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between py-1 my-1 border-top">
+                        <p>&copy; @DateTime.Today.ToString("yyyy") <a target="_blank" href="https://www.dbnetlink.co.uk">DbNetLink Limited</a></p>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
