@@ -1,0 +1,75 @@
+﻿@page "/Grid/Chart"
+@attribute [StreamRendering]
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Sections
+@using Microsoft.JSInterop
+@inject IHttpContextAccessor httpContextAccessor
+@inject IWebHostEnvironment env
+@inject IJSRuntime JSRuntime
+
+@{
+    GridModel categorySalesChartGrid = new GridModel(DataSourceType.SQLite, "Northwind", "[Sales By Category]");
+    categorySalesChartGrid.Columns = new List<GridColumn>
+    {
+        new GridColumn("CategoryName", "Category"),
+        new GridColumn("ProductSales", "Total Sales") {Format = "c", Aggregate = AggregateType.Sum, DataType = typeof(Decimal)}
+    };
+    categorySalesChartGrid.IncludeJsonData = true;
+    categorySalesChartGrid.ToolbarPosition = ToolbarPosition.Hidden;
+    categorySalesChartGrid.Bind(GridClientEvent.PageLoaded, "renderChart");
+
+    <div style="display:flex; flex-direction:row">
+        <div>
+            @if (httpContextAccessor.HttpContext != null)
+            {
+                @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(categorySalesChartGrid).Result)
+            }
+        </div>
+        <div style="width: 600px;">
+            <canvas id="salesByCategory"></canvas>
+        </div>
+    </div>
+}
+
+<SectionContent SectionName="razor-source">
+    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
+</SectionContent>
+
+<SectionContent SectionName="summary">
+    <p data-summary>The @HelperFunctions.Wiki("gridmodel-properties#includejsondata-bool", "IncludeJsonData") property makes a raw JSON data version of the grid data available on the client for 3rd party controls such as charting libraries. In this sample the data is used to render a chart using the <a href="https://www.chartjs.org/" target="_blank">ChartJS</a> library. The sample uses the <b>PageLoaded</b> event to run some client-side JavaScript which in turn uses the client-side API @HelperFunctions.Wiki("grid-client-side-api#columnseriesdata", "columnSeriesData") method to get data for the chart labels and data-points.</p>
+</SectionContent>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript" class="source">
+    let salesChart = null;
+
+    function renderChart(gridControl, args)
+    {
+            if (salesChart)  // update chart
+            {
+                salesChart.data.labels = gridControl.columnSeriesData("CategoryName");
+                salesChart.data.datasets[0].data = gridControl.columnSeriesData("ProductSales");
+                salesChart.update();
+            }
+            else
+            {
+                const ctx = document.getElementById('salesByCategory');
+                salesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: gridControl.columnSeriesData("CategoryName"),
+                    datasets: [{
+                    label: 'Sales By Category',
+                    data: gridControl.columnSeriesData("ProductSales")
+                    }]
+                }
+                });
+            }
+    }
+</script>

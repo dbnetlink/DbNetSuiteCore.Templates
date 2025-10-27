@@ -1,0 +1,76 @@
+﻿@page "/Grid/Detail"
+@attribute [StreamRendering]
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Sections
+@using Microsoft.JSInterop
+@inject IHttpContextAccessor httpContextAccessor
+@inject IWebHostEnvironment env
+@inject IJSRuntime JSRuntime
+
+@code 
+{
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "CustomerId")]
+    public string? CustomerId { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "OrderId")]
+    public string? OrderId { get; set; }
+}
+
+@{
+    if (!string.IsNullOrEmpty(CustomerId))
+    {
+        <h2>Customer ID - @CustomerId</h2>
+        GridModel ordersGrid = new GridModel(DataSourceType.SQLite, "northwind", "orders");
+        ordersGrid.Columns = new List<GridColumn>()
+        {
+            new GridColumn("EmployeeID","Employee") {Lookup = new Lookup("Employees", "EmployeeId", "lastname || ',' || firstname")},
+            new GridColumn("OrderDate","Ordered"),
+            new GridColumn("RequiredDate","Required"),
+            new GridColumn("ShippedDate","Shipped"),
+            new GridColumn("ShipVia") {Lookup = new Lookup("Shippers", "ShipperId", "CompanyName")},
+            new GridColumn("Freight") { Format = "c"},
+            new GridColumn("OrderId","") {Format = "<a target='_blank' href='/grid/detail?orderid={0}'><button type=\"button\" class=\"btn btn-secondary btn-sm\">Order Lines</button></a>", Style = "white-space:norwrap" }
+        };
+
+        ordersGrid.FixedFilter = "CustomerId = @CustomerId";
+        ordersGrid.FixedFilterParameters.Add(new DbParameter("@CustomerId", CustomerId));
+        ordersGrid.RowSelection = RowSelection.None;
+        @if (httpContextAccessor.HttpContext != null)
+        {
+            @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(ordersGrid).Result)
+        }
+    }
+
+    if(!string.IsNullOrEmpty(OrderId))
+    {
+        <h2>Order ID - @OrderId</h2>
+        GridModel orderDetailsGrid = new GridModel(DataSourceType.SQLite, "northwind", "[order details]");
+        orderDetailsGrid.Columns = new List<GridColumn>()
+        {
+            new GridColumn("ProductID","Product") {Lookup = new Lookup("Products", "ProductID", "ProductName")},
+            new GridColumn("UnitPrice") { Format = "c"},
+            new GridColumn("Quantity"),
+            new GridColumn("Discount") { Format = "p"}
+        };
+        orderDetailsGrid.FixedFilter = "OrderId = @OrderId";
+        orderDetailsGrid.FixedFilterParameters.Add(new DbParameter("@OrderId", OrderId));
+        @if (httpContextAccessor.HttpContext != null)
+        {
+            @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(orderDetailsGrid).Result)
+        }
+    }
+}
+<SectionContent SectionName="razor-source">
+    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
+</SectionContent>
+
+<SectionContent SectionName="summary">
+    <p data-summary>The @HelperFunctions.Wiki("gridmodel-properties#fixedfilter-string", "FixedFilter") and @HelperFunctions.Wiki("gridmodel-properties#fixedfilterparameters-listdbparameter", "FixedFilterParameters") applies a filter to the dataset restricting the rows returned by the data source. In this example either CustomerId or OrderId is passed on the query string and used to filter either the <b>Orders</b> or <b>OrderDetails</b> tables. The sample also use the GridColumn @HelperFunctions.Wiki("gridcolumn-properties#format-string", "Format") property to put a column value into a parameterised template string to create a clickable button in the grid</p>
+</SectionContent>

@@ -1,0 +1,96 @@
+﻿@page "/Grid/ComparingCells"
+@attribute [StreamRendering]
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Sections
+@using Microsoft.JSInterop
+@inject IHttpContextAccessor httpContextAccessor
+@inject IWebHostEnvironment env
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Customers</PageTitle>
+
+@{
+    GridModel productGrid = new GridModel(DataSourceType.SQLite, "Northwind", "Products") { 
+        ViewDialog = new ViewDialog() { LayoutColumns = 2 } 
+    };
+    productGrid.Columns = new List<GridColumn>()
+    {
+        new GridColumn("ProductID") { PrimaryKey = true },
+        new GridColumn("ProductName"),
+        new GridColumn("SupplierID","Supplier") { Lookup = new Lookup("Suppliers", "SupplierId", "CompanyName"), Filter = FilterType.Default },
+        new GridColumn("CategoryID","Category") { Lookup = new Lookup("Categories", "CategoryID", "CategoryName"), Filter = FilterType.Default },
+        new GridColumn("QuantityPerUnit", "Qty."),
+        new GridColumn("UnitPrice","Price") { Format = "c"},
+        new GridColumn("UnitsInStock", "Stock"),
+        new GridColumn("UnitsOnOrder","On Order"),
+        new GridColumn("ReorderLevel"),
+        new GridColumn("Discontinued") { DataType = typeof(Boolean)}
+    };
+    productGrid.Bind(GridClientEvent.RowTransform, "highlightGridLowStock");
+    productGrid.Bind(GridClientEvent.ViewDialogUpdated, "highlightViewLowStock");
+
+    @if (httpContextAccessor.HttpContext != null)
+    {
+        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(productGrid).Result)
+    }
+   
+}
+
+<SectionContent SectionName="razor-source">
+    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
+</SectionContent>
+
+<SectionContent SectionName="summary">
+    <p data-summary>Client-side events can be used to customise the grid UI after it has been rendered. In this example the @HelperFunctions.Wiki("gridmodel-events#rowtransform", "RowTransform") and @HelperFunctions.Wiki("gridmodel-events#viewdialogupdated", "ViewDialogUpdated") client-side events are used to highlighted records where the stock is less than the re-order level and also records for discontinued products</p>
+    <p>Client-side events are passed a reference to the client-side grid control object along with a second args object which contains data relevant to the event. The client-side control has its own @HelperFunctions.Wiki("grid-client-side-api", "API")  and in this example the @HelperFunctions.Wiki("grid-client-side-api#columnvalue", "columnValue") and @HelperFunctions.Wiki("grid-client-side-api#columncell", "columnCell") methods are used to interact with the grid page after it has rendered.</p>
+</SectionContent>
+
+        
+<script type="text/javascript" class="source">
+    function highlightGridLowStock(gridControl, args) {
+        highlightLowStock(gridControl, args.row)
+        highlightDiscontinued(gridControl, args.row);
+    }
+
+    function highlightViewLowStock(gridControl, args) {
+        highlightLowStock(args.viewDialog)
+    }
+
+    // Either the grid control or view dialog control are passed in depending on the event
+    function highlightLowStock(control, row) {
+        var unitsInStock = parseInt(control.columnValue("UnitsInStock", row));
+        var reorderLevel = parseInt(control.columnValue("ReorderLevel", row));
+
+        if (unitsInStock < reorderLevel) {
+            if (row) {
+                row.style.fontWeight = "bold";
+            }
+            let unitsInStockCell = control.columnCell("UnitsInStock", row);
+            let reorderLevelCell = control.columnCell("ReorderLevel", row);
+
+            unitsInStockCell.style.backgroundColor = "#CD6155"
+            unitsInStockCell.style.color = "#F2D7D5";
+
+            reorderLevelCell.style.backgroundColor = "#CD6155"
+            reorderLevelCell.style.color = "#F2D7D5";
+        }
+    }
+
+    function highlightDiscontinued(gridControl, row) {
+
+        if (gridControl.columnValue("Discontinued", row) == "False") {
+            return
+        }
+
+        console.log(gridControl.columnValue("Discontinued", row))
+
+        row.style.backgroundColor = "whitesmoke";
+        row.style.color = "gainsboro";
+    }
+</script>

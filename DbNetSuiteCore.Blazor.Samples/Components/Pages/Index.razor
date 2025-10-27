@@ -59,10 +59,14 @@
                 }
                 break;
 
-            case "content":
-                var content = args.cell.dataset.value.toString();
-                args.cell.innerHTML = content.replace(/@@HelperFunctions\.Wiki\(\s*"([^"]+)"(?:\s*,.*)?\)/g,'$1');
+            case "content0":
+                const regex = /@@HelperFunctions\.Wiki\("([^"]*)",\s*"([^"]*)"\)/g;
+                args.cell.innerHTML = args.cell.innerText.replace(regex, renderLink);
                 break;
         }
+    }
+
+    function renderLink(match, param1, param2) {
+      return `<a target="_blank" href="https://github.com/dbnetlink/DbNetSuiteCore2/wiki/${param1}">${param2}</a>`;
     }
 </script>

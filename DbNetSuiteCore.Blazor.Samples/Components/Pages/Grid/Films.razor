@@ -1,0 +1,72 @@
+﻿@page "/Grid/Films"
+@attribute [StreamRendering]
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Sections
+@using Microsoft.JSInterop
+@inject IHttpContextAccessor httpContextAccessor
+@inject IWebHostEnvironment env
+@inject IJSRuntime JSRuntime
+
+@{
+    var ratings = new List<string> { "G", "NC-17", "PG", "PG-13", "R" };
+}
+
+<ul class="nav nav-tabs">
+    @{
+        foreach (string tab in ratings)
+        {
+            <li class="nav-item">
+                <button class="nav-link @(tab == ratings.First() ? "active" : string.Empty)" id="@(tab)-tab" data-bs-toggle="tab" data-bs-target="#@(tab)-pane" type="button" role="tab" aria-controls="@tab" aria-selected="true">@tab</button>
+            </li>
+        }
+    }
+</ul>
+
+<div class="tab-content" id="tabContent">
+    @foreach (string tab in ratings)
+    {
+        var filmsModel = new GridModel(DataSourceType.SQLite, "sakila", "Film join Language on Film.Language_id = language.language_id")
+        {
+            Columns = new List<GridColumn>()
+            {
+            new GridColumn("film.film_id", "FilmID") { PrimaryKey = true, DataOnly = true},
+            new GridColumn("film.title", "Title"),
+            new GridColumn("film.description", "Description") {MaxChars = 30},
+            new GridColumn("film.release_year", "Year Of Release"),
+            new GridColumn("language.name", "Language"),
+            new GridColumn("film.rental_duration", "Duration"),
+            new GridColumn("film.rental_rate", "Rental Rate"){Format = "C" },
+            new GridColumn("film.length", "Length"),
+            new GridColumn("film.replacement_cost", "Replacement Cost"){Format = "C" },
+            new GridColumn("film.rating", "Rating") ,
+            new GridColumn("film.special_features", "Special Features") {MaxChars = 20},
+            new GridColumn("film.last_update", "Last Updated") {Format = "dd/MM/yy", DataType = typeof(DateTime)},
+            },
+            DeferredLoad = true,
+            FixedFilter = "rating = @rating",
+            FixedFilterParameters = new List<DbParameter>() { new DbParameter("@rating", tab) },
+            ViewDialog = new ViewDialog()
+        };
+
+        <div class="tab-pane fade @(tab == ratings.First() ? "show active" : string.Empty)" id="@(tab)-pane" role="tabpanel" aria-labelledby="@(tab)-tab">
+            @if (httpContextAccessor.HttpContext != null)
+            {
+                @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(filmsModel).Result)
+            }
+        </div>
+    }
+</div>
+
+<SectionContent SectionName="razor-source">
+    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
+</SectionContent>
+
+<SectionContent SectionName="summary">
+    <p data-summary>At it's most basic you can generate a grid by simply supplying the data source type, connection alias and the name of the table or view to the @HelperFunctions.Wiki("gridmodel-constructors", "GridModel"). Default functionality includes a search box that will perform a wildcard search against all string based columns in the dataset, the ability to sort on any column by clicking on the heading, a copy page button and an option to export the data in HTML, Excel, CSV and JSON formats.</p>
+</SectionContent>

@@ -1,0 +1,154 @@
+﻿@page "/Grid/ChartMultiSeries"
+@attribute [StreamRendering]
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components.Sections
+@inject IHttpContextAccessor httpContextAccessor
+@inject IWebHostEnvironment env
+@inject IJSRuntime JSRuntime
+
+@code
+{
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "Mode")]
+    public string? Mode { get; set; } = "volume";
+
+    public bool ValueSelected => Mode?.ToLower() == "value";
+}
+
+@{
+
+    List<GridColumn> salesColumns = new List<GridColumn>()
+    {
+        new GridColumn("CategoryName", "Category") { Filter = FilterType.Distinct}
+    };
+
+    for (var i = 1; i <= 12; i++)
+    {
+        var monthName = new DateTime(2024, i, 1).ToString("MMMM");
+        GridColumn column;
+
+        string columnTemplate = $"(case when strftime ('%d', OrderDate) = '{i.ToString("00")}' then {{0}} else 0 end) as {monthName.ToLower()}";
+
+        if (ValueSelected)
+        {
+            column = new GridColumn(string.Format(columnTemplate, "quantity"), monthName) { Aggregate = AggregateType.Sum, DataType = typeof(Int32) };
+        }
+        else
+        {
+
+            column = new GridColumn(string.Format(columnTemplate, "(Quantity * [order details].UnitPrice)"), monthName) { Aggregate = AggregateType.Sum, DataType = typeof(Decimal), Format = "c" };
+        }
+        salesColumns.Add(column);
+    }
+
+    var salesGrid = new GridModel(DataSourceType.SQLite, "Northwind", "[order details] join products on [order details].productid = products.productid join categories on products.categoryid = categories.categoryid join orders on orders.orderid = [order details].orderid");
+    salesGrid.Columns = salesColumns;
+    salesGrid.Caption = $"Sales {(ValueSelected ? "Value" : "Volumes")} By Category/Month";
+    salesGrid.IncludeJsonData = true;
+    salesGrid.ToolbarPosition = ToolbarPosition.Hidden;
+    salesGrid.Bind(GridClientEvent.PageLoaded,"renderChart");
+
+    <div style="display:flex; flex-direction:row;gap:20px;align-items:center;border:1pt solid gainsboro;border-radius:5px;background-color:whitesmoke;padding:10px;margin-bottom:10px;">
+        <div class="form-check"><b>Report By:</b></div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="salesVolume" id="salesVolume" checked="@(ValueSelected == false)">
+            <label class="form-check-label" for="salesVolume">
+                Sales Volume
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="salesValue" id="salesValue" checked="@(ValueSelected == true)">
+            <label class="form-check-label" for="salesValue">
+                Sales Value
+            </label>
+        </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column">
+        <div>
+            @if (httpContextAccessor.HttpContext != null)
+            {
+                @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(salesGrid).Result)
+            }
+        </div>
+        <div style="width: 1000px;border:1pt solid gainsboro; padding:10px;margin-top:10px;border-radius:5px;">
+            <canvas id="salesByCategory"></canvas>
+        </div>
+    </div>
+}
+<SectionContent SectionName="razor-source">
+    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
+</SectionContent>
+
+<SectionContent SectionName="summary">
+    <p data-summary>The @HelperFunctions.Wiki("gridmodel-properties#includejsondata-bool", "IncludeJsonData") property makes a raw JSON data version of the grid data available on the client for 3rd party controls such as charting libraries. In this sample the data is used to render a chart using the <a href="https://www.chartjs.org/" target="_blank">ChartJS</a> library. The sample uses the <b>PageLoaded</b> event to run some client-side JavaScript which in turn uses the client-side API @HelperFunctions.Wiki("grid-client-side-api#columnseriesdata", "columnSeriesData") method to get data for the chart labels and data-points.</p>
+</SectionContent>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript" class="source">
+    (function() {
+        document.querySelector("#salesValue").addEventListener("click", () => {updateUrl('value')});
+        document.querySelector("#salesVolume").addEventListener("click", () => {updateUrl('volume')});
+    })();
+
+    function updateUrl(value) {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('mode', value);
+        window.location.search = urlParams;
+    }
+
+    var monthNames = [];
+
+    @for (var i = 1; i <= 12; i++)
+    {
+        var monthName = new DateTime(2024, i, 1).ToString("MMMM");
+        <text>monthNames.push('@monthName');</text>
+    }
+
+    let salesChart = null;
+
+    function renderChart(gridControl)
+    {
+        let datasets = [];
+
+        var categories = gridControl.columnSeriesData("CategoryName")
+        console.log(categories)
+
+        for (var i = 0; i < categories.length; i++)
+        {
+            var dataset = {};
+            var columnName = categories[i];
+            dataset.label = columnName
+            dataset.data = gridControl.rowSeriesData("CategoryName",columnName, monthNames)
+            datasets.push(dataset)
+        }
+        if (salesChart)
+        {
+            salesChart.data.datasets = datasets;
+            salesChart.update();
+        }
+        else
+        {
+            const ctx = document.getElementById('salesByCategory');
+
+            salesChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: monthNames,
+                    datasets: datasets
+                        },
+                options: {
+                    elements: {
+                        line: {
+                            tension : 0.4  // smooth lines
+                        },
+                    },
+                },
+            });
+        }
+    }
+</script>

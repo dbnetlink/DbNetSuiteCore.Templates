@@ -1,4 +1,4 @@
-﻿@page "/Form/Customer_Form"
+﻿@page "/Form/Customers"
 @attribute [StreamRendering]
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Constants
@@ -6,8 +6,6 @@
 @inject IHttpContextAccessor httpContextAccessor
 @inject IWebHostEnvironment env
 @inject IJSRuntime JSRuntime
-
-<PageTitle>Customer Form</PageTitle>
 
 <p data-summary>CRUD applications can be created easily using the Form control</p>
 @{
@@ -26,4 +24,7 @@
         new FormColumn("Fax") };
 }
 
-@(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(customerForm).Result)
+@if (httpContextAccessor.HttpContext != null)
+{
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(customerForm).Result)
+}

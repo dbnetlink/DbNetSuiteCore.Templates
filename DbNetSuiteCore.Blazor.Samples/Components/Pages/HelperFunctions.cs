@@ -67,7 +67,7 @@ namespace DbNetSuiteCore.Blazor.Samples.Components.Pages
             }
         }
 
-        public static MarkupString Wiki(string title, string link)
+        public static MarkupString Wiki(string link, string title)
         {
             return new MarkupString($"<a target=\"_blank\" href=\"https://github.com/dbnetlink/DbNetSuiteCore2/wiki/{link}\">{title}</a>");
         }

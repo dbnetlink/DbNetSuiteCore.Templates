@@ -27,8 +27,10 @@
 
     customerGridModel.PageSize = 10;
 }
-
-@(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(customerGridModel).Result)
+@if (httpContextAccessor.HttpContext != null)
+{
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(customerGridModel).Result)
+}
 
 <SectionContent SectionName="razor-source">
     @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)

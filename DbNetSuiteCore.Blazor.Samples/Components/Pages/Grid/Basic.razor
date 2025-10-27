@@ -1,0 +1,30 @@
+﻿@page "/Grid/Basic"
+@attribute [StreamRendering]
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Sections
+@using Microsoft.JSInterop
+@inject IHttpContextAccessor httpContextAccessor
+@inject IWebHostEnvironment env
+@inject IJSRuntime JSRuntime
+
+@{
+    GridModel customerGrid = new GridModel(DataSourceType.SQLite, "northwind", "Customers");
+}
+@if (httpContextAccessor.HttpContext != null)
+{
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(customerGrid).Result)
+}
+
+<SectionContent SectionName="razor-source">
+    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
+</SectionContent>
+
+<SectionContent SectionName="summary">
+    <p data-summary>At it's most basic you can generate a grid by simply supplying the data source type, connection alias and the name of the table or view to the @HelperFunctions.Wiki("gridmodel-constructors", "GridModel"). Default functionality includes a search box that will perform a wildcard search against all string based columns in the dataset, the ability to sort on any column by clicking on the heading, a copy page button and an option to export the data in HTML, Excel, CSV and JSON formats.</p>
+</SectionContent>

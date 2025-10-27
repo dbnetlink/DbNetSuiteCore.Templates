@@ -1,0 +1,51 @@
+﻿@page "/Grid/ProductEdit"
+@attribute [StreamRendering]
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Sections
+@using Microsoft.JSInterop
+@inject IHttpContextAccessor httpContextAccessor
+@inject IWebHostEnvironment env
+@inject IJSRuntime JSRuntime
+@{
+    var productGrid = new GridModel(DataSourceType.SQLite, "northwind", "Products") { Caption = "Product Edit" };
+    productGrid.Columns = new List<GridColumn>() {
+        new GridColumn("ProductID","ID") { DataOnly = true, PrimaryKey = true},
+        new GridColumn("ProductName", "Name") {FormColumn = new FormColumn() { Required = true, MinLength = 3, MaxLength = 50 } },
+        new GridColumn("SupplierID","Supplier") {FormColumn = new FormColumn() {Required = true}, Lookup = new Lookup("Suppliers", "SupplierId", "CompanyName") },
+        new GridColumn("CategoryID","Category") { Lookup = new Lookup("Categories", "CategoryID", "CategoryName"),FormColumn = new FormColumn() {Required = true, HelpText = "Select a category for the product" } },
+        new GridColumn("QuantityPerUnit", "Qty"){FormColumn = new FormColumn() },
+        new GridColumn("UnitPrice", "Price") {FormColumn = new FormColumn() {Required = false }, Format = "c" },
+        new GridColumn("UnitsInStock", "Stock") {FormColumn = new FormColumn() { Required = false, MinValue = 0 } },
+        new GridColumn("UnitsOnOrder", "On Order") {FormColumn = new FormColumn() { Required = false } },
+        new GridColumn("ReorderLevel", "Re-order Level") {FormColumn = new FormColumn() {Required = true, MaxValue = 50, LookupRange = Enumerable.Range(0,50) } },
+        new GridColumn("Discontinued") { DataType = typeof(bool), FormColumn = new FormColumn(){HelpText = "Discontinued products must have a re-order level of 0" } }
+    };
+    productGrid.Bind(GridClientEvent.ValidateUpdate, "validateReOrderLevel");
+    @if (httpContextAccessor.HttpContext != null)
+    {
+        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(productGrid).Result)
+    }
+}
+
+<script type="text/javascript" class="source">
+    function validateReOrderLevel(gridControl, args) {
+        if (gridControl.columnValue("discontinued", args.row) && gridControl.columnValue("ReorderLevel") > 0) {
+            gridControl.highlightError("ReorderLevel");
+            args.message = `Re-order level must be zero for discontinued products`;
+        }
+    }
+</script>
+
+<SectionContent SectionName="razor-source">
+   
+</SectionContent>
+
+<SectionContent SectionName="summary">
+    <p data-summary>A grid can be made editable by setting the column @HelperFunctions.Wiki("gridcolumn-properties#formcolumn-formcolumn", "FormColumn") property to an instance of FormColumn. Custom client-side validation can be implemented using the @HelperFunctions.Wiki("gridmodel-events#validateupdate", "ValidateUpdate") event.</p>
+</SectionContent>
