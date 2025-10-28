@@ -1,0 +1,40 @@
+﻿@page "/Select/Basic"
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components.Sections
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    SelectModel customerSelect = new SelectModel(DataSourceType.SQLite, "northwind", "Customers")
+    {
+        Caption = "Customer",
+        EmptyOption = "Please select a customer",
+        Columns = new List<SelectColumn>()
+        {
+            new SelectColumn("CustomerID"),
+            new SelectColumn("CompanyName")
+        }
+    };
+    customerSelect.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCustomer";
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerSelect))
+    <div id="selectedCustomer"></div>
+}
+<SectionContent SectionName="summary">
+    <p data-summary>The @HelperFunctions.Wiki("select-overview", "Select") control uses the HTML Select element to create a data-driven selection control that can be populated with all the supported data sources. You can use the @HelperFunctions.Wiki("selectmodel-events#optionselected", "OptionSelected") event to interact with the selected value.</p>
+</SectionContent>
+
+<script type="text/javascript" class="source">
+function showSelectedCustomer(selectControl, args) {
+    var selectedCustomer = document.querySelector("#selectedCustomer");
+    if (selectControl.select.value == "") {
+        selectedCustomer.innerText = ""
+    }
+    else {
+        var selectedOption = args.selectedOptions[0];
+        selectedCustomer.innerHTML = `You selected customer - <b>${selectedOption.text} (${selectedOption.value})</b>`
+    }
+}
+</script>

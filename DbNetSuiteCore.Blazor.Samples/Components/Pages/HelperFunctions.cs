@@ -5,15 +5,15 @@ namespace DbNetSuiteCore.Blazor.Samples.Components.Pages
 {
     public static class HelperFunctions
     {
-        public static MarkupString GetSourceCode(HttpContext? httpContext = null, IWebHostEnvironment? host = null)
+        public static MarkupString GetSourceCode(IHttpContextAccessor httpContextAccessor, IWebHostEnvironment? host = null)
         {
             try
             {
-                if (httpContext == null || host == null)
+                if (httpContextAccessor.HttpContext == null || host == null)
                 {
                     return new MarkupString(string.Empty);
                 }
-                var routeName = httpContext.Request.Path.Value;
+                var routeName = httpContextAccessor.HttpContext.Request.Path.Value;
                 routeName = routeName == "/" ? "index" : routeName;
                 var subPath = $"components/pages{routeName}.razor";
                 var fileLines = GetSourceLines(subPath, host);

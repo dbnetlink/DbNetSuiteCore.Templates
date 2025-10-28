@@ -1,17 +1,12 @@
 ﻿@page "/Grid/ProductEdit"
-@attribute [StreamRendering]
 @layout SampleLayout
 @using DbNetSuiteCore.Blazor.Samples.Components.Layout
 @using DbNetSuiteCore.Blazor.Samples.Components.Pages
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Enums
-@using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Sections
-@using Microsoft.JSInterop
 @inject IHttpContextAccessor httpContextAccessor
-@inject IWebHostEnvironment env
-@inject IJSRuntime JSRuntime
 @{
     var productGrid = new GridModel(DataSourceType.SQLite, "northwind", "Products") { Caption = "Product Edit" };
     productGrid.Columns = new List<GridColumn>() {
@@ -27,10 +22,7 @@
         new GridColumn("Discontinued") { DataType = typeof(bool), FormColumn = new FormColumn(){HelpText = "Discontinued products must have a re-order level of 0" } }
     };
     productGrid.Bind(GridClientEvent.ValidateUpdate, "validateReOrderLevel");
-    @if (httpContextAccessor.HttpContext != null)
-    {
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(productGrid).Result)
-    }
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(productGrid))
 }
 
 <script type="text/javascript" class="source">
@@ -41,10 +33,6 @@
         }
     }
 </script>
-
-<SectionContent SectionName="razor-source">
-   
-</SectionContent>
 
 <SectionContent SectionName="summary">
     <p data-summary>A grid can be made editable by setting the column @HelperFunctions.Wiki("gridcolumn-properties#formcolumn-formcolumn", "FormColumn") property to an instance of FormColumn. Custom client-side validation can be implemented using the @HelperFunctions.Wiki("gridmodel-events#validateupdate", "ValidateUpdate") event.</p>

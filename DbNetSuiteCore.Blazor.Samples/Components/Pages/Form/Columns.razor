@@ -1,0 +1,35 @@
+﻿@page "/Form/Columns"
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components.Sections
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var filmForm = new FormModel(DataSourceType.SQLite, "Sakila", "Film") { Insert = true, Delete = true };
+
+    filmForm.Columns = new List<FormColumn>()
+    {
+        new FormColumn("Film_Id"),
+        new FormColumn("Title"){ColSpan = 3 },
+        new FormColumn("Description"){ColSpan = 4, HelpText = "Use ColSpan to extend the width of the input control within the Grid layout"},
+        new FormColumn("Release_Year") {MinValue = 2006, MaxValue = DateTime.Today.Year, HelpText = $"Entered value must be between 2006 and {DateTime.Today.Year}"},
+        new FormColumn("Language_Id", "Language") {Lookup = new Lookup("language","language_id","name"), HelpText = "Select against a foreign key table"},
+        new FormColumn("Original_Language_Id", "Original Language") {Lookup = new Lookup("language","language_id","name")},
+        new FormColumn("Rental_Duration","Duration (days)"){ControlType = FormControlType.Auto,LookupRange = Enumerable.Range(3,5), HelpText = "Use IEnumerable to create number based lookup list"},
+        new FormColumn("Rental_Rate") {Format = "C", HelpText = "Use standard .NET formatting"},
+        new FormColumn("Length") { ControlType = FormControlType.Number, HelpText = "Make input number only"},
+        new FormColumn("Replacement_Cost") {Format = "C", Style = "background-color:whitesmoke", HelpText = "Apply custom styling"},
+        new FormColumn("Special_Features") {RowSpan = 2, ControlType = FormControlType.SelectMultiple, LookupList = new List<string>(){"Behind the Scenes","Commentaries","Deleted Scenes","Trailers" }, HelpText = "Select multiple values against a custom list"},
+        new FormColumn("Rating") {ColSpan = 1, ControlType = FormControlType.Text, LookupDictionary = new Dictionary<string, string>(){{"G", "General audiences (G)"},{"PG", "Parental Guidance (PG)" },{"PG-13", "Parents strongly cautioned (PG-13)"},{"R","Restricted (R)"},{"NC-17", "No children under 17 (NC-17)"}}, HelpText = "Create value suggestions with a custom dictionary"},
+        new FormColumn("Last_Update") { DataType = typeof(DateTime), ReadOnly = ReadOnlyMode.InsertAndUpdate, HelpText = "Make input read only"}
+    };
+
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(filmForm))
+
+}
+<SectionContent SectionName="summary">
+    <p data-summary>The @HelperFunctions.Wiki("formmodel-properties#columns-ienumerableformcolumn", "Columns") is used to specify the columns that can be edited in the form. Each column in defined by a @HelperFunctions.Wiki("formcolumn-constructors", "FormColumn") object which has a range of properties that can be used to control the behaviour of the form element.</p>
+</SectionContent>

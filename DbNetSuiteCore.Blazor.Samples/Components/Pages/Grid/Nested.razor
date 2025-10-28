@@ -1,14 +1,15 @@
 ﻿@page "/Grid/Nested"
-@attribute [StreamRendering]
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components.Sections
 @inject IHttpContextAccessor httpContextAccessor
-@inject IJSRuntime JSRuntime
 
-<PageTitle>Customers</PageTitle>
+<PageTitle>Customers, Orders and Order Lines</PageTitle>
 
-<p data-summary>Grid controls can be nested by specifying the primary and foreign keys</p>
 @{
     var customerColumns = new List<GridColumn>
     {
@@ -58,8 +59,10 @@
     customerGridModel.NestedGrid = invoiceGridModel;
 }
 
-@(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(customerGridModel).Result)
+@(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerGridModel))
 
-
+<SectionContent SectionName="summary">
+    <p data-summary>Grid controls can be nested by assigning a child grid control to a parent control using the @HelperFunctions.Wiki("gridmodel-properties#nestedgrid-componentcontrol", "NestedGrid"). The child control will return records whose @HelperFunctions.Wiki("gridcolumn-properties#ForeignKey-bool", "ForeignKey") column matches the @HelperFunctions.Wiki("gridcolumn-properties#PrimaryKey-bool", "PrimaryKey") column of the parent.</p>
+</SectionContent>
 
 

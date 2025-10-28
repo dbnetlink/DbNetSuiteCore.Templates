@@ -1,14 +1,15 @@
 ﻿@page "/Grid/Linked"
-@attribute [StreamRendering]
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components.Sections
 @inject IHttpContextAccessor httpContextAccessor
-@inject IJSRuntime JSRuntime
 
 <PageTitle>Customers</PageTitle>
 
-<p data-summary>Grid controls can be linked together by specifying the primary and foreign keys</p>
 @{
     var customerColumns = new List<GridColumn>
     {
@@ -63,15 +64,17 @@
 
 <div class="d-flex flex-column gap-3">
     <div>
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(customerGridModel).Result)
+        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerGridModel))
     </div>
     <div>
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(invoiceGridModel).Result)
+        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(invoiceGridModel))
     </div>
     <div>
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(invoiceLineGridModel).Result)
+        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(invoiceLineGridModel))
     </div>
 </div>
 
-
+<SectionContent SectionName="summary">
+    <p data-summary>Grid controls can be linked together by assigning a child control to a parent control using the @HelperFunctions.Wiki("gridmodel-properties#linkedcontrol-componentcontrol", "LinkedControl"). The child control will return records whose @HelperFunctions.Wiki("gridcolumn-properties#ForeignKey-bool", "ForeignKey") column matches the @HelperFunctions.Wiki("gridcolumn-properties#PrimaryKey-bool", "PrimaryKey") column of the parent.</p>
+</SectionContent>
 

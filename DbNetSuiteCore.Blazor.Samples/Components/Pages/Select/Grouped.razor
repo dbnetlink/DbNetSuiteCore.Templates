@@ -1,0 +1,22 @@
+﻿@page "/Select/Grouped"
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components.Sections
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var productSelect = new SelectModel(DataSourceType.SQLite, "Northwind", "Products join Categories on Products.CategoryID = Categories.CategoryID") { Searchable = true };
+    productSelect.Columns = new List<SelectColumn>()
+    {
+        new SelectColumn("ProductID"),
+        new SelectColumn("ProductName"),
+        new SelectColumn("CategoryName") {OptionGroup = true}
+    };
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(productSelect))
+}
+<SectionContent SectionName="summary">
+    <p data-summary>Using the @HelperFunctions.Wiki("selectcolumn-properties#optiongroup", "OptionGroup") column property allows you to take advantage of the native select option grouping capability </p>
+</SectionContent>

@@ -1,17 +1,12 @@
 ﻿@page "/Grid/CrossTab"
-@attribute [StreamRendering]
 @layout SampleLayout
 @using DbNetSuiteCore.Blazor.Samples.Components.Layout
 @using DbNetSuiteCore.Blazor.Samples.Components.Pages
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Enums
-@using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Sections
-@using Microsoft.JSInterop
 @inject IHttpContextAccessor httpContextAccessor
-@inject IWebHostEnvironment env
-@inject IJSRuntime JSRuntime
 
 <PageTitle>Cross Tabulation</PageTitle>
 @{
@@ -30,15 +25,9 @@
     var invoiceGrid = new GridModel(DataSourceType.SQLite, "Northwind", "invoices");
     invoiceGrid.Columns = invoiceColumns;
     invoiceGrid.ClientEvents[GridClientEvent.CellTransform] = "highlightQuantity";
-    @if (httpContextAccessor.HttpContext != null)
-    {
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(invoiceGrid).Result)
-    }
-}
 
-<SectionContent SectionName="razor-source">
-    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
-</SectionContent>
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(invoiceGrid))
+}
 
 <SectionContent SectionName="summary">
     <p data-summary>In this example we use the @HelperFunctions.Wiki("gridcolumn-properties#aggregate-aggregatetype", "Aggregate") column property and built-in database functions to create a cross-tabulation example. It also use the @HelperFunctions.Wiki("gridmodel-events#celltransform", "CellTransform") client-side event to highlight values over 100</p>

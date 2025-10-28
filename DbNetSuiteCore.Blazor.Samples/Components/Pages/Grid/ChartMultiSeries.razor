@@ -1,14 +1,12 @@
 ﻿@page "/Grid/ChartMultiSeries"
-@attribute [StreamRendering]
 @layout SampleLayout
 @using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Enums
 @using Microsoft.AspNetCore.Components.Sections
 @inject IHttpContextAccessor httpContextAccessor
-@inject IWebHostEnvironment env
-@inject IJSRuntime JSRuntime
 
 @code
 {
@@ -70,26 +68,20 @@
 
     <div style="display:flex; flex-direction:column">
         <div>
-            @if (httpContextAccessor.HttpContext != null)
-            {
-                @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(salesGrid).Result)
-            }
+            @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(salesGrid))
         </div>
         <div style="width: 1000px;border:1pt solid gainsboro; padding:10px;margin-top:10px;border-radius:5px;">
             <canvas id="salesByCategory"></canvas>
         </div>
     </div>
 }
-<SectionContent SectionName="razor-source">
-    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
-</SectionContent>
 
 <SectionContent SectionName="summary">
-    <p data-summary>The @HelperFunctions.Wiki("gridmodel-properties#includejsondata-bool", "IncludeJsonData") property makes a raw JSON data version of the grid data available on the client for 3rd party controls such as charting libraries. In this sample the data is used to render a chart using the <a href="https://www.chartjs.org/" target="_blank">ChartJS</a> library. The sample uses the <b>PageLoaded</b> event to run some client-side JavaScript which in turn uses the client-side API @HelperFunctions.Wiki("grid-client-side-api#columnseriesdata", "columnSeriesData") method to get data for the chart labels and data-points.</p>
+    <p data-summary>The @HelperFunctions.Wiki("gridmodel#includejsondata-bool", "IncludeJsonData") property makes a raw JSON data version of the grid data available on the client for 3rd party controls such as charting libraries. In this sample the data is used to render a chart using the <a href="https://www.chartjs.org/" target="_blank">ChartJS</a> library. The sample uses the <b>PageLoaded</b> event to run some client-side JavaScript which in turn uses the client-side API @HelperFunctions.Wiki("Grid-Model#columnseriesdata", "columnSeriesData") method to get data for the chart labels and data-points.</p>
 </SectionContent>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="text/javascript" class="source">
+<script type="text/javascript">
     (function() {
         document.querySelector("#salesValue").addEventListener("click", () => {updateUrl('value')});
         document.querySelector("#salesVolume").addEventListener("click", () => {updateUrl('volume')});

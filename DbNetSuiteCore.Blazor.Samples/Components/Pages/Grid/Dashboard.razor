@@ -1,17 +1,12 @@
 ﻿@page "/Grid/Dashboard"
-@attribute [StreamRendering]
 @layout SampleLayout
 @using DbNetSuiteCore.Blazor.Samples.Components.Layout
 @using DbNetSuiteCore.Blazor.Samples.Components.Pages
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Enums
-@using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Sections
-@using Microsoft.JSInterop
 @inject IHttpContextAccessor httpContextAccessor
-@inject IWebHostEnvironment env
-@inject IJSRuntime JSRuntime
 @{
     var leagues = new Dictionary<string, string>
     {
@@ -36,20 +31,13 @@
                         resultsGrid.ToolbarPosition = ToolbarPosition.Hidden;
                         resultsGrid.Caption = leagues[league];
                         resultsGrid.HeadingMode = HeadingMode.Hidden;
-                        @if (httpContextAccessor.HttpContext != null)
-                        {
-                            @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(resultsGrid).Result)
-                        }
+                        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(resultsGrid))
                     }
                 </div>
             }
         }
     </div>
 }
-
-<SectionContent SectionName="razor-source">
-    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
-</SectionContent>
 
 <SectionContent SectionName="summary">
     <p data-summary>In this example multiple grid controls are generated to create simple lists with the @HelperFunctions.Wiki("gridmodel-properties#toolbarposition-toolbarposition", "toolbar") and @HelperFunctions.Wiki("gridmodel-properties#headingmode-headingmode", "headings") hidden and without any interactivity.</p>

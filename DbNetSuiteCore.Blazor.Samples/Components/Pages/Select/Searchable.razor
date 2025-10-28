@@ -1,0 +1,42 @@
+﻿@page "/Select/Searchable"
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components.Sections
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    SelectModel customerSelect = new SelectModel(DataSourceType.SQLite, "northwind", "Customers")
+    {
+        Caption = "Customer",
+        Searchable = true,
+        EmptyOption = "Please select a customer",
+        Columns = new List<SelectColumn>()
+        {
+            new SelectColumn("CustomerID"),
+            new SelectColumn("CompanyName")
+        }
+    };
+    customerSelect.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCustomer";
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerSelect))
+
+    <div id="selectedCustomer"></div>
+}
+<SectionContent SectionName="summary">
+    <p data-summary>Setting the @HelperFunctions.Wiki("selectmodel-properties#searchable-bool", "Searchable") property to true allows the user to find an option using wildcard searching. The sample also demonstrates use of the @HelperFunctions.Wiki("selectmodel-properties#emptyoption-string", "EmptyOption") property which allows custom text to be shown for the empty (unselected) option</p>
+</SectionContent>
+
+<script type="text/javascript" class="source">
+function showSelectedCustomer(selectControl, args) {
+    var selectedCustomer = document.querySelector("#selectedCustomer");
+    if (selectControl.select.value == "") {
+        selectedCustomer.innerText = ""
+    }
+    else {
+        var selectedOption = args.selectedOptions[0];
+        selectedCustomer.innerHTML = `You selected customer - <b>${selectedOption.text} (${selectedOption.value})</b>`
+    }
+}
+</script>

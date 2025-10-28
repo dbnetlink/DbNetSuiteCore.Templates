@@ -1,17 +1,12 @@
 ﻿@page "/Grid/Detail"
-@attribute [StreamRendering]
 @layout SampleLayout
 @using DbNetSuiteCore.Blazor.Samples.Components.Layout
 @using DbNetSuiteCore.Blazor.Samples.Components.Pages
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Enums
-@using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Sections
-@using Microsoft.JSInterop
 @inject IHttpContextAccessor httpContextAccessor
-@inject IWebHostEnvironment env
-@inject IJSRuntime JSRuntime
 
 @code 
 {
@@ -42,10 +37,9 @@
         ordersGrid.FixedFilter = "CustomerId = @CustomerId";
         ordersGrid.FixedFilterParameters.Add(new DbParameter("@CustomerId", CustomerId));
         ordersGrid.RowSelection = RowSelection.None;
-        @if (httpContextAccessor.HttpContext != null)
-        {
-            @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(ordersGrid).Result)
-        }
+
+        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(ordersGrid))
+
     }
 
     if(!string.IsNullOrEmpty(OrderId))
@@ -61,16 +55,9 @@
         };
         orderDetailsGrid.FixedFilter = "OrderId = @OrderId";
         orderDetailsGrid.FixedFilterParameters.Add(new DbParameter("@OrderId", OrderId));
-        @if (httpContextAccessor.HttpContext != null)
-        {
-            @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(orderDetailsGrid).Result)
-        }
+        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(orderDetailsGrid))
     }
 }
-<SectionContent SectionName="razor-source">
-    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
-</SectionContent>
-
 <SectionContent SectionName="summary">
     <p data-summary>The @HelperFunctions.Wiki("gridmodel-properties#fixedfilter-string", "FixedFilter") and @HelperFunctions.Wiki("gridmodel-properties#fixedfilterparameters-listdbparameter", "FixedFilterParameters") applies a filter to the dataset restricting the rows returned by the data source. In this example either CustomerId or OrderId is passed on the query string and used to filter either the <b>Orders</b> or <b>OrderDetails</b> tables. The sample also use the GridColumn @HelperFunctions.Wiki("gridcolumn-properties#format-string", "Format") property to put a column value into a parameterised template string to create a clickable button in the grid</p>
 </SectionContent>

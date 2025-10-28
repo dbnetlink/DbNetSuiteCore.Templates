@@ -1,17 +1,12 @@
 ﻿@page "/Grid/Columns"
-@attribute [StreamRendering]
 @layout SampleLayout
 @using DbNetSuiteCore.Blazor.Samples.Components.Layout
 @using DbNetSuiteCore.Blazor.Samples.Components.Pages
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Enums
-@using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Sections
-@using Microsoft.JSInterop
 @inject IHttpContextAccessor httpContextAccessor
-@inject IWebHostEnvironment env
-@inject IJSRuntime JSRuntime
 
 <PageTitle>Customers</PageTitle>
 @{
@@ -23,16 +18,9 @@
         new GridColumn("coalesce(Phone,'') || ' / ' || coalesce(Fax,'')", "Phone/Fax") { DataType = typeof(string)}
     };
 
-    @if (httpContextAccessor.HttpContext != null) 
-    {
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(customerGrid).Result)
-    }
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerGrid))
 }
 
-<SectionContent SectionName="razor-source">
-    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
-</SectionContent>
-
 <SectionContent SectionName="summary">
-    <p data-summary>You can control the columns selected from the table or view by defining @HelperFunctions.Wiki("gridcolumn-constructors", "GridColumn") objects and adding them the @HelperFunctions.Wiki("gridmodel-properties#columns-ienumerablegridcolumn", "Columns") property. In this example columns are selected and combined in an expression and also given a @HelperFunctions.Wiki("gridcolumn-properties#label-string", "Label").</p>
+    <p data-summary>You can control the columns selected from the table or view by defining @HelperFunctions.Wiki("gridcolumn", "GridColumn") objects and adding them the @HelperFunctions.Wiki("gridmodel#columns-ienumerablegridcolumn", "Columns") property. In this example columns are selected and combined in an expression and also given a @HelperFunctions.Wiki("gridcolumn#label-string", "Label").</p>
 </SectionContent>

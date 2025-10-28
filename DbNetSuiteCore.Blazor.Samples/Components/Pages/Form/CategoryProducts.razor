@@ -1,0 +1,55 @@
+﻿@page "/Form/CategoryProducts"
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components.Sections
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var categorySelect = new SelectModel(DataSourceType.SQLite, "Northwind", "Categories") { Caption = "Categories", Searchable = true, Layout = LayoutType.Row };
+    categorySelect.Columns = new List<SelectColumn>()
+    {
+        new SelectColumn("CategoryId"),
+        new SelectColumn("CategoryName")
+    };
+    categorySelect.Bind(SelectClientEvent.OptionSelected, "updateFormCaption");
+
+    var productForm = new FormModel("Products") { Insert = true, Delete = true, ToolbarPosition = ToolbarPosition.Bottom, Caption = "Products" };
+    productForm.Columns = new List<FormColumn>() 
+    {
+        new FormColumn("ProductID","ID"),
+        new FormColumn("ProductName", "Name"),
+        new FormColumn("SupplierID","Supplier") { Lookup = new Lookup("Suppliers", "SupplierId", "CompanyName"),Required = true },
+        new FormColumn("CategoryID","Category") { Lookup = new Lookup("Categories", "CategoryID", "CategoryName"),Required = true, ForeignKey = true },
+        new FormColumn("QuantityPerUnit", "Qty"){ InitialValue = 0},
+        new FormColumn("UnitPrice", "Price") {Required = true,InitialValue = 0, MinValue = 0, MaxValue = 100 },
+        new FormColumn("UnitsInStock", "Stock") {Required = true,InitialValue = 0, MinValue = 0 },
+        new FormColumn("UnitsOnOrder", "On Order") {Required = true,InitialValue = 0 },
+        new FormColumn("ReorderLevel", "Re-order Level") {Required = true,InitialValue = 0, MaxValue = 50 },
+        new FormColumn("Discontinued") {DataType = typeof(bool), InitialValue = true}
+    };
+    productForm.Bind(FormClientEvent.Initialised, "saveFormReference");
+
+categorySelect.LinkedControl = productForm;
+
+@(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(categorySelect))
+<hr />
+@(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(productForm))
+}
+<SectionContent SectionName="summary">
+<p data-summary>This sample uses the @HelperFunctions.Wiki("select-overview", "Select") control to filter records returned to the form.</p>
+</SectionContent>
+
+<script>
+    function saveFormReference(form) {
+        window.categoryProductsForm = form;
+    }
+    function updateFormCaption(select, args) {
+        var categoryName = args.selectedOptions[0].text;
+        if (window.categoryProductsForm) {
+            window.categoryProductsForm.setCaption(`Products (${categoryName})`);
+        }
+    }
+</script>

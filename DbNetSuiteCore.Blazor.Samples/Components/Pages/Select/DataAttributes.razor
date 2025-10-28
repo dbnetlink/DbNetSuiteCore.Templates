@@ -1,0 +1,121 @@
+﻿@page "/Select/DataAttributes"
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components.Sections
+@inject IHttpContextAccessor httpContextAccessor
+
+@{
+    var employeeSelect = new SelectModel(DataSourceType.SQLite, "Northwind", "Employees") { Caption = "Employees",  Layout = LayoutType.Row };
+    employeeSelect.Columns = new List<SelectColumn>()
+    {
+        new SelectColumn("EmployeeID"),
+        new SelectColumn("coalesce(LastName,'') || ', ' || coalesce(FirstName,'') as full_name"),
+        new SelectColumn("LastName"),
+        new SelectColumn("FirstName"),
+        new SelectColumn("Title"),
+        new SelectColumn("TitleOfCourtesy"),
+        new SelectColumn("BirthDate"),
+        new SelectColumn("HireDate"),
+        new SelectColumn("Address"),
+        new SelectColumn("City"),
+        new SelectColumn("Region"),
+        new SelectColumn("PostalCode"),
+        new SelectColumn("Country"),
+        new SelectColumn("HomePhone"),
+        new SelectColumn("Extension"),
+        new SelectColumn("Photo"),
+        new SelectColumn("Notes"),
+        new SelectColumn("ReportsTo") {Lookup = new Lookup("employees","EmployeeID","LastName || ',' || FirstName")}
+    };
+    employeeSelect.ClientEvents[SelectClientEvent.OptionSelected] = "showEmployee";
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(employeeSelect))
+    <hr />
+    <table style="width:1000px">
+        <colgroup>
+            <col style="width:10%" />
+            <col style="width:15%" />
+            <col style="width:10%" />
+            <col style="width:15%" />
+            <col style="width:10%" />
+            <col style="width:15%" />
+            <col style="width:10%" />
+            <col style="width:15%" />
+        </colgroup>
+        <tr>
+            <td class="label">Last&nbsp;Name</td>
+            <td id="lastname"></td>
+            <td class="label">First&nbsp;Name</td>
+            <td id="firstname"></td>
+            <td class="label">Title</td>
+            <td id="title"></td>
+            <td class="label">Title&nbsp;Of&nbsp;Courtesy</td>
+            <td id="titleofcourtesy"></td>
+        </tr>
+        <tr>
+            <td class="label">Birth&nbsp;Date</td>
+            <td id="birthdate"></td>
+            <td class="label">Hire&nbsp;Date</td>
+            <td id="hiredate"></td>
+            <td class="label">Address</td>
+            <td id="address"></td>
+            <td class="label">City</td>
+            <td id="city"></td>
+        </tr>
+        <tr>
+            <td class="label">Region</td>
+            <td id="region"></td>
+            <td class="label">Postal&nbsp;Code</td>
+            <td id="postalcode"></td>
+            <td class="label">Country</td>
+            <td id="country"></td>
+            <td class="label">Home&nbsp;Phone</td>
+            <td id="homephone"></td>
+        </tr>
+        <tr>
+            <td class="label">Extension</td>
+            <td id="extension"></td>
+            <td class="label">Reports&nbsp;To</td>
+            <td id="reportsto"></td>
+            <td colspan="4"></td>
+        </tr>
+        <tr>
+            <td class="label">Photo</td>
+            <td id="photo"></td>
+            <td class="label">Notes</td>
+            <td id="notes" colspan="5"></td>
+        </tr>
+    </table>
+
+    <style>
+        td.label {font-weight:bold}
+        td img {border:2pt solid gainsboro; border-radius:5px;}
+        td {vertical-align:top}
+    </style>
+}
+<SectionContent SectionName="summary">
+        <p data-summary>Additional column data can be returned as option data attributes by simply defining more than 2 columns. All columns after the first 2 will have their column values stored as attributes on the select options.</p>
+</SectionContent>
+<script type="text/javascript" class="source">
+    function showEmployee(selectControl, args) {
+        let selectedOption = args.selectedOptions[0]
+
+        for (var name in selectedOption.dataset) {
+            var el = document.querySelector(`#${name}`)
+            if (!el) {
+                continue
+            }
+            if (name == 'photo') {
+                el.innerHTML = `<img src="data:image/jpg;base64,${selectedOption.dataset[name]}" style="max-height:200px"/>`
+            }
+            else {
+                el.innerText = selectedOption.dataset[name]
+            }
+        }
+    }
+</script>
+
+   

@@ -1,14 +1,12 @@
 ﻿@page "/Grid/Customers"
-@attribute [StreamRendering]
 @layout SampleLayout
 @using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Enums
 @using Microsoft.AspNetCore.Components.Sections
 @inject IHttpContextAccessor httpContextAccessor
-@inject IWebHostEnvironment env
-@inject IJSRuntime JSRuntime
 
 <PageTitle>Customers</PageTitle>
 
@@ -27,14 +25,8 @@
 
     customerGridModel.PageSize = 10;
 }
-@if (httpContextAccessor.HttpContext != null)
-{
-    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(customerGridModel).Result)
-}
 
-<SectionContent SectionName="razor-source">
-    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
-</SectionContent>
+@(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerGridModel))
 
 <SectionContent SectionName="summary">
     <p data-summary>At it's simplest just define the @HelperFunctions.Wiki("GridModel", "Grid-Model") specifying the data source type, connection alias and table or view name. The @HelperFunctions.Wiki("GridColumn", "Grid-Column") objects define each column in the grid.</p>

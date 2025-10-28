@@ -1,17 +1,12 @@
 ﻿@page "/Grid/ComparingCells"
-@attribute [StreamRendering]
 @layout SampleLayout
 @using DbNetSuiteCore.Blazor.Samples.Components.Layout
 @using DbNetSuiteCore.Blazor.Samples.Components.Pages
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Enums
-@using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Sections
-@using Microsoft.JSInterop
 @inject IHttpContextAccessor httpContextAccessor
-@inject IWebHostEnvironment env
-@inject IJSRuntime JSRuntime
 
 <PageTitle>Customers</PageTitle>
 
@@ -35,16 +30,8 @@
     productGrid.Bind(GridClientEvent.RowTransform, "highlightGridLowStock");
     productGrid.Bind(GridClientEvent.ViewDialogUpdated, "highlightViewLowStock");
 
-    @if (httpContextAccessor.HttpContext != null)
-    {
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(productGrid).Result)
-    }
-   
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(productGrid))
 }
-
-<SectionContent SectionName="razor-source">
-    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
-</SectionContent>
 
 <SectionContent SectionName="summary">
     <p data-summary>Client-side events can be used to customise the grid UI after it has been rendered. In this example the @HelperFunctions.Wiki("gridmodel-events#rowtransform", "RowTransform") and @HelperFunctions.Wiki("gridmodel-events#viewdialogupdated", "ViewDialogUpdated") client-side events are used to highlighted records where the stock is less than the re-order level and also records for discontinued products</p>

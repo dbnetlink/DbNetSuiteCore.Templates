@@ -33,7 +33,9 @@
                             <div class="tab-pane fade" id="source" role="tabpanel" aria-labelledby="source-tab" style="padding-top:20px">
                                 <h5>Component</h5>
                                 <pre>
-                                <code class="language-csharp razor">@HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)</code>
+                                <code class="language-csharp razor">
+                                    @HelperFunctions.GetSourceCode(httpContextAccessor, env)
+                                </code>
                                 </pre>
                             </div>
                         </div>
@@ -48,3 +50,11 @@
         </div>
     </div>
 </div>
+<HeadContent>
+    <style>
+        pre[class*=language-] {
+            border: 1pt solid steelblue;
+            border-radius: 5px;
+        }
+    </style>
+</HeadContent>

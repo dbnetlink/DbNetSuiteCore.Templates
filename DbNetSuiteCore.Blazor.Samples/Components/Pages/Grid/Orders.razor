@@ -1,17 +1,12 @@
 ﻿@page "/Grid/Orders"
-@attribute [StreamRendering]
 @layout SampleLayout
 @using DbNetSuiteCore.Blazor.Samples.Components.Layout
 @using DbNetSuiteCore.Blazor.Samples.Components.Pages
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Constants
 @using DbNetSuiteCore.Enums
-@using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Sections
-@using Microsoft.JSInterop
 @inject IHttpContextAccessor httpContextAccessor
-@inject IWebHostEnvironment env
-@inject IJSRuntime JSRuntime
 @{
     var ordersGrid = new GridModel(DataSourceType.SQLite, "northwind", "Orders");
     ordersGrid.Columns = new List<GridColumn>() {
@@ -30,14 +25,8 @@
         new GridColumn("ShipPostalCode"),
         new GridColumn("ShipCountry") {Filter = FilterType.Distinct}
     };
-    @if (httpContextAccessor.HttpContext != null)
-    {
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor.HttpContext).Render(ordersGrid).Result)
-    }
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(ordersGrid))
 }
-<SectionContent SectionName="razor-source">
-    @HelperFunctions.GetSourceCode(httpContextAccessor.HttpContext, env)
-</SectionContent>
 
 <SectionContent SectionName="summary">
         <p data-summary>In addition to the toolbar search box you can also add filters to individual columns. String based columns support wildcard searching and date/time and numeric columns support the use of operators such as <b>&lt;, &gt;,&lt;=, &gt;=</b> and <b>!=</b>. Columns with lookups has selection based filters based on the values available in the dataset column. Filters are added to a grid column using the @HelperFunctions.Wiki("gridcolumn-properties#filter-filtertype", "Filter") property. The sample also demonstrates use of the @HelperFunctions.Wiki("gridcolumn-properties#initialsortorder-sortorder", "InitialSortOrder") column property to set the initial sort order of the grid to <b>OrderDate</b> descending.</p>

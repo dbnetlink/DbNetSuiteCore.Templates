@@ -1,4 +1,4 @@
-﻿@page "/Select/Customers"
+﻿@page "/Select/LinkedGrid"
 @layout SampleLayout
 @using DbNetSuiteCore.Blazor.Samples.Components.Layout
 @using DbNetSuiteCore.Blazor.Samples.Components.Pages
@@ -7,17 +7,13 @@
 @using DbNetSuiteCore.Enums
 @using Microsoft.AspNetCore.Components.Sections
 @inject IHttpContextAccessor httpContextAccessor
-
-<PageTitle>Customer Form</PageTitle>
-
-<p data-summary>The select control is designed to create a simple, searchable selection control</p>
 @{
-    var orderDetailsGrid = new GridModel(DataSourceType.SQLite, "Northwind", "[Order Details]");
+    var orderDetailsGrid = new GridModel("[Order Details]");
     orderDetailsGrid.Columns = new List<GridColumn>
     {
         new GridColumn("OrderId", "Invoice Line ID") {ForeignKey = true },
         new GridColumn("ProductID", "Product")  {Lookup = new Lookup("Products","ProductID","ProductName")},
-        new GridColumn("UNitPrice", "Price") { Format = "c"},
+        new GridColumn("UnitPrice", "Price") { Format = "c"},
         new GridColumn("QUantity", "Quantity"),
         new GridColumn("UnitPrice*Quantity", "Cost") { Format = "c", DataType = typeof(Decimal)},
         new GridColumn("Discount", "Discount") { Format = "p"},
@@ -27,7 +23,7 @@
     orderDetailsGrid.Caption = "Order Details";
     orderDetailsGrid.PageSize = 5;
 
-    var ordersGrid = new GridModel(DataSourceType.SQLite, "Northwind", "Orders");
+    var ordersGrid = new GridModel("Orders");
     ordersGrid.Columns = new List<GridColumn>
     {
         new GridColumn("OrderId", "Order ID") {PrimaryKey = true },
@@ -50,15 +46,19 @@
         new SelectColumn("coalesce(CompanyName,'') || ', ' || coalesce(Address,'') || ', ' || coalesce(City,'')") {DataType = typeof(String)}
     };
     customerSelect.LinkedControl = ordersGrid;
+
+    <div class="flex flex-column">
+        <div class="flex">
+            @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerSelect))
+        </div>
+        <div class="flex">
+            @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(ordersGrid))
+        </div>
+        <div class="flex">
+            @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(orderDetailsGrid))
+        </div>
+    </div>
 }
-<div class="d-flex flex-column gap-3">
-    <div>
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerSelect))
-    </div>
-    <div>
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(ordersGrid))
-    </div>
-    <div>
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(orderDetailsGrid))
-    </div>
-</div>
+<SectionContent SectionName="summary">
+    <p data-summary>A @HelperFunctions.Wiki("select-overview", "Select") control can also link to a @HelperFunctions.Wiki("grid-overview", "Grid") control using the @HelperFunctions.Wiki("selectmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property</p>
+</SectionContent>

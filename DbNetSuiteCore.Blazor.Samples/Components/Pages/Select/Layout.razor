@@ -1,0 +1,73 @@
+﻿@page "/Select/Layout"
+@layout SampleLayout
+@using DbNetSuiteCore.Blazor.Samples.Components.Layout
+@using DbNetSuiteCore.Blazor.Samples.Components.Pages
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Constants
+@using DbNetSuiteCore.Enums
+@using Microsoft.AspNetCore.Components.Sections
+@inject IHttpContextAccessor httpContextAccessor
+@code 
+{
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "LayoutType")]
+    public string? LayoutType { get; set; } = "volume";
+
+    public Enums.LayoutType TypeOfLayout => Enum.TryParse<Enums.LayoutType>(LayoutType, true, out var layout) ? layout : Enums.LayoutType.Column;
+}
+@{
+    SelectModel customerSelect = new SelectModel(DataSourceType.SQLite, "northwind", "Customers")
+    {
+        Caption = "Customer",
+        Searchable = true,
+        Layout = TypeOfLayout,
+        EmptyOption = "Please select a customer",
+        Columns = new List<SelectColumn>()
+        {
+            new SelectColumn("CustomerID"),
+            new SelectColumn("CompanyName")
+        }
+    };
+    customerSelect.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCustomer";
+    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerSelect))
+
+    <div style="display:flex;gap:10px;">
+        <div>
+            <b>Layout Type:</b>
+            <select id="layoutSelector" onchange="location = this.value;">
+                <option value="Column" selected="@(TypeOfLayout == Enums.LayoutType.Column)">Column</option>
+                <option value="Row" selected="@(TypeOfLayout == Enums.LayoutType.Row)">Row</option>
+            </select>
+        </div>
+        <div>
+            <div id="selectedCustomer"></div>
+        </div>
+    </div>
+}
+
+<SectionContent SectionName="summary">
+    <p data-summary>The layout of the control can be controlled using the @HelperFunctions.Wiki("selectmodel-properties#layout-layouttype", "Layout") property which can be set to @HelperFunctions.Wiki("select-enums#layouttype", "Column") (default) or @HelperFunctions.Wiki("select-enums#layouttype", "Row").</p>
+</SectionContent>
+<script type="text/javascript">
+    (function() {
+        document.querySelector("#layoutSelector").addEventListener("change", () => {updateUrl()});
+    })();
+
+    function updateUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('layouttype', document.querySelector("#layoutSelector").value);
+        window.location.search = urlParams;
+    }
+    function showSelectedCustomer(selectControl, args) {
+        var selectedCustomer = document.querySelector("#selectedCustomer");
+        if (selectControl.select.value == "") {
+            selectedCustomer.innerText = ""
+        }
+        else {
+            var selectedOption = args.selectedOptions[0];
+            selectedCustomer.innerHTML = `You selected customer - <b>${selectedOption.text} (${selectedOption.value})</b>`
+        }
+    }
+</script>
+
+   
