@@ -31,12 +31,25 @@
                                 @Body
                             </div>
                             <div class="tab-pane fade" id="source" role="tabpanel" aria-labelledby="source-tab" style="padding-top:20px">
-                                <h5>Component</h5>
+                                <h5>Server-side code</h5>
                                 <pre>
                                 <code class="language-csharp razor">
                                     @HelperFunctions.GetSourceCode(httpContextAccessor, env)
                                 </code>
                                 </pre>
+                                @{
+                                    var jsSource = @HelperFunctions.GetJSSourceCode(httpContextAccessor, env);
+                                    if (jsSource.ToString() != string.Empty)
+                                    {
+                                        <h5>JavaScript</h5>
+                                        <pre>
+                                            <code class="language-js">
+                                                @jsSource
+                                            </code>
+                                        </pre>
+                                    }
+                                }
+                               
                             </div>
                         </div>
                     </main>

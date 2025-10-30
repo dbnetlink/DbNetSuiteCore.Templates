@@ -67,6 +67,52 @@ namespace DbNetSuiteCore.Blazor.Samples.Components.Pages
             }
         }
 
+        public static MarkupString GetJSSourceCode(IHttpContextAccessor httpContextAccessor, IWebHostEnvironment? host = null)
+        {
+            try
+            {
+                if (httpContextAccessor.HttpContext == null || host == null)
+                {
+                    return new MarkupString(string.Empty);
+                }
+                var routeName = httpContextAccessor.HttpContext.Request.Path.Value;
+                routeName = routeName == "/" ? "index" : routeName;
+                var subPath = $"components/pages{routeName}.razor";
+                var fileLines = GetSourceLines(subPath, host);
+                var collect = false;
+                var source = new List<string>();
+                foreach (string line in fileLines)
+                {
+                    if (line.StartsWith("&lt;script type"))
+                    {
+                        collect = true;
+                    }
+                    else if (line.Contains("&lt;/script&gt;") && collect)
+                    {
+                        source.Add(line);
+                        break;
+                    }
+
+                    if (collect)
+                    {
+                        source.Add(line);
+                    }
+                }
+                if (source.Any() == false)
+                {
+                    return new MarkupString(string.Empty);
+                }
+                source.Insert(0, string.Empty);
+                return new MarkupString(string.Join(Environment.NewLine, source));
+            }
+            catch (Exception e)
+            {
+                {
+                    return new MarkupString(e.Message);
+                }
+            }
+        }
+
         public static MarkupString Wiki(string link, string title)
         {
             return new MarkupString($"<a target=\"_blank\" href=\"https://github.com/dbnetlink/DbNetSuiteCore2/wiki/{link}\">{title}</a>");

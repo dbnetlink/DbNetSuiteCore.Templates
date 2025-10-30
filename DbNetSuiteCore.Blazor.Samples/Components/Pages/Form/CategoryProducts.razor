@@ -15,6 +15,7 @@
         new SelectColumn("CategoryName")
     };
     categorySelect.Bind(SelectClientEvent.OptionSelected, "updateFormCaption");
+    categorySelect.Bind(SelectClientEvent.Initialised, "saveSelectReference");
 
     var productForm = new FormModel("Products") { Insert = true, Delete = true, ToolbarPosition = ToolbarPosition.Bottom, Caption = "Products" };
     productForm.Columns = new List<FormColumn>() 
@@ -43,8 +44,15 @@ categorySelect.LinkedControl = productForm;
 </SectionContent>
 
 <script>
+    function saveSelectReference(select) {
+        window.categoryProductsSelect = select;
+    }
     function saveFormReference(form) {
         window.categoryProductsForm = form;
+        if (window.categoryProductsSelect) {
+            var args = {selectedOptions : window.categoryProductsSelect.select.selectedOptions};
+            updateFormCaption(window.categoryProductsSelect, args);
+        }
     }
     function updateFormCaption(select, args) {
         var categoryName = args.selectedOptions[0].text;
