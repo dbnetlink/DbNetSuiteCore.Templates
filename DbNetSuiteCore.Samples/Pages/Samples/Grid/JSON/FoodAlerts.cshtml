@@ -40,19 +40,20 @@
     var gridModel = new GridModel(DataSourceType.JSON, "https://data.food.gov.uk/food-alerts/id")
     {
         Caption = "Food Alerts",
-        JsonTransformPlugin = typeof(FoodAlertsTransform)
+        JsonTransformPlugin = typeof(FoodAlertsTransform),
+        ViewDialog = new ViewDialog() { LayoutColumns = 2 }
     };
 
     gridModel.Columns = new List<GridColumn>()
     {
         new GridColumn("Title"),
-        new GridColumn("Notation"),
-        new GridColumn("Created"),
+        new GridColumn("Notation") {PrimaryKey = true},
+        new GridColumn("Created") { DataType = typeof(DateTime)},
         new GridColumn("Modified"),
         new GridColumn("Type") { Format = FormatType.Url},
         new GridColumn("ShortTitle"),
         new GridColumn("Status"),
-        new GridColumn("AlertURL") { Format = FormatType.Url},
+        new GridColumn("AlertURL", "Details") { Format = FormatType.Url},
         new GridColumn("ReportingBusiness") {Filter = FilterType.Distinct},
         new GridColumn("Problem"),
         new GridColumn("ProductDetails"),
