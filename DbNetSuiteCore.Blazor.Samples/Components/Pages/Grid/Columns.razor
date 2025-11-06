@@ -18,9 +18,9 @@
         new GridColumn("coalesce(Phone,'') || ' / ' || coalesce(Fax,'')", "Phone/Fax") { DataType = typeof(string)}
     };
 
-    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerGrid))
+    @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(customerGrid))
 }
 
 <SectionContent SectionName="summary">
-    <p data-summary>You can control the columns selected from the table or view by defining @HelperFunctions.Wiki("gridcolumn", "GridColumn") objects and adding them the @HelperFunctions.Wiki("gridmodel#columns-ienumerablegridcolumn", "Columns") property. In this example columns are selected and combined in an expression and also given a @HelperFunctions.Wiki("gridcolumn#label-string", "Label").</p>
+    <p data-summary>You can control the columns selected from the table or view by defining @HelperFunctions.Wiki("Grid-Column", "Grid Column") objects and adding them the @HelperFunctions.Wiki("Grid-Model#columns-ienumerablegridcolumn", "Columns") property. In this example columns are selected and combined in an expression and also given a @HelperFunctions.Wiki("grid-column#label-string", "Label").</p>
 </SectionContent>

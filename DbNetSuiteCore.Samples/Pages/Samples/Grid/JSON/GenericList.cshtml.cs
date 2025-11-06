@@ -1,5 +1,5 @@
 ﻿using DbNetSuiteCoreSamples.Models;
-using DbNetSuiteCoreSamples.ViewModels;
+using DbNetSuiteCore.Samples.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;

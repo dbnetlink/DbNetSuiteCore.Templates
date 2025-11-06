@@ -2,11 +2,11 @@
 @using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 
 @section Title
 {
-    <p data-summary>The @RazorHelper.HelpLink("gridmodel-properties#includejsondata-bool", "IncludeJsonData") property makes a raw JSON data version of the grid data available on the client for 3rd party controls such as charting libraries. In this sample the data is used to render a chart using the <a href="https://www.chartjs.org/" target="_blank">ChartJS</a> library. The sample uses the <b>PageLoaded</b> event to run some client-side JavaScript which in turn uses the client-side API @RazorHelper.HelpLink("grid-client-side-api#columnseriesdata", "columnSeriesData") method to get data for the chart labels and data-points.</p>
+    <p data-summary>The @RazorHelper.HelpLink("Grid-Model#includejsondata-bool", "IncludeJsonData") property makes a raw JSON data version of the grid data available on the client for 3rd party controls such as charting libraries. In this sample the data is used to render a chart using the <a href="https://www.chartjs.org/" target="_blank">ChartJS</a> library. The sample uses the <b>PageLoaded</b> event to run some client-side JavaScript which in turn uses the client-side API @RazorHelper.HelpLink("Grid-Client-API#columnseriesdata", "columnSeriesData") method to get data for the chart labels and data-points.</p>
 }
 @section Control {
 @{
@@ -22,7 +22,7 @@
 
     <div style="display:flex; flex-direction:row">
         <div>
-            @(await new DbNetSuiteCore.Control(HttpContext).Render(categorySalesChartGrid))
+            @(await DbNetSuiteCore.Control.Create(HttpContext).Render(categorySalesChartGrid))
         </div>
         <div style="width: 600px;">
             <canvas id="salesByCategory"></canvas>

@@ -9,9 +9,9 @@
 @inject IHttpContextAccessor httpContextAccessor
 @{
     FormModel customerForm = new FormModel(DataSourceType.SQLite, "northwind", "Customers") { Insert = true, Delete = false };
-    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerForm))
+    @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(customerForm))
 }
 
 <SectionContent SectionName="summary">
-    <p data-summary>At it's most basic you can generate a form by simply @HelperFunctions.Wiki("formmodel-constructors", "specifying") a data source type, connection alias and the name of the table. Default functionality includes a search box that will perform a wildcard search against all string based columns in the dataset, navigation where more than one record is returned and the ability to update, insert and delete records.</p>
+    <p data-summary>At it's most basic you can generate a form by simply @HelperFunctions.Wiki("form-model#datasourcetype-datasourcetype", "specifying") a data source type, connection alias and the name of the table. Default functionality includes a search box that will perform a wildcard search against all string based columns in the dataset, navigation where more than one record is returned and the ability to update, insert and delete records.</p>
 </SectionContent>

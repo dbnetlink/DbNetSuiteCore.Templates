@@ -1,6 +1,6 @@
 ﻿@using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
     <p data-summary>Additional column data can be returned as option data attributes by simply defining more than 2 columns. All columns after the first 2 will have their column values stored as attributes on the select options.</p>
@@ -8,7 +8,7 @@
 @section Control {
 @{
     Model.SelectModel.ClientEvents[SelectClientEvent.OptionSelected] = "showEmployee";
-    @(await new DbNetSuiteCore.SelectControl(Context).Render(Model.SelectModel))
+    @(await DbNetSuiteCore.Control.Create(Context).Render(Model.SelectModel))
     <hr />
     <table style="width:1000px">
         <colgroup>

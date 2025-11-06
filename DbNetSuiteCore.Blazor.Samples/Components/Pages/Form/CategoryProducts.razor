@@ -35,12 +35,12 @@
 
 categorySelect.LinkedControl = productForm;
 
-@(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(categorySelect))
+@(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(categorySelect))
 <hr />
-@(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(productForm))
+@(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(productForm))
 }
 <SectionContent SectionName="summary">
-<p data-summary>This sample uses the @HelperFunctions.Wiki("select-overview", "Select") control to filter records returned to the form.</p>
+<p data-summary>This sample uses the @HelperFunctions.Wiki("select-model", "Select") control to filter records returned to the form.</p>
 </SectionContent>
 
 <script>

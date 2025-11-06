@@ -3,10 +3,10 @@
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
 
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
-    <p data-summary>This sample uses the @RazorHelper.HelpLink("select-overview", "Select") control to filter records returned to the form.</p>
+    <p data-summary>This sample uses the @RazorHelper.HelpLink("select-model", "Select") control to filter records returned to the form.</p>
 }
 @section Control {
     @{
@@ -31,8 +31,8 @@
 
         categorySelect.LinkedControl = productForm;
 
-        @(await new DbNetSuiteCore.Control(HttpContext).Render(categorySelect))
+        @(await DbNetSuiteCore.Control.Create(HttpContext).Render(categorySelect))
         <hr />
-        @(await new DbNetSuiteCore.Control(HttpContext).Render(productForm))
+        @(await DbNetSuiteCore.Control.Create(HttpContext).Render(productForm))
     }
 }

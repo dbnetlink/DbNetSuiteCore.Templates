@@ -4,11 +4,11 @@
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
 
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 
 @section Title
 {
-    <p data-summary><a target="_blank" href="/data/json/producthunt.json">JSON</a> can also be used as a data source either as a file or as an API url. The sample also uses the @RazorHelper.HelpLink("gridmodel-properties#cache-bool", "Cache") property to cache the JSON data in memory to improve performance</p>
+    <p data-summary><a target="_blank" href="/data/json/producthunt.json">JSON</a> can also be used as a data source either as a file or as an API url. The sample also uses the @RazorHelper.HelpLink("grid-model#cache-bool", "Cache") property to cache the JSON data in memory to improve performance</p>
 }
 
 @section Control {
@@ -26,5 +26,5 @@
     };
     gridModel.Cache = true;
 
-    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(gridModel))
+    @(await DbNetSuiteCore.Control.Create(HttpContext).Render(gridModel))
 }}

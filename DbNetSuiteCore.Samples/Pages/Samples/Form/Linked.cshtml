@@ -3,10 +3,10 @@
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
 
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
-    <p data-summary>Like the @RazorHelper.HelpLink("grid-overview", "Grid") and @RazorHelper.HelpLink("select-overview", "Select") controls the Form control can be linked together using the @RazorHelper.HelpLink("formmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property</p>
+    <p data-summary>Like the @RazorHelper.HelpLink("grid-model", "Grid") and @RazorHelper.HelpLink("select-model", "Select") controls the Form control can be linked together using the @RazorHelper.HelpLink("form-model#linkedcontrol-componentmodel", "LinkedControl") property</p>
 }
 @section Control {
     @{
@@ -47,10 +47,10 @@
 
         <div style="display:flex; flex-direction: column; gap:10px;">
             <div>
-                @(await new DbNetSuiteCore.Control(HttpContext).Render(customerForm))
+                @(await DbNetSuiteCore.Control.Create(HttpContext).Render(customerForm))
             </div>
             <div>
-                @(await new DbNetSuiteCore.Control(HttpContext).Render(orderForm))
+                @(await DbNetSuiteCore.Control.Create(HttpContext).Render(orderForm))
             </div>
         </div>
     }

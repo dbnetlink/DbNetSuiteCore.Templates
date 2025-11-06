@@ -5,61 +5,67 @@
 @inject IWebHostEnvironment env
 
 <div class="page">
-    <div class="container-fluid">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 mt-3 mb-3">
-                    <div class="border border-1 rounded bg-light text-dark p-2">
-                        <SectionOutlet SectionName="summary" />
-                    </div>
+    <div class="container-fluid" style="padding:40px">
+        <div class="row">
+            <div style="display:flex;justify-content: space-between;">
+                <div>
+                    <a class="btn btn-primary btn-lg" data-enhance-nav="false" href="@HelperFunctions.GetPreviousSample(httpContextAccessor, env)">&lt; Previous</a>
+                </div>
+                <div>
+                    <a class="btn btn-primary btn-lg" data-enhance-nav="false" href="@HelperFunctions.GetNextSample(httpContextAccessor, env)">Next &gt;</a>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <main role="main">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Example</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="source-tab" data-bs-toggle="tab" data-bs-target="#source" type="button" role="tab" aria-controls="source" aria-selected="false">Source</button>
-                            </li>
-                        </ul>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-3 mb-3">
+                <div class="border border-1 rounded bg-light text-dark p-2">
+                    <SectionOutlet SectionName="summary" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <main role="main">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Example</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="source-tab" data-bs-toggle="tab" data-bs-target="#source" type="button" role="tab" aria-controls="source" aria-selected="false">Source</button>
+                        </li>
+                    </ul>
 
-                        <div class="tab-content" id="samplesContent">
-                            <div class="tab-pane fade show active pt-3" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                @Body
-                            </div>
-                            <div class="tab-pane fade" id="source" role="tabpanel" aria-labelledby="source-tab" style="padding-top:20px">
-                                <h5>Server-side code</h5>
-                                <pre>
-                                <code class="language-csharp razor">
-                                    @HelperFunctions.GetSourceCode(httpContextAccessor, env)
-                                </code>
-                                </pre>
-                                @{
-                                    var jsSource = @HelperFunctions.GetJSSourceCode(httpContextAccessor, env);
-                                    if (jsSource.ToString() != string.Empty)
-                                    {
-                                        <h5>JavaScript</h5>
-                                        <pre>
-                                            <code class="language-js">
-                                                @jsSource
-                                            </code>
-                                        </pre>
-                                    }
-                                }
-                               
-                            </div>
+                    <div class="tab-content" id="samplesContent">
+                        <div class="tab-pane fade show active pt-3" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            @Body
                         </div>
-                    </main>
-                </div>
-                <footer class="py-2">
-                    <div class="d-flex flex-column flex-sm-row justify-content-between py-1 my-1 border-top">
-                        <p>&copy; @DateTime.Today.ToString("yyyy") <a target="_blank" href="https://dbnetlink.co.uk">DbNetLink Limited</a></p>
+                        <div class="tab-pane fade" id="source" role="tabpanel" aria-labelledby="source-tab" style="padding-top:20px">
+                            <h5>Server-side code</h5>
+                            <pre><code class="language-csharp razor">@HelperFunctions.GetSourceCode(httpContextAccessor, env)</code></pre>
+                            @{
+                                var jsSource = @HelperFunctions.GetJSSourceCode(httpContextAccessor, env);
+                                if (jsSource.ToString() != string.Empty)
+                                {
+                                    <h5>JavaScript</h5>
+                                    <pre><code class="language-js">@jsSource</code></pre>
+                                }
+
+                                var jsLibrariesSource = @HelperFunctions.GetJsLibraries(httpContextAccessor, env);
+                                if (jsLibrariesSource.ToString() != string.Empty)
+                                {
+                                    <h5>JavaScript Libraries</h5>
+                                    <pre><code class="language-js">@jsLibrariesSource</code></pre>
+                                }
+                            }
+                        </div>
                     </div>
-                </footer>
+                </main>
             </div>
+            <footer class="py-2">
+                <div class="d-flex flex-column flex-sm-row justify-content-between py-1 my-1 border-top">
+                    <p>&copy; @DateTime.Today.ToString("yyyy") <a target="_blank" href="https://dbnetlink.co.uk">DbNetLink Limited</a></p>
+                </div>
+            </footer>
         </div>
     </div>
 </div>

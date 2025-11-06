@@ -2,7 +2,7 @@
 @using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
     <p data-summary>@RazorHelper.HelpLink("select-overview", "Select") controls can be linked together using the @RazorHelper.HelpLink("selectmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property to create a hierarchy of dependent select controls. You can also use @RazorHelper.HelpLink("selectmodel-events", "events") to easily integrate 3rd party libraries such as maps.</p>
@@ -39,13 +39,13 @@
 
     <div class="flex flex-column">
         <div class="flex">
-        @(await new DbNetSuiteCore.SelectControl(HttpContext).Render(countrySelect))
+        @(await DbNetSuiteCore.Control.Create(HttpContext).Render(countrySelect))
         </div>
         <div class="flex">
-        @(await new DbNetSuiteCore.SelectControl(HttpContext).Render(stateSelect))
+        @(await DbNetSuiteCore.Control.Create(HttpContext).Render(stateSelect))
         </div>
         <div class="flex">
-        @(await new DbNetSuiteCore.SelectControl(HttpContext).Render(citySelect))
+        @(await DbNetSuiteCore.Control.Create(HttpContext).Render(citySelect))
         </div>
         <div class="flex" id="selectedCity" style="padding-top:10px"></div>
     </div>

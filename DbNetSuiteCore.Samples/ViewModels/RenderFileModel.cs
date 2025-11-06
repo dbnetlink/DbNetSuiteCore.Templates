@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 
-namespace DbNetSuiteCoreSamples.ViewModels
+namespace DbNetSuiteCore.Samples.ViewModels
 {
     public class RenderFileModel : SampleModel
     {

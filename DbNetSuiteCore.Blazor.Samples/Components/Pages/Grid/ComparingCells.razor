@@ -30,12 +30,12 @@
     productGrid.Bind(GridClientEvent.RowTransform, "highlightGridLowStock");
     productGrid.Bind(GridClientEvent.ViewDialogUpdated, "highlightViewLowStock");
 
-    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(productGrid))
+    @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(productGrid))
 }
 
 <SectionContent SectionName="summary">
-    <p data-summary>Client-side events can be used to customise the grid UI after it has been rendered. In this example the @HelperFunctions.Wiki("gridmodel-events#rowtransform", "RowTransform") and @HelperFunctions.Wiki("gridmodel-events#viewdialogupdated", "ViewDialogUpdated") client-side events are used to highlighted records where the stock is less than the re-order level and also records for discontinued products</p>
-    <p>Client-side events are passed a reference to the client-side grid control object along with a second args object which contains data relevant to the event. The client-side control has its own @HelperFunctions.Wiki("grid-client-side-api", "API")  and in this example the @HelperFunctions.Wiki("grid-client-side-api#columnvalue", "columnValue") and @HelperFunctions.Wiki("grid-client-side-api#columncell", "columnCell") methods are used to interact with the grid page after it has rendered.</p>
+    <p data-summary>Client-side events can be used to customise the grid UI after it has been rendered. In this example the @HelperFunctions.Wiki("grid-model#rowtransform", "RowTransform") and @HelperFunctions.Wiki("Grid-Model#viewdialogupdated", "ViewDialogUpdated") client-side events are used to highlighted records where the stock is less than the re-order level and also records for discontinued products</p>
+    <p>Client-side events are passed a reference to the client-side grid control object along with a second args object which contains data relevant to the event. The client-side control has its own @HelperFunctions.Wiki("Grid-Client-API", "API")  and in this example the @HelperFunctions.Wiki("Grid-Client-API#columnvalue", "columnValue") and @HelperFunctions.Wiki("Grid-Client-API#columncell", "columnCell") methods are used to interact with the grid page after it has rendered.</p>
 </SectionContent>
 
         

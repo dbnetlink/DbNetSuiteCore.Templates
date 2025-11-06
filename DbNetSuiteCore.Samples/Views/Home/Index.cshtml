@@ -1,7 +1,7 @@
 ﻿@using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Helpers
 @using DbNetSuiteCore.Models
-@using DbNetSuiteCoreSamples.ViewModels
+@using DbNetSuiteCore.Samples.ViewModels
 @model SampleModel
 
 @section Title
@@ -43,7 +43,7 @@
                         };
 
                         samplesGrid.ClientEvents[GridClientEvent.CellTransform] = "createLink";
-                        @(await new DbNetSuiteCore.GridControl(Context).Render(samplesGrid))
+                        @(await DbNetSuiteCore.Control.Create(Context).Render(samplesGrid))
                     }
 
                 </div>

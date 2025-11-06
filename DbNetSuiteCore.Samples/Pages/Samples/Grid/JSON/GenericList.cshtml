@@ -5,10 +5,10 @@
 @using System.Net.Http
 @using DbNetSuiteCore.Samples.Helpers
 @using DbNetSuiteCoreSamples.Models
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 
 @section Title {
-    <p data-summary>If you want to customise your JSON data source you can do so and then supply the transformed JSON as a string to the GridModel @RazorHelper.HelpLink("gridmodel-constructors#excel-and-json", "constructor")</p>
+    <p data-summary>If you want to customise your JSON data source you can do so and then supply the transformed JSON as a string to the GridModel @RazorHelper.HelpLink("grid-model#excel-and-json", "constructor")</p>
 }
 
 @section Control {
@@ -32,5 +32,5 @@
 
     gridModel.Cache = true;
 
-    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(gridModel))
+    @(await DbNetSuiteCore.Control.Create(HttpContext).Render(gridModel))
 }}

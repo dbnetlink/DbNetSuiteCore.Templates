@@ -2,7 +2,7 @@
 @using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
 
-@model DbNetSuiteCoreSamples.ViewModels.RenderFileModel
+@model DbNetSuiteCore.Samples.ViewModels.RenderFileModel
 @section Title
 {
     <p data-summary>Here we are rendering a file passed as a link from the grid control that <a href="/samples/grid/browse">browses</a> the data folder.</p>
@@ -29,6 +29,6 @@
     </form>
 
     <div style="margin-top:10px">
-        @(await new DbNetSuiteCore.GridControl(HttpContext).Render(dataGrid))
+        @(await DbNetSuiteCore.Control.Create(HttpContext).Render(dataGrid))
     </div>
 }}

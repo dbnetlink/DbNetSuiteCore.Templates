@@ -2,7 +2,7 @@
 @using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
     <p data-summary>A grid can be made editable by setting the column @RazorHelper.HelpLink("gridcolumn-properties#edit-bool", "Edit") property to <b>true</b>. Custom client-side validation can be implemented using the @RazorHelper.HelpLink("gridmodel-events#validateupdate", "ValidateUpdate") event.</p>
@@ -24,17 +24,11 @@
     };
   
     productGrid.Bind(GridClientEvent.ValidateUpdate, "validateReOrderLevel");
-    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(productGrid))
+    @(await DbNetSuiteCore.Control.Create(HttpContext).Render(productGrid))
 }}
-
 
 @section Scripts {
 <script type="text/javascript" class="source">
-    function validateReOrderLevel(gridControl, args) {
-        if (gridControl.columnValue("discontinued", args.row) && gridControl.columnValue("ReorderLevel") > 0) {
-            gridControl.highlightError("ReorderLevel");
-            args.message = `Re-order level must be zero for discontinued products`;
-        }
-    }
+    <p data-summary>A grid can be made editable by setting the column <b>FormColumn</b> property to an instance of @RazorHelper.HelpLink("Grid-Column#formcolumn-formcolumn", "FormColumn") and configuring as required. Custom client-side validation can be implemented using the @RazorHelper.HelpLink("Grid-Model#validateupdate", "ValidateUpdate") event.</p>
 </script>
 }

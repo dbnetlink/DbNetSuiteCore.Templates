@@ -20,12 +20,12 @@
         }
     };
     customerSelect.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCustomer";
-    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerSelect))
+    @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(customerSelect))
 
     <div id="selectedCustomer"></div>
 }
 <SectionContent SectionName="summary">
-    <p data-summary>Setting the @HelperFunctions.Wiki("selectmodel-properties#searchable-bool", "Searchable") property to true allows the user to find an option using wildcard searching. The sample also demonstrates use of the @HelperFunctions.Wiki("selectmodel-properties#emptyoption-string", "EmptyOption") property which allows custom text to be shown for the empty (unselected) option</p>
+    <p data-summary>Setting the @HelperFunctions.Wiki("select-model#searchable-bool", "Searchable") property to true allows the user to find an option using wildcard searching. The sample also demonstrates use of the @HelperFunctions.Wiki("select-model#emptyoption-string", "EmptyOption") property which allows custom text to be shown for the empty (unselected) option</p>
 </SectionContent>
 
 <script type="text/javascript" class="source">

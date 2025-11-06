@@ -38,13 +38,13 @@
 
     <div class="flex flex-column">
         <div class="flex">
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(countrySelect))
+        @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(countrySelect))
         </div>
         <div class="flex">
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(stateSelect))
+        @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(stateSelect))
         </div>
         <div class="flex">
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(citySelect))
+        @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(citySelect))
         </div>
         <div class="flex" id="selectedCity" style="padding-top:10px"></div>
     </div>
@@ -60,7 +60,7 @@
 }
 
 <SectionContent SectionName="summary">
-    <p data-summary>@HelperFunctions.Wiki("select-overview", "Select") controls can be linked together using the @HelperFunctions.Wiki("selectmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property to create a hierarchy of dependent select controls. You can also use @HelperFunctions.Wiki("selectmodel-events", "events") to easily integrate 3rd party libraries such as maps.</p>
+    <p data-summary>@HelperFunctions.Wiki("select-model", "Select") controls can be linked together using the @HelperFunctions.Wiki("select-model#linkedcontrolcomponentmodel", "LinkedControl") property to create a hierarchy of dependent select controls. You can also use @HelperFunctions.Wiki("select-model#events", "events") to easily integrate 3rd party libraries such as maps.</p>
 </SectionContent>
 
 <script type="text/javascript" class="source">

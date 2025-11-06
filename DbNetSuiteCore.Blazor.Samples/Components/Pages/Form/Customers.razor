@@ -25,7 +25,7 @@
     };
 }
 
-@(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerForm))
+@(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(customerForm))
 
 <SectionContent SectionName="summary">
     <p data-summary>CRUD applications can be created easily using the Form control</p>

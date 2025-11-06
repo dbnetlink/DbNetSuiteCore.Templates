@@ -31,14 +31,14 @@
             new GridColumn("ShippedDate","Shipped"),
             new GridColumn("ShipVia") {Lookup = new Lookup("Shippers", "ShipperId", "CompanyName")},
             new GridColumn("Freight") { Format = "c"},
-            new GridColumn("OrderId","") {Format = "<a target='_blank' href='/grid/detail?orderid={0}'><button type=\"button\" class=\"btn btn-secondary btn-sm\">Order Lines</button></a>", Style = "white-space:norwrap" }
+            new GridColumn("OrderId","") {Format = "<a target='_blank' href='/grid/_detail?orderid={0}'><button type=\"button\" class=\"btn btn-secondary btn-sm\">Order Lines</button></a>", Style = "white-space:norwrap" }
         };
 
         ordersGrid.FixedFilter = "CustomerId = @CustomerId";
         ordersGrid.FixedFilterParameters.Add(new DbParameter("@CustomerId", CustomerId));
         ordersGrid.RowSelection = RowSelection.None;
 
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(ordersGrid))
+        @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(ordersGrid))
 
     }
 
@@ -55,9 +55,9 @@
         };
         orderDetailsGrid.FixedFilter = "OrderId = @OrderId";
         orderDetailsGrid.FixedFilterParameters.Add(new DbParameter("@OrderId", OrderId));
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(orderDetailsGrid))
+        @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(orderDetailsGrid))
     }
 }
 <SectionContent SectionName="summary">
-    <p data-summary>The @HelperFunctions.Wiki("gridmodel-properties#fixedfilter-string", "FixedFilter") and @HelperFunctions.Wiki("gridmodel-properties#fixedfilterparameters-listdbparameter", "FixedFilterParameters") applies a filter to the dataset restricting the rows returned by the data source. In this example either CustomerId or OrderId is passed on the query string and used to filter either the <b>Orders</b> or <b>OrderDetails</b> tables. The sample also use the GridColumn @HelperFunctions.Wiki("gridcolumn-properties#format-string", "Format") property to put a column value into a parameterised template string to create a clickable button in the grid</p>
+    <p data-summary>The @HelperFunctions.Wiki("grid-model#fixedfilter-string", "FixedFilter") and @HelperFunctions.Wiki("grid-model#fixedfilterparameters-listdbparameter", "FixedFilterParameters") applies a filter to the dataset restricting the rows returned by the data source. In this example either CustomerId or OrderId is passed on the query string and used to filter either the <b>Orders</b> or <b>OrderDetails</b> tables. The sample also use the GridColumn @HelperFunctions.Wiki("Grid-Column#format-string", "Format") property to put a column value into a parameterised template string to create a clickable button in the grid</p>
 </SectionContent>

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DbNetSuiteCoreSamples.ViewModels
+namespace DbNetSuiteCore.Samples.ViewModels
 {
     public class SampleModel : PageModel
     {

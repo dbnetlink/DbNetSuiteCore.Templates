@@ -28,11 +28,10 @@
 @inject IHttpContextAccessor httpContextAccessor
 
 
-
 <PageTitle>Samples</PageTitle>
 @{
     <h1>@Title()</h1>
-    GridModel samplesGrid = new GridModel(DataSourceType.FileSystem, $"../Components/Pages/{(string.IsNullOrEmpty(Key) ? "grid" : Key)}") { FixedFilter = "(IsDirectory = 1 or Name like '%.razor') and Name not in ('Error.razor','Index.razor')" };
+    GridModel samplesGrid = new GridModel(DataSourceType.FileSystem, $"../Components/Pages/{(string.IsNullOrEmpty(Key) ? "grid" : Key)}") { FixedFilter = "(IsDirectory = 1 or Name like '%.razor') and Name not in ('Error.razor','Index.razor') and SUBSTRING(Name, 1, 1) <> '_'" };
     samplesGrid.Columns = new List<GridColumn>()
     {
         new GridColumn(FileSystemColumn.Name.ToString()),

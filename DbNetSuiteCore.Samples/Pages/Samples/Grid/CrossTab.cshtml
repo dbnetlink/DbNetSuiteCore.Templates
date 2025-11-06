@@ -3,11 +3,11 @@
 @using DbNetSuiteCore.Enums;
 @using DbNetSuiteCore.Samples.Helpers
 
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 
 @section Title
 {
-    <p data-summary>In this example we use the @RazorHelper.HelpLink("gridcolumn-properties#aggregate-aggregatetype", "Aggregate") column property and built-in database functions to create a cross-tabulation example. It also use the @RazorHelper.HelpLink("gridmodel-events#celltransform", "CellTransform") client-side event to highlight values over 100</p>
+    <p data-summary>In this example we use the @RazorHelper.HelpLink("Grid-Column#aggregate-aggregatetype", "Aggregate") column property and built-in database functions to create a cross-tabulation example. It also use the @RazorHelper.HelpLink("Grid-Model#celltransform", "CellTransform") client-side event to highlight values over 100</p>
 }
 
 @section Control {
@@ -27,7 +27,7 @@
     var invoiceGrid = new GridModel(DataSourceType.SQLite, "Northwind", "invoices");
     invoiceGrid.Columns = invoiceColumns;
     invoiceGrid.ClientEvents[GridClientEvent.CellTransform] = "highlightQuantity";
-    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(invoiceGrid))
+    @(await DbNetSuiteCore.Control.Create(HttpContext).Render(invoiceGrid))
 }}
 
 @section Scripts {

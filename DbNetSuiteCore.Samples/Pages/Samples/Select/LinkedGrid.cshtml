@@ -2,7 +2,7 @@
 @using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
     <p data-summary>A @RazorHelper.HelpLink("select-overview", "Select") control can also link to a @RazorHelper.HelpLink("grid-overview", "Grid") control using the @RazorHelper.HelpLink("selectmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property</p>
@@ -48,7 +48,7 @@
     };
     customerSelect.LinkedControl = ordersGrid;
 
-    @(await new DbNetSuiteCore.SelectControl(HttpContext).Render(customerSelect))
-    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(ordersGrid))
-    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(orderDetailsGrid))
+    @(await DbNetSuiteCore.Control.Create(HttpContext).Render(customerSelect))
+    @(await DbNetSuiteCore.Control.Create(HttpContext).Render(ordersGrid))
+    @(await DbNetSuiteCore.Control.Create(HttpContext).Render(orderDetailsGrid))
 }}

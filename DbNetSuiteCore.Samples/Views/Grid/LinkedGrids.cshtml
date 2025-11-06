@@ -4,7 +4,7 @@
 
 @using DbNetSuiteCore.Samples.Helpers
 @using Microsoft.AspNetCore.Html
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
     <p data-summary>On of the more powerful features of the grid control is that they can be linked together to create parent child relationships.</p> <p>To link a child grid simply add it to the parent control using the @RazorHelper.HelpLink("gridmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property. The grids are linked by associating the column in the child grid specified as a @RazorHelper.HelpLink("gridcolumn-properties#foreignkey-bool", "ForeignKey") with the column in the parent grid identified as a @RazorHelper.HelpLink("gridcolumn-properties#primarykey-bool", "PrimaryKey"). The sample also demonstrates use of the client-side event @RazorHelper.HelpLink("gridmodel-events#rowselected", "RowSelected") to set the tab label using the client-side @RazorHelper.HelpLink("grid-client-side-api#columnvalue", "columnValue"). method</p>
@@ -33,13 +33,13 @@
         </ul>
         <div class="tab-content" id="linkedGrids">
             <div class="tab-pane fade show active" id="customers" role="tabpanel" aria-labelledby="customers-tab">
-                    @(await new DbNetSuiteCore.Control(Context).Render(Model.GridModels[0]))
+                    @(await DbNetSuiteCore.Control.Create(Context).Render(Model.GridModels[0]))
             </div>
             <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                    @(await new DbNetSuiteCore.Control(Context).Render(Model.GridModels[1]))
+                    @(await DbNetSuiteCore.Control.Create(Context).Render(Model.GridModels[1]))
             </div>
             <div class="tab-pane fade" id="orderdetails" role="tabpanel" aria-labelledby="orderdetails-tab">
-                    @(await new DbNetSuiteCore.Control(Context).Render(Model.GridModels[2]))
+                    @(await DbNetSuiteCore.Control.Create(Context).Render(Model.GridModels[2]))
             </div>
         </div>
     </div>

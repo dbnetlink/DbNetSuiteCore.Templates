@@ -19,11 +19,11 @@
         }
     };
     customerSelect.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCustomer";
-    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerSelect))
+    @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(customerSelect))
     <div id="selectedCustomer"></div>
 }
 <SectionContent SectionName="summary">
-    <p data-summary>The @HelperFunctions.Wiki("select-overview", "Select") control uses the HTML Select element to create a data-driven selection control that can be populated with all the supported data sources. You can use the @HelperFunctions.Wiki("selectmodel-events#optionselected", "OptionSelected") event to interact with the selected value.</p>
+    <p data-summary>The @HelperFunctions.Wiki("select-model", "Select") control uses the HTML Select element to create a data-driven selection control that can be populated with all the supported data sources. You can use the @HelperFunctions.Wiki("select-model#optionselected", "OptionSelected") event to interact with the selected value.</p>
 </SectionContent>
 
 <script type="text/javascript" class="source">

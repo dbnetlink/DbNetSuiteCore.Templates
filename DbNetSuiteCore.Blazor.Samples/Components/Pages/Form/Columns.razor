@@ -27,7 +27,7 @@
         new FormColumn("Last_Update") { DataType = typeof(DateTime), ReadOnly = ReadOnlyMode.InsertAndUpdate, HelpText = "Make input read only"}
     };
 
-    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(filmForm))
+    @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(filmForm))
 
 }
 <SectionContent SectionName="summary">

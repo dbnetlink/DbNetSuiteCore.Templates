@@ -32,7 +32,7 @@
         new SelectColumn("ReportsTo") {Lookup = new Lookup("employees","EmployeeID","LastName || ',' || FirstName")}
     };
     employeeSelect.ClientEvents[SelectClientEvent.OptionSelected] = "showEmployee";
-    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(employeeSelect))
+    @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(employeeSelect))
     <hr />
     <table style="width:1000px">
         <colgroup>
@@ -97,7 +97,7 @@
     </style>
 }
 <SectionContent SectionName="summary">
-        <p data-summary>Additional column data can be returned as option data attributes by simply defining more than 2 columns. All columns after the first 2 will have their column values stored as attributes on the select options.</p>
+    <p data-summary>Additional column data can be returned as option data attributes by simply defining more than 2 columns. All columns after the first 2 will have their column values stored as attributes on the select options. In this example the @HelperFunctions.Wiki("select-model#optionSelected", "OptionSelected") event is used to bind a JavaScript function that will passed a reference to the selected option and then render the values held in the option <b>dataset</b> property.</p>
 </SectionContent>
 <script type="text/javascript" class="source">
     function showEmployee(selectControl, args) {

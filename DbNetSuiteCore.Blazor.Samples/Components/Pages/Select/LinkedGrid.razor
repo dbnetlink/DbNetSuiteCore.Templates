@@ -49,16 +49,16 @@
 
     <div class="flex flex-column">
         <div class="flex">
-            @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerSelect))
+            @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(customerSelect))
         </div>
         <div class="flex">
-            @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(ordersGrid))
+            @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(ordersGrid))
         </div>
         <div class="flex">
-            @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(orderDetailsGrid))
+            @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(orderDetailsGrid))
         </div>
     </div>
 }
 <SectionContent SectionName="summary">
-    <p data-summary>A @HelperFunctions.Wiki("select-overview", "Select") control can also link to a @HelperFunctions.Wiki("grid-overview", "Grid") control using the @HelperFunctions.Wiki("selectmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property</p>
+    <p data-summary>A @HelperFunctions.Wiki("select-model", "Select") control can also link to a @HelperFunctions.Wiki("grid-model", "Grid") control using the @HelperFunctions.Wiki("select-model#linkedcontrolcomponentmodel", "LinkedControl") property</p>
 </SectionContent>

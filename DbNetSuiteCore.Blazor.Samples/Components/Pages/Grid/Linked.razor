@@ -64,17 +64,17 @@
 
 <div class="d-flex flex-column gap-3">
     <div>
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerGridModel))
+        @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(customerGridModel))
     </div>
     <div>
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(invoiceGridModel))
+        @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(invoiceGridModel))
     </div>
     <div>
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(invoiceLineGridModel))
+        @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(invoiceLineGridModel))
     </div>
 </div>
 
 <SectionContent SectionName="summary">
-    <p data-summary>Grid controls can be linked together by assigning a child control to a parent control using the @HelperFunctions.Wiki("gridmodel-properties#linkedcontrol-componentcontrol", "LinkedControl"). The child control will return records whose @HelperFunctions.Wiki("gridcolumn-properties#ForeignKey-bool", "ForeignKey") column matches the @HelperFunctions.Wiki("gridcolumn-properties#PrimaryKey-bool", "PrimaryKey") column of the parent.</p>
+    <p data-summary>Grid controls can be linked together by assigning a child control to a parent control using the @HelperFunctions.Wiki("grid-model#linkedcontrol-componentmodel", "LinkedControl"). The child control will return records whose @HelperFunctions.Wiki("Grid-Column#ForeignKey-bool", "ForeignKey") column matches the @HelperFunctions.Wiki("Grid-Column#PrimaryKey-bool", "PrimaryKey") column of the parent.</p>
 </SectionContent>
 

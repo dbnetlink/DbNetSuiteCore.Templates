@@ -29,7 +29,7 @@
         }
     };
     customerSelect.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCustomer";
-    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerSelect))
+    @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(customerSelect))
 
     <div style="display:flex;gap:10px;">
         <div>
@@ -46,7 +46,7 @@
 }
 
 <SectionContent SectionName="summary">
-    <p data-summary>The layout of the control can be controlled using the @HelperFunctions.Wiki("selectmodel-properties#layout-layouttype", "Layout") property which can be set to @HelperFunctions.Wiki("select-enums#layouttype", "Column") (default) or @HelperFunctions.Wiki("select-enums#layouttype", "Row").</p>
+    <p data-summary>The layout of the control can be controlled using the @HelperFunctions.Wiki("select-model#layout-layouttype", "Layout") property which can be set to @HelperFunctions.Wiki("select-model#layouttype", "Column") (default) or @HelperFunctions.Wiki("select-model#layouttype", "Row").</p>
 </SectionContent>
 <script type="text/javascript">
     (function() {

@@ -22,7 +22,7 @@
         new GridColumn("Discontinued") { DataType = typeof(bool), FormColumn = new FormColumn(){HelpText = "Discontinued products must have a re-order level of 0" } }
     };
     productGrid.Bind(GridClientEvent.ValidateUpdate, "validateReOrderLevel");
-    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(productGrid))
+    @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(productGrid))
 }
 
 <script type="text/javascript" class="source">
@@ -35,5 +35,5 @@
 </script>
 
 <SectionContent SectionName="summary">
-    <p data-summary>A grid can be made editable by setting the column @HelperFunctions.Wiki("gridcolumn-properties#formcolumn-formcolumn", "FormColumn") property to an instance of FormColumn. Custom client-side validation can be implemented using the @HelperFunctions.Wiki("gridmodel-events#validateupdate", "ValidateUpdate") event.</p>
+    <p data-summary>A grid can be made editable by setting the column <b>FormColumn</b> property to an instance of @HelperFunctions.Wiki("Grid-Column#formcolumn-formcolumn", "FormColumn") and configuring as required. Custom client-side validation can be implemented using the @HelperFunctions.Wiki("Grid-Model#validateupdate", "ValidateUpdate") event.</p>
 </SectionContent>

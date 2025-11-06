@@ -47,14 +47,14 @@ customerForm.LinkedControl = orderForm;
 
 <div style="display:flex; flex-direction: column; gap:10px;">
     <div>
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerForm))
+        @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(customerForm))
     </div>
     <div>
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(orderForm))
+        @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(orderForm))
     </div>
 </div>
 }
 
 <SectionContent SectionName="summary">
-    <p data-summary>Like the @HelperFunctions.Wiki("grid-model", "Grid") and @HelperFunctions.Wiki("select-model", "Select") controls the Form control can be linked together using the @HelperFunctions.Wiki("formmodel-properties#linkedcontrol-componentmodel", "LinkedControl") property</p>
+    <p data-summary>Like the @HelperFunctions.Wiki("grid-model", "Grid") and @HelperFunctions.Wiki("select-model", "Select") controls the Form control can be linked together using the @HelperFunctions.Wiki("form-model#linkedcontrol-componentmodel", "LinkedControl") property</p>
 </SectionContent>

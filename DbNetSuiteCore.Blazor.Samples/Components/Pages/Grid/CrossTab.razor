@@ -26,11 +26,11 @@
     invoiceGrid.Columns = invoiceColumns;
     invoiceGrid.ClientEvents[GridClientEvent.CellTransform] = "highlightQuantity";
 
-    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(invoiceGrid))
+    @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(invoiceGrid))
 }
 
 <SectionContent SectionName="summary">
-    <p data-summary>In this example we use the @HelperFunctions.Wiki("gridcolumn-properties#aggregate-aggregatetype", "Aggregate") column property and built-in database functions to create a cross-tabulation example. It also use the @HelperFunctions.Wiki("gridmodel-events#celltransform", "CellTransform") client-side event to highlight values over 100</p>
+    <p data-summary>In this example we use the @HelperFunctions.Wiki("Grid-Column#aggregate-aggregatetype", "Aggregate") column property and built-in database functions to create a cross-tabulation example. It also use the @HelperFunctions.Wiki("Grid-Model#celltransform", "CellTransform") client-side event to highlight values over 100</p>
 </SectionContent>
 
 <script type="text/javascript" class="source">

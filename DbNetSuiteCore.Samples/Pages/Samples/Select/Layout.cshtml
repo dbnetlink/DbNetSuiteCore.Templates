@@ -2,7 +2,7 @@
 @using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
     <p data-summary>The layout of the control can be controlled using the @RazorHelper.HelpLink("selectmodel-properties#layout-layouttype", "Layout") property which can be set to @RazorHelper.HelpLink("select-enums#layouttype", "Column") (default) or @RazorHelper.HelpLink("select-enums#layouttype", "Row").</p>
@@ -23,7 +23,7 @@
         }
     };
     customerSelect.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCustomer";
-    @(await new DbNetSuiteCore.SelectControl(HttpContext).Render(customerSelect))
+    @(await DbNetSuiteCore.Control.Create(HttpContext).Render(customerSelect))
 
     <div id="selectedCustomer"></div>
 }}

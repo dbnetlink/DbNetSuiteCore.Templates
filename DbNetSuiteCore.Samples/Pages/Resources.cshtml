@@ -48,7 +48,7 @@
                 resourcesModel.FixedFilter = "CultureCode = @culturecode";
                 resourcesModel.FixedFilterParameters.Add(new DbParameter("culturecode", Model.Culture));
 
-                @(await new DbNetSuiteCore.Control(HttpContext).Render(resourcesModel))
+                @(await DbNetSuiteCore.Control.Create(HttpContext).Render(resourcesModel))
             }
         </div>
     </div>

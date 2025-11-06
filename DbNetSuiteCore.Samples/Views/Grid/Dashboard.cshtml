@@ -2,7 +2,7 @@
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
 
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
     <p data-summary>In this example multiple grid controls are generated to create simple lists with the @RazorHelper.HelpLink("gridmodel-properties#toolbarposition-toolbarposition", "toolbar") and @RazorHelper.HelpLink("gridmodel-properties#headingmode-headingmode", "headings") hidden and without any interactivity.</p>
@@ -15,7 +15,7 @@
             {
                 <div style="padding-right:1rem; padding-bottom:1rem">
                     @{
-                        @(await new DbNetSuiteCore.GridControl(Context).Render(leagueModel))
+                        @(await DbNetSuiteCore.Control.Create(Context).Render(leagueModel))
                     }
                 </div>
             }

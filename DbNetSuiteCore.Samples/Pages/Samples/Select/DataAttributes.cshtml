@@ -1,10 +1,12 @@
 ﻿@page
 @using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@using DbNetSuiteCore.Samples.Helpers
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
+
 @section Title
 {
-    <p data-summary>Additional column data can be returned as option data attributes by simply defining more than 2 columns. All columns after the first 2 will have their column values stored as attributes on the select options.</p>
+    <p data-summary>Additional column data can be returned as option data attributes by simply defining more than 2 columns. All columns after the first 2 will have their column values stored as attributes on the select options. In this example the @RazorHelper.HelpLink("select-model#optionSelected", "OptionSelected") event is used to bind a JavaScript function that will passed a reference to the selected option and then render the values held in the option <b>dataset</b> property.</p>
 }
 @section Control {
 @{
@@ -31,7 +33,7 @@
         new SelectColumn("ReportsTo") {Lookup = new Lookup("employees","EmployeeID","LastName || ',' || FirstName")}
     };
     employeeSelect.ClientEvents[SelectClientEvent.OptionSelected] = "showEmployee";
-    @(await new DbNetSuiteCore.SelectControl(HttpContext).Render(employeeSelect))
+    @(await DbNetSuiteCore.Control.Create(HttpContext).Render(employeeSelect))
     <hr />
     <table style="width:1000px">
         <colgroup>

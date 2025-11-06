@@ -3,14 +3,14 @@
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
 
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
-    <p data-summary>At it's most basic you can generate a form by simply @RazorHelper.HelpLink("formmodel-constructors", "specifying") a data source type, connection alias and the name of the table. Default functionality includes a search box that will perform a wildcard search against all string based columns in the dataset, navigation where more than one record is returned and the ability to update, insert and delete records.</p>
+    <p data-summary>At it's most basic you can generate a form by simply @RazorHelper.HelpLink("form-model#datasourcetype-datasourcetype", "specifying") a data source type, connection alias and the name of the table. Default functionality includes a search box that will perform a wildcard search against all string based columns in the dataset, navigation where more than one record is returned and the ability to update, insert and delete records.</p>
 }
 @section Control {
     @{
         FormModel customerForm = new FormModel(DataSourceType.SQLite, "northwind", "Customers") { Insert = true, Delete = false };
-        @(await new DbNetSuiteCore.Control(HttpContext).Render(customerForm))
+        @(await DbNetSuiteCore.Control.Create(HttpContext).Render(customerForm))
     }
 }

@@ -26,8 +26,8 @@
     customerGridModel.PageSize = 10;
 }
 
-@(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerGridModel))
+@(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(customerGridModel))
 
 <SectionContent SectionName="summary">
-    <p data-summary>At it's simplest just define the @HelperFunctions.Wiki("GridModel", "Grid-Model") specifying the data source type, connection alias and table or view name. The @HelperFunctions.Wiki("GridColumn", "Grid-Column") objects define each column in the grid.</p>
+    <p data-summary>At it's simplest just define the @HelperFunctions.Wiki("Grid-Model", "GridModel") specifying the data source type, connection alias and table or view name. The @HelperFunctions.Wiki("Grid-Column", "GridColumn") objects define each column in the grid.</p>
 </SectionContent>

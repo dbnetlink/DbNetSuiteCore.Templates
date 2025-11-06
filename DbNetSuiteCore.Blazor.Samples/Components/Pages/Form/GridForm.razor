@@ -40,14 +40,14 @@ productForm.Columns = new List<FormColumn>()
 productsGrid.LinkedControl = productForm;
 <div style="display:flex; flex-direction: column; gap:10px;">
     <div>
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(productsGrid))
+        @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(productsGrid))
     </div>
     <div>
-        @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(productForm))
+        @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(productForm))
     </div>
 </div>
 }
 
 <SectionContent SectionName="summary">
-    <p data-summary>For a Form with multiple records you can increase the visibility of the dataset by linking the Form control to a parent Grid control using the @HelperFunctions.Wiki("gridmodel#linkedcontrol-componentmodel", "LinkedControl") property. This also adds the enhanced navigation, sorting and filtering capabilities which can be particularly helpful with larger number of records. The sample also demonstrates use of the @HelperFunctions.Wiki("formcolumn-properties#required-boolean", "Required"), @HelperFunctions.Wiki("formcolumn-properties#initialvalue-object", "InitialValue"), @HelperFunctions.Wiki("formcolumn-properties#minvalue-object", "MinValue") and @HelperFunctions.Wiki("formcolumn-properties#maxvalue-object", "MaxValue") column properties</p>
+    <p data-summary>For enhanced navigation and browsability of a form dataset you can link the Form control to a parent @HelperFunctions.Wiki("grid-model", "Grid") control by assigning the Form to the Grid @HelperFunctions.Wiki("grid-model#linkedcontrol-componentmodel", "LinkedControl") property. This adds paging, sorting and filtering capabilities which can be helpful when working with larger datasets. By making the @HelperFunctions.Wiki("form-column#foreignkey-bool", "ForeignKey") in the Form control the same as the @HelperFunctions.Wiki("grid-column#primarykey-bool", "PrimaryKey") in the Grid control a one-to-one relationship is formed. The sample also demonstrates use of the @HelperFunctions.Wiki("form-column#required-boolean", "Required"), @HelperFunctions.Wiki("form-column#initialvalue-object", "InitialValue"), @HelperFunctions.Wiki("form-column#minvalue-object", "MinValue") and @HelperFunctions.Wiki("form-column#maxvalue-object", "MaxValue") column properties. </p>
 </SectionContent>

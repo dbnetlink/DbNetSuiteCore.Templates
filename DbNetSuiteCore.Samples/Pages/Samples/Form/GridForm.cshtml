@@ -3,10 +3,10 @@
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
 
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
-    <p data-summary>For a Form with multiple records you can increase the visibility of the dataset by linking the Form control to a parent Grid control using the @RazorHelper.HelpLink("gridmodel-properties#linkedcontrolcomponentmodel", "LinkedControl") property. This also adds the enhanced navigation, sorting and filtering capabilities which can be particularly helpful with larger number of records. The sample also demonstrates use of the @RazorHelper.HelpLink("formcolumn-properties#required-boolean", "Required"), @RazorHelper.HelpLink("formcolumn-properties#initialvalue-object", "InitialValue"), @RazorHelper.HelpLink("formcolumn-properties#minvalue-object", "MinValue") and @RazorHelper.HelpLink("formcolumn-properties#maxvalue-object", "MaxValue") column properties</p>
+    <p data-summary>For enhanced navigation and browsability of a form dataset you can link the Form control to a parent @RazorHelper.HelpLink("grid-model", "Grid") control by assigning the Form to the Grid @RazorHelper.HelpLink("grid-model#linkedcontrol-componentmodel", "LinkedControl") property. This adds paging, sorting and filtering capabilities which can be helpful when working with larger datasets. By making the @RazorHelper.HelpLink("form-column#foreignkey-bool", "ForeignKey") in the Form control the same as the @RazorHelper.HelpLink("grid-column#primarykey-bool", "PrimaryKey") in the Grid control a one-to-one relationship is formed. The sample also demonstrates use of the @RazorHelper.HelpLink("form-column#required-boolean", "Required"), @RazorHelper.HelpLink("form-column#initialvalue-object", "InitialValue"), @RazorHelper.HelpLink("form-column#minvalue-object", "MinValue") and @RazorHelper.HelpLink("form-column#maxvalue-object", "MaxValue") column properties. </p>
 }
 @section Control {
     @{
@@ -40,10 +40,10 @@
         productsGrid.LinkedControl = productForm;
         <div style="display:flex; flex-direction: column; gap:10px;">
             <div>
-                @(await new DbNetSuiteCore.Control(HttpContext).Render(productsGrid))
+                @(await DbNetSuiteCore.Control.Create(HttpContext).Render(productsGrid))
             </div>
             <div>
-                @(await new DbNetSuiteCore.Control(HttpContext).Render(productForm))
+                @(await DbNetSuiteCore.Control.Create(HttpContext).Render(productForm))
             </div>
         </div>
 }}

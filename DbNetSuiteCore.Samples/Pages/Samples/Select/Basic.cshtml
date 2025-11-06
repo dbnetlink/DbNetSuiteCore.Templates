@@ -2,10 +2,10 @@
 @using DbNetSuiteCore.Enums
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
-    <p data-summary>The @RazorHelper.HelpLink("select-overview", "Select") control uses the HTML Select element to create a data-driven selection control that can be populated with all the supported data sources. You can use the @RazorHelper.HelpLink("selectmodel-events#optionselected", "OptionSelected") event to interact with the selected value.</p>
+    <p data-summary>The @RazorHelper.HelpLink("select-model", "Select") control uses the HTML Select element to create a data-driven selection control that can be populated with all the supported data sources. You can use the @RazorHelper.HelpLink("select-model#optionselected", "OptionSelected") event to interact with the selected value.</p>
 }
 @section Control {
 @{
@@ -20,7 +20,7 @@
         }
     };
     customerSelect.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCustomer";
-    @(await new DbNetSuiteCore.SelectControl(HttpContext).Render(customerSelect))
+    @(await DbNetSuiteCore.Control.Create(HttpContext).Render(customerSelect))
     <div id="selectedCustomer"></div>
 }}
 

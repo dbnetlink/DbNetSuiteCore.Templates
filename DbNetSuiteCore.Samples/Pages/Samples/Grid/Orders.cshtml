@@ -3,10 +3,10 @@
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
 
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
-    <p data-summary>In addition to the toolbar search box you can also add filters to individual columns. String based columns support wildcard searching and date/time and numeric columns support the use of operators such as <b>&lt;, &gt;,&lt;=, &gt;=</b> and <b>!=</b>. Columns with lookups has selection based filters based on the values available in the dataset column. Filters are added to a grid column using the @RazorHelper.HelpLink("gridcolumn-properties#filter-filtertype", "Filter") property. The sample also demonstrates use of the @RazorHelper.HelpLink("gridcolumn-properties#initialsortorder-sortorder", "InitialSortOrder") column property to set the initial sort order of the grid to <b>OrderDate</b> descending.</p>
+    <p data-summary>In addition to the toolbar search box you can also add filters to individual columns. String based columns support wildcard searching and date/time and numeric columns support the use of operators such as <b>&lt;, &gt;,&lt;=, &gt;=</b> and <b>!=</b>. Columns with lookups has selection based filters based on the values available in the dataset column. Filters are added to a grid column using the @RazorHelper.HelpLink("Grid-Column#filter-filtertype", "Filter") property. The sample also demonstrates use of the @RazorHelper.HelpLink("Grid-Column#initialsortorder-sortorder", "InitialSortOrder") column property to set the initial sort order of the grid to <b>OrderDate</b> descending.</p>
 }
 @section Control {
 @{
@@ -27,5 +27,5 @@
         new GridColumn("ShipPostalCode"),
         new GridColumn("ShipCountry") {Filter = FilterType.Distinct}
     };
-    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(ordersGrid))
+    @(await DbNetSuiteCore.Control.Create(HttpContext).Render(ordersGrid))
 }}

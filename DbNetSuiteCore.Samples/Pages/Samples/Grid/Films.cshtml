@@ -3,10 +3,10 @@
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
 
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
-    <p data-summary>To speed up the rendering of the page and to reduce the loading on the server you can set the <b>DeferredLoad</b> property to true which will defer the loading of the grid until it becomes visible to the user. In this sample the grids in the hidden tabs are only loaded when you click on the tab instead of when the page loads. The sample also demonstrates use of the <b>MaxChars</b> column property which can be used to limit the number of characters of a long text value shown directly in a grid with the full text shown by hovering the cursor over the cell.</p>
+    <p data-summary>At it's most basic you can generate a grid by simply supplying the data source type, connection alias and the name of the table or view to the @RazorHelper.HelpLink("grid-model", "Grid Model"). Default functionality includes a search box that will perform a wildcard search against all string based columns in the dataset, the ability to sort on any column by clicking on the heading, a copy page button and an option to export the data in HTML, Excel, CSV and JSON formats.</p>
 }
 @section Control {
     @{
@@ -51,7 +51,7 @@
                 };
 
         <div class="tab-pane fade @(tab == ratings.First() ? "show active" : string.Empty)" id="@(tab)-pane" role="tabpanel" aria-labelledby="@(tab)-tab">
-            @(await new DbNetSuiteCore.GridControl(HttpContext).Render(filmsModel))
+            @(await DbNetSuiteCore.Control.Create(HttpContext).Render(filmsModel))
         </div>
     }
 </div>

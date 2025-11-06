@@ -15,8 +15,8 @@
         new SelectColumn("ProductName"),
         new SelectColumn("CategoryName") {OptionGroup = true}
     };
-    @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(productSelect))
+    @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(productSelect))
 }
 <SectionContent SectionName="summary">
-    <p data-summary>Using the @HelperFunctions.Wiki("selectcolumn-properties#optiongroup", "OptionGroup") column property allows you to take advantage of the native select option grouping capability </p>
+    <p data-summary>Using the @HelperFunctions.Wiki("select-column#optiongroup-bool", "OptionGroup") column property allows you to take advantage of the native select option grouping capability </p>
 </SectionContent>

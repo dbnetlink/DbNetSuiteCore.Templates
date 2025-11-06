@@ -3,10 +3,10 @@
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
 
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
-    <p data-summary>JSON can be loaded from a file, a string or in this case an API end-point. This sample also makes use of the @RazorHelper.HelpLink("gridmodel-properties#cache-bool", "Cache") property to improve performance for JSON based data sources</p>
+    <p data-summary>JSON can be loaded from a file, a string or in this case an API end-point. This sample also makes use of the @RazorHelper.HelpLink("grid-model#cache-bool", "Cache") property to improve performance for JSON based data sources</p>
 }
 @section Control {
 @{
@@ -37,5 +37,5 @@
 
     GridModel superstoreGrid = new GridModel(DataSourceType.JSON, "/superstore") { Columns = columns, Cache = true };
 
-    @(await new DbNetSuiteCore.GridControl(HttpContext).Render(superstoreGrid))
+    @(await DbNetSuiteCore.Control.Create(HttpContext).Render(superstoreGrid))
 }}

@@ -1,7 +1,7 @@
 using DbNetSuiteCore.Constants;
 using DbNetSuiteCore.Enums;
 using DbNetSuiteCore.Models;
-using DbNetSuiteCoreSamples.ViewModels;
+using DbNetSuiteCore.Samples.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DbNetSuiteCore.Samples.Controllers

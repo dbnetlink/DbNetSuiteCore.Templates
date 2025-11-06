@@ -3,10 +3,10 @@
 @using DbNetSuiteCore.Models
 @using DbNetSuiteCore.Samples.Helpers
 
-@model DbNetSuiteCoreSamples.ViewModels.SampleModel
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
 @section Title
 {
-    <p data-summary>The form layout uses a grid system which has a number of columns specified by the @RazorHelper.HelpLink("formmodel-properties#layoutcolumns-int", "LayoutColumns") property. Individual form elements by default take up 1 column and 1 row of the grid but this can overriden using the @RazorHelper.HelpLink("formcolumn-properties#colspan-int", "ColSpan") and @RazorHelper.HelpLink("formcolumn-properties#rowspan-int", "RowSpan") properties.</p>
+    <p data-summary>The form layout uses a grid system which has a number of columns specified by the @RazorHelper.HelpLink("form-model#layoutcolumns-int", "LayoutColumns") property. Individual form elements by default take up 1 column and 1 row of the grid but this can overriden using the @RazorHelper.HelpLink("form-column#colspan-int", "ColSpan") and @RazorHelper.HelpLink("form-column#rowspan-int", "RowSpan") properties.</p>
 }
 @section Control {
     @{
@@ -30,6 +30,6 @@ employeeForm.Columns = new List<FormColumn>()
     new FormColumn("HomePhone"),
     new FormColumn("Extension")
 };
-@(await new DbNetSuiteCore.FormControl(HttpContext).Render(employeeForm))
+@(await DbNetSuiteCore.Control.Create(HttpContext).Render(employeeForm))
     }
 }

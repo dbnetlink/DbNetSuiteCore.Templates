@@ -24,7 +24,7 @@
 
     <div class="flex flex-row">
         <div class="flex">
-            @(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerSelect))
+            @(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(customerSelect))
         </div>
         <div class="flex flex-column" style="padding:10px">
             <h5>Selected Customers</h5> 
@@ -33,7 +33,7 @@
     </div>
 }
 <SectionContent SectionName="summary">
-    <p data-summary>Setting the @HelperFunctions.Wiki("selectmodel-properties#size-int32", "Size") property to a number greater than 1 and the @HelperFunctions.Wiki("selectmodel-properties#rowselection-rowselection", "RowSelection") property to @HelperFunctions.Wiki("gridmodel-enums#rowselection", "Multiple") true allows the user to select multiple options.</p>
+    <p data-summary>Setting the @HelperFunctions.Wiki("select-model#size-int32", "Size") property to a number greater than 1 and the @HelperFunctions.Wiki("select-model#rowselection-rowselection", "RowSelection") property to @HelperFunctions.Wiki("grid-model#rowselection", "Multiple") true allows the user to select multiple options.</p>
 </SectionContent>
 
 <script type="text/javascript" class="source">

@@ -12,8 +12,8 @@
     GridModel customerGrid = new GridModel(DataSourceType.SQLite, "northwind", "Customers");
 }
 
-@(new DbNetSuiteCore.Blazor.Control(httpContextAccessor).Render(customerGrid))
+@(DbNetSuiteCore.Blazor.Control.Create(httpContextAccessor).Render(customerGrid))
 
 <SectionContent SectionName="summary">
-    <p data-summary>At it's most basic you can generate a grid by simply supplying the data source type, connection alias and the name of the table or view to the @HelperFunctions.Wiki("gridmodel-constructors", "GridModel"). Default functionality includes a search box that will perform a wildcard search against all string based columns in the dataset, the ability to sort on any column by clicking on the heading, a copy page button and an option to export the data in HTML, Excel, CSV and JSON formats.</p>
+    <p data-summary>At it's most basic you can generate a grid by simply supplying the data source type, connection alias and the name of the table or view to the @HelperFunctions.Wiki("grid-model", "Grid Model"). Default functionality includes a search box that will perform a wildcard search against all string based columns in the dataset, the ability to sort on any column by clicking on the heading, a copy page button and an option to export the data in HTML, Excel, CSV and JSON formats.</p>
 </SectionContent>
