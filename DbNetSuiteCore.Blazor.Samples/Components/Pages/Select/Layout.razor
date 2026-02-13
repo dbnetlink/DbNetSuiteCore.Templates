@@ -19,7 +19,7 @@
     SelectModel customerSelect = new SelectModel(DataSourceType.SQLite, "northwind", "Customers")
     {
         Caption = "Customer",
-        Searchable = true,
+        Search = true,
         Layout = TypeOfLayout,
         EmptyOption = "Please select a customer",
         Columns = new List<SelectColumn>()

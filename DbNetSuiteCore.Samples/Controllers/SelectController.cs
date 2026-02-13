@@ -57,7 +57,7 @@ namespace DbNetSuiteCore.Samples.Controllers
         }
         public IActionResult Grouped()
         {
-            var productSelect = new SelectModel(DataSourceType.SQLite, "Northwind", "Products join Categories on Products.CategoryID = Categories.CategoryID") { Searchable = true };
+            var productSelect = new SelectModel(DataSourceType.SQLite, "Northwind", "Products join Categories on Products.CategoryID = Categories.CategoryID") { Search = true };
             productSelect.Columns = new List<SelectColumn>()
             {
                 new SelectColumn("ProductID"),
@@ -73,7 +73,7 @@ namespace DbNetSuiteCore.Samples.Controllers
             SelectModel customerSelect = new SelectModel(DataSourceType.SQLite, "northwind", "Customers")
             {
                 Caption = "Customer",
-                Searchable = true,
+                Search = true,
                 Layout = LayoutType.Row,
                 EmptyOption = "Please select a customer",
                 Columns = new List<SelectColumn>()
@@ -88,7 +88,7 @@ namespace DbNetSuiteCore.Samples.Controllers
         }
         public IActionResult Linked()
         {
-            var citySelect = new SelectModel("Cities") { Caption = "City", Searchable = true, Layout = LayoutType.Row, EmptyOption = "Select a city" };
+            var citySelect = new SelectModel("Cities") { Caption = "City", Search = true, Layout = LayoutType.Row, EmptyOption = "Select a city" };
             citySelect.Columns = new List<SelectColumn>
             {
                 new SelectColumn("cityid") {PrimaryKey = true },
@@ -99,7 +99,7 @@ namespace DbNetSuiteCore.Samples.Controllers
             };
             citySelect.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCity";
 
-            var stateSelect = new SelectModel("States") { Caption = "State", Searchable = true, Layout = LayoutType.Row, EmptyOption = "Select a state" };
+            var stateSelect = new SelectModel("States") { Caption = "State", Search = true, Layout = LayoutType.Row, EmptyOption = "Select a state" };
             stateSelect.Columns = new List<SelectColumn>
             {
                 new SelectColumn("stateid") {PrimaryKey = true },
@@ -108,7 +108,7 @@ namespace DbNetSuiteCore.Samples.Controllers
             };
             stateSelect.LinkedControl = citySelect;
 
-            var countrySelect = new SelectModel(DataSourceType.SQLite, "DbNetSuiteCore", "Countries") { Caption = "Country", Searchable = true, Layout = LayoutType.Row, EmptyOption = "Select a country" };
+            var countrySelect = new SelectModel(DataSourceType.SQLite, "DbNetSuiteCore", "Countries") { Caption = "Country", Search = true, Layout = LayoutType.Row, EmptyOption = "Select a country" };
             countrySelect.Columns = new List<SelectColumn>
             {
                 new SelectColumn("countryid") {PrimaryKey = true },
@@ -154,7 +154,7 @@ namespace DbNetSuiteCore.Samples.Controllers
             ordersGrid.Caption = "Orders";
             ordersGrid.PageSize = 5;
 
-            var customerSelect = new SelectModel(DataSourceType.SQLite, "Northwind", "customers") { Caption = "Customers", EmptyOption = "Please select a customer", Searchable = true };
+            var customerSelect = new SelectModel(DataSourceType.SQLite, "Northwind", "customers") { Caption = "Customers", EmptyOption = "Please select a customer", Search = true };
 
             customerSelect.Columns = new List<SelectColumn>
             {
@@ -175,7 +175,7 @@ namespace DbNetSuiteCore.Samples.Controllers
             SelectModel customerSelect = new SelectModel(DataSourceType.SQLite, "northwind", "Customers")
             {
                 Caption = "Customer",
-                Searchable = true,
+                Search = true,
                 Size = 20,
                 RowSelection = RowSelection.Multiple,
                 Columns = new List<SelectColumn>()
@@ -195,7 +195,7 @@ namespace DbNetSuiteCore.Samples.Controllers
             SelectModel customerSelect = new SelectModel(DataSourceType.SQLite, "northwind", "Customers")
             {
                 Caption = "Customer",
-                Searchable = true,
+                Search = true,
                 EmptyOption = "Please select a customer",
                 Columns = new List<SelectColumn>()
                 {

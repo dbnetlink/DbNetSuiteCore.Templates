@@ -1,5 +1,6 @@
 ﻿using DbNetSuiteCore.Models;
 using DbNetSuiteCore.Plugins.Interfaces;
+using System.Collections;
 using System.Text.Json.Serialization;
 
 
@@ -10,7 +11,7 @@ namespace DbNetSuiteCore.Samples.Plugins
         public Meta meta { get; set; } = new Meta();
         public List<Item> items { get; set; } = new List<Item>();
 
-        public object Transform(GridModel gridModel, HttpContext httpContext, IConfiguration configuration)
+        public IEnumerable Transform(GridModel gridModel)
         {
             return items.Select(i => new
             {

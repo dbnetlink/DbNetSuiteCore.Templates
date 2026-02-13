@@ -17,7 +17,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DbNetSuiteCore" Version="2.0.73" />
+    <PackageReference Include="DbNetSuiteCore" Version="2.0.82" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DbNetSuiteCore2\DbNetSuiteCore\DbNetSuiteCore.csproj" />
   </ItemGroup>
 
 </Project>

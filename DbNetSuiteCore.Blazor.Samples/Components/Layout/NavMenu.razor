@@ -4,25 +4,26 @@
     </div>
 </div>
 
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    private string GetLink(string component) => $"/?key={component.ToLower()}";
+}
 <div class="nav-scrollable">
     <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/?key=grid" data-enhance-nav="false" Match="NavLinkMatch.All">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Grid Samples
-            </NavLink>
-        </div>
+        @{
+            var components = new List<string> { "Grid", "Form", "Select", "Tree" };
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/?key=form" data-enhance-nav="false">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Form Samples
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/?key=select" data-enhance-nav="false">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Select Samples
-            </NavLink>
-        </div>
+            foreach (var component in components)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="@GetLink(component)" data-enhance-nav="false" Match="@(component == components.First() ? NavLinkMatch.All : NavLinkMatch.Prefix)">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> @component Samples
+                    </NavLink>
+                </div>
+            }
+        }
     </nav>
 </div>
 

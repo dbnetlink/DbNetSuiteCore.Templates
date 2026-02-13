@@ -9,7 +9,7 @@
 }
 @section Control {
 @{
-var productSelect = new SelectModel(DataSourceType.SQLite, "Northwind", "Products join Categories on Products.CategoryID = Categories.CategoryID") { Searchable = true };
+var productSelect = new SelectModel(DataSourceType.SQLite, "Northwind", "Products join Categories on Products.CategoryID = Categories.CategoryID") { Search = true };
 productSelect.Columns = new List<SelectColumn>()
 {
     new SelectColumn("ProductID"),

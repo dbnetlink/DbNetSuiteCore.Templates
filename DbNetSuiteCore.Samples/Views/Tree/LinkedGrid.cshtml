@@ -1,0 +1,41 @@
+﻿@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>Use to filter other DbNetSuiteCore controls such as the grid by using @RazorHelper.HelpLink("tree-model#itemselected", "ItemSelected") event to set the filter on the grid control.</p>
+}
+@section Control {
+@{
+ 
+
+<div style="display:flex;flex-direction:row;gap: 10px;">
+    <div>
+        @(await DbNetSuiteCore.Control.Create(Context).Render(Model.TreeModel))
+    </div>
+    <div style="display:flex;flex-direction:column;gap: 10px;padding-top:5px;">
+        <div>
+            @(await DbNetSuiteCore.Control.Create(Context).Render(Model.GridModels[0]))
+        </div>
+        <div>
+            @(await DbNetSuiteCore.Control.Create(Context).Render(Model.GridModels[1]))
+        </div>
+    </div>
+</div>
+}}
+
+@section Scripts
+{
+<script type="text/javascript" class="source">
+    function saveOrdersGridReference(sender) {
+        window.ordersGrid = sender;
+    }
+    function customerSelected(sender, args) {
+        if (window.ordersGrid)
+        {
+            window.ordersGrid.updateFixedFilterParameters({customerid : args.value})
+        }
+    }
+</script>
+}

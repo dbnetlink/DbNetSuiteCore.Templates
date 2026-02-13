@@ -19,7 +19,7 @@ namespace DbNetSuiteCore.Samples.Controllers
         }
         public IActionResult CategoryProducts()
         {
-            var categorySelect = new SelectModel(DataSourceType.SQLite, "Northwind", "Categories") { Caption = "Categories", Searchable = true, Layout = LayoutType.Row };
+            var categorySelect = new SelectModel(DataSourceType.SQLite, "Northwind", "Categories") { Caption = "Categories", Search = true, Layout = LayoutType.Row };
             categorySelect.Columns = new List<SelectColumn>() 
             {
                 new SelectColumn("CategoryId"),

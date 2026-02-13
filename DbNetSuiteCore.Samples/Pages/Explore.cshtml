@@ -52,13 +52,13 @@
                 {
                     if (Model.ControlType == "Grid")
                     {
-                        GridModel gridModel = new GridModel(Model.DataSourceType, Model.ConnectionAlias, Model.TableName) { DatabaseName = Model.DatabaseName, QueryLimit = 500 };
+                        GridModel gridModel = new GridModel(Model.DataSourceType, Model.ConnectionAlias, Model.TableName) { DatabaseName = Model.DatabaseName, OptimizeForLargeDataset = true };
                         gridModel.ClientEvents[GridClientEvent.FileDownload] = "setFileName";
                         @(await DbNetSuiteCore.Control.Create(HttpContext).Render(gridModel))
                     }
                     else
                     {
-                        FormModel formModel = new FormModel(Model.DataSourceType, Model.ConnectionAlias, Model.TableName) { DatabaseName = Model.DatabaseName, QueryLimit = 500 };
+                        FormModel formModel = new FormModel(Model.DataSourceType, Model.ConnectionAlias, Model.TableName) { DatabaseName = Model.DatabaseName, QueryLimit = 500, Insert = true, Delete = true };
                         @(await DbNetSuiteCore.Control.Create(HttpContext).Render(formModel))
                     }
                 }
