@@ -2,10 +2,10 @@
 
   <PropertyGroup>    
     <PackageId>DbNetSuiteCore.Templates</PackageId>
-    <PackageVersion>2.0.65</PackageVersion>
+    <PackageVersion>2.0.73</PackageVersion>
     <Title>DbNetSuiteCore Templates</Title>
     <Authors>DbNetLink Limited</Authors>
-    <Description>Templates to illustrate use of DbNetSuiteCore UI components for Razor/MVC.</Description>
+    <Description>Templates to illustrate use of DbNetSuiteCore UI components for Razor/MVC and Blazor Server.</Description>
     <PackageTags>dbnetsuitecore;razor;datagrid;blazor;component;ui;</PackageTags>
 	<PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://dbnetsuitecore.com</PackageProjectUrl>
