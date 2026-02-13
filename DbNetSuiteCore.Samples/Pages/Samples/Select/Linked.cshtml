@@ -9,7 +9,7 @@
 }
 @section Control {
 @{
-    var citySelect = new SelectModel("Cities") { Caption = "City", Searchable = true, Layout = LayoutType.Row, EmptyOption = "Select a city" };
+    var citySelect = new SelectModel("Cities") { Caption = "City", Search = true, Layout = LayoutType.Row, EmptyOption = "Select a city" };
     citySelect.Columns = new List<SelectColumn>
     {
         new SelectColumn("cityid") {PrimaryKey = true },
@@ -20,7 +20,7 @@
     };
     citySelect.ClientEvents[SelectClientEvent.OptionSelected] = "showSelectedCity";
 
-    var stateSelect = new SelectModel("States") { Caption = "State", Searchable = true, Layout = LayoutType.Row, EmptyOption = "Select a state" };
+    var stateSelect = new SelectModel("States") { Caption = "State", Search = true, Layout = LayoutType.Row, EmptyOption = "Select a state" };
     stateSelect.Columns = new List<SelectColumn>
     {
         new SelectColumn("stateid") {PrimaryKey = true },
@@ -29,7 +29,7 @@
     };
     stateSelect.LinkedControl = citySelect;
 
-    var countrySelect = new SelectModel(DataSourceType.SQLite, "DbNetSuiteCore", "Countries") { Caption = "Country", Searchable = true, Layout = LayoutType.Row, EmptyOption = "Select a country" };
+    var countrySelect = new SelectModel(DataSourceType.SQLite, "DbNetSuiteCore", "Countries") { Caption = "Country", Search = true, Layout = LayoutType.Row, EmptyOption = "Select a country" };
     countrySelect.Columns = new List<SelectColumn>
     {
         new SelectColumn("countryid") {PrimaryKey = true },

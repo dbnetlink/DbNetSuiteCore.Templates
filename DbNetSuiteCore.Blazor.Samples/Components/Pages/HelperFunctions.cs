@@ -151,7 +151,7 @@ namespace DbNetSuiteCore.Blazor.Samples.Components.Pages
         {
             var sourceFiles = GetSourceFiles(httpContextAccessor, host);
 
-            var routeParts = (httpContextAccessor.HttpContext.Request.Path.Value ?? string.Empty).Split("/").ToList();
+            var routeParts = (httpContextAccessor.HttpContext?.Request.Path.Value ?? string.Empty).Split("/").ToList();
             var folderName = routeParts[1];
             var fileName = routeParts.Last() ?? string.Empty;
 
@@ -201,7 +201,7 @@ namespace DbNetSuiteCore.Blazor.Samples.Components.Pages
             fileContents = fileContents.Replace(">", "&gt;").Replace("<", "&lt;");
 
             httpContextAccessor.HttpContext.Items[cacheKey] = fileContents.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-            return httpContextAccessor.HttpContext.Items[cacheKey] as string[];
+            return httpContextAccessor?.HttpContext.Items[cacheKey] as string[] ?? new string[0];
         }
 
         private static List<string> GetSourceFiles(IHttpContextAccessor httpContextAccessor, IWebHostEnvironment? host)
@@ -233,7 +233,7 @@ namespace DbNetSuiteCore.Blazor.Samples.Components.Pages
             }
 
             httpContextAccessor.HttpContext.Items[cacheKey] = files;
-            return httpContextAccessor.HttpContext.Items[cacheKey] as List<string>;
+            return httpContextAccessor?.HttpContext.Items[cacheKey] as List<string> ?? new List<string>();
         }
     }
 }

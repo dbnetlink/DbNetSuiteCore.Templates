@@ -1,0 +1,67 @@
+﻿@page
+@using DbNetSuiteCore.Enums
+@using DbNetSuiteCore.Models
+@using DbNetSuiteCore.Samples.Helpers
+@model DbNetSuiteCore.Samples.ViewModels.SampleModel
+@section Title
+{
+    <p data-summary>The create views based on the file system structure. In this example to create a simple application menu.</p>
+}
+@section Control {
+@{
+    var samplesTree = new TreeModel(DataSourceType.FileSystem, "../Pages") { FixedFilter = "(IsDirectory = 1 or Name like '%.cshtml') and Name not in ('Shared','_ViewStart.cshtml','index.cshtml','_viewimports.cshtml','explore.cshtml','resources.cshtml','error.cshtml')" };
+    samplesTree.Columns = new List<TreeColumn>()
+    {
+        new TreeColumn(FileSystemColumn.Name.ToString())
+    };
+    samplesTree.Bind(TreeClientEvent.ItemSelected, "fileSelected");
+    samplesTree.Bind(TreeClientEvent.Initialised, "cleanFileNames");
+
+    <div class="main-container">
+        <nav class="sidebar">
+            @(await DbNetSuiteCore.Control.Create(HttpContext).Render(samplesTree))
+        </nav>
+
+        <iframe name="content-viewport" src="" class="content-frame"></iframe>
+    </div>
+}}
+
+@section Scripts {
+    <script type="text/javascript" class="source">
+        function fileSelected(sender, args) {
+            let selectedValues = [args.value];
+            selectedValues = selectedValues.concat(args.parentValues);
+            let url = `/${selectedValues.reverse().join('/').replace('.cshtml','')}`;
+            document.querySelector("iframe.content-frame").src = url;
+        }
+
+        function cleanFileNames(sender) {
+            sender.getLeafElements().forEach(e => {e.innerText = e.innerText.replace(".cshtml","")} )
+        }
+    </script>
+}
+
+@section Styles {
+    <style>
+    .main-container {
+        display: flex;
+        height: 100vh; /* Viewport Height */
+        width: 100vw;  /* Viewport Width */
+    }
+
+    .sidebar {
+        flex: 1;
+        background-color: #f4f4f4;
+        border-right: 1px solid #ccc;
+        overflow-y: auto; /* Allows scrolling within the list only */
+        padding: 20px;
+    }
+
+    .content-frame {
+        flex: 4;
+        border: none;
+        height: 100%;
+    }
+    </style>
+}
+

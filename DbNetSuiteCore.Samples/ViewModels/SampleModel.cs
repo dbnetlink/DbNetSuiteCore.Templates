@@ -28,7 +28,8 @@ namespace DbNetSuiteCore.Samples.ViewModels
         public List<FormModel> FormModels { get; set; } = new List<FormModel>();
         public SelectModel SelectModel { get; set; }
         public List<SelectModel> SelectModels { get; set; } = new List<SelectModel>();
-
+        public TreeModel TreeModel { get; set; }
+        public List<TreeModel> TreeModels { get; set; } = new List<TreeModel>();
 
         public void OnGet(
             string? customerId = null,
